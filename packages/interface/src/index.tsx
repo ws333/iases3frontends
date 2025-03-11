@@ -6,7 +6,6 @@ import App from "./components/app";
 
 import "./css/browser-style.css";
 import "./css/email-preview.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const store = createStore(model, { disableImmer: true });
 
