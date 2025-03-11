@@ -12,7 +12,6 @@ export type MessagePayload = {
         | "GET_DEFAULT_PREFERENCES"
         | "GET_PREFERENCES"
         | "SET_PREFERENCES"
-        | "GET_TEMPLATE"
         | "GET_LOCALIZED_STRINGS"
         | "SEND_EMAILS"
         | "SEND_EMAIL"
@@ -24,7 +23,6 @@ export type MessagePayload = {
     reply_id?: string | number;
     data?: {
         prefs?: Partial<Prefs>;
-        template?: Email;
         strings?: Strings;
         emails?: Email[];
         email?: Email;
@@ -46,13 +44,9 @@ export type IframeService = {
         getDefaultPreferences: () => Promise<Prefs>;
         getPreferences: () => Promise<Prefs>;
         getLocalizedStrings: () => Promise<Strings>;
-        getTemplate: () => Promise<Email>;
         setPreferences: (_prefs?: Partial<Prefs>) => Promise<void>;
         sendEmails: (_emails: Email[]) => Promise<void>;
-        sendEmail: (
-            _email: Email,
-            _sendmode?: Prefs["sendmode"]
-        ) => Promise<void>;
+        sendEmail: (_email: Email, _sendmode?: Prefs["sendmode"]) => Promise<void>;
         cancel: () => void;
         openUrl: (_url: string) => void;
     };
@@ -66,9 +60,7 @@ export const iframeService: IframeService = {
     init: function init(iframe: HTMLIFrameElement) {
         // Find our child iframe and send it a message as soon as possible
         // so it is capable of sending messages back.
-        iframeService.iframe =
-            iframe ||
-            window.document.querySelector<HTMLIFrameElement>("#content-frame");
+        iframeService.iframe = iframe || window.document.querySelector<HTMLIFrameElement>("#content-frame");
         window.childFrame = iframe;
 
         if (iframe.contentDocument?.readyState === "complete") {
@@ -127,22 +119,12 @@ export const iframeService: IframeService = {
                     },
                 });
                 break;
-            case "GET_TEMPLATE":
-                iframeService.messageChild({
-                    type,
-                    id,
-                    data: {
-                        template: await iframeService.commands.getTemplate(),
-                    },
-                });
-                break;
             case "GET_LOCALIZED_STRINGS":
                 iframeService.messageChild({
                     type,
                     id,
                     data: {
-                        strings:
-                            await iframeService.commands.getLocalizedStrings(),
+                        strings: await iframeService.commands.getLocalizedStrings(),
                     },
                 });
                 break;
@@ -154,10 +136,7 @@ export const iframeService: IframeService = {
                 break;
             case "SEND_EMAIL":
                 if (data.email) {
-                    await iframeService.commands.sendEmail(
-                        data.email,
-                        data.sendmode
-                    );
+                    await iframeService.commands.sendEmail(data.email, data.sendmode);
                 }
                 iframeService.messageChild({ type, id });
                 break;
@@ -176,10 +155,7 @@ export const iframeService: IframeService = {
     // send a message to the child iframe so that it has a reference to us,
     // it's parent.
     initChild: function initChild() {
-        iframeService.iframe?.contentWindow?.addEventListener(
-            "message",
-            iframeService.onmessage
-        );
+        iframeService.iframe?.contentWindow?.addEventListener("message", iframeService.onmessage);
 
         const payload = { type: "INITIALIZE_PARENT" };
         iframeService.iframe?.contentWindow?.postMessage(payload, "*");
@@ -209,10 +185,6 @@ export const iframeService: IframeService = {
         getLocalizedStrings: async () => {
             console.warn("Function not implemented");
             return {} as Strings;
-        },
-        getTemplate: async () => {
-            console.warn("Function not implemented");
-            return {} as Email;
         },
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         setPreferences: async (_prefs?: Partial<Prefs>) => {

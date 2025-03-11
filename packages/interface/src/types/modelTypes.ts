@@ -1,13 +1,10 @@
 import { Action, Thunk } from "easy-peasy";
 import type { SpreadsheetData, Strings } from "./types.ts";
 
-type SpreadsheetHasManuallyUpdated = boolean;
-
 export interface Model {
     locale: Locale;
     prefs: Prefs;
     data: Data;
-    tabs: Tabs;
     initialise: Thunk<Model, undefined, never, Model>;
     cancel: Thunk<Model>;
     parseSpreadsheet: Thunk<Model, undefined, never, Model>;
@@ -36,20 +33,7 @@ export interface Prefs {
 interface Data {
     spreadsheetData: SpreadsheetData;
     updateSpreadsheetData: Action<Data, SpreadsheetData>;
-    spreadsheetHasManuallyUpdated: SpreadsheetHasManuallyUpdated;
-    updateSpreadsheetHasManuallyUpdated: Action<Data, SpreadsheetHasManuallyUpdated>;
-    template: Email;
-    updateTemplate: Action<Data, Email>;
-    fetchTemplate: Thunk<Data>;
     emails: Email[];
-    updateEmails: Action<Data, Email[]>;
-}
-
-interface Tabs {
-    currTab: number;
-    setTab: Action<Tabs, number>;
-    prevTab: Action<Tabs>;
-    nextTab: Action<Tabs>;
 }
 
 interface SendDialog {

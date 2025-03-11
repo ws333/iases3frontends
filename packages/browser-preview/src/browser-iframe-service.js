@@ -2,9 +2,7 @@
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-//import { iframeService } from "./iframe-service.js";
 import { iframeService } from "@mailmergeiase/iframe-service";
-//import interfaceHtml from "@mailmergeiase/interface/index.html?raw";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -74,30 +72,6 @@ if (typeof iframeService === "undefined") {
         window.localStorage.setItem("prefs", JSON.stringify(newPrefs));
     }
 
-    function getTemplate() {
-        // return a dummy template
-        const defaultTemplate = {
-            from: "From Guy <from@guy.com>",
-            to: "To Guy <to@guy.com>, {{email}}",
-            cc: "To Guy CC <tocc@guy.com>",
-            bcc: "To Guy BCC <tobcc@guy.com>",
-            replyTo: "",
-            attachment: "",
-            subject: "Error processing template; this is a default template",
-            body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
-        };
-
-        let textarea = document.querySelector("#template-textarea");
-        try {
-            let ret = JSON.parse(textarea.value);
-            textarea.classList.remove("processing-error");
-            return ret;
-        } catch (e) {
-            textarea.classList.add("processing-error");
-            return defaultTemplate;
-        }
-    }
-
     function getLocalizedStrings() {
         return {
             next: "Next",
@@ -164,7 +138,6 @@ if (typeof iframeService === "undefined") {
         getDefaultPreferences,
         getPreferences,
         getLocalizedStrings,
-        getTemplate,
         setPreferences,
         sendEmails,
         sendEmail,
@@ -174,12 +147,5 @@ if (typeof iframeService === "undefined") {
 })();
 
 window.onload = () => {
-    //   const interfaceHtmlUrl = URL.createObjectURL(
-    //       new Blob([interfaceHtml], { type: "text/html" })
-    //   );
-
-    //   const iframe = window.document.getElementById("content-frame");
-    //   iframe.setAttribute("src", interfaceHtmlUrl);
-
     iframeService.init(window.document.getElementById("content-frame"));
 };

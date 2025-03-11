@@ -86,44 +86,6 @@ try {
             await browser.storage.local.set({ prefs: newPrefs });
         }
 
-        async function getTemplate() {
-            if (composeTabId != null) {
-                const composeDetails = await browser.compose.getComposeDetails(composeTabId);
-
-                return {
-                    from: await getSenderFromComposeDetails(composeDetails),
-                    to: composeDetails.to.map(cleanupTemplateAddress).join(", "),
-                    cc: composeDetails.cc.map(cleanupTemplateAddress).join(", "),
-                    bcc: composeDetails.bcc.map(cleanupTemplateAddress).join(", "),
-                    replyTo: composeDetails.replyTo.map(cleanupTemplateAddress).join(", "),
-                    attachment: "",
-                    subject: composeDetails.subject,
-                    body: composeDetails.body,
-                };
-            }
-
-            // return a dummy template
-            const defaultTemplate = {
-                from: "From Guy <from@guy.com>",
-                to: "To Guy <to@guy.com>, {{email}}",
-                cc: "To Guy CC <tocc@guy.com>",
-                bcc: "To Guy BCC <tobcc@guy.com>",
-                replyTo: "",
-                attachment: "",
-                subject: "Error processing template; this is a default template",
-                body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
-            };
-
-            let textarea = document.querySelector("#template-textarea");
-            try {
-                let ret = JSON.parse(textarea.value);
-                textarea.classList.remove("processing-error");
-                return ret;
-            } catch (e) {
-                textarea.classList.add("processing-error");
-                return defaultTemplate;
-            }
-        }
         function getLocalizedStrings() {
             const stringNames = [
                 "next",
@@ -196,7 +158,6 @@ try {
             getDefaultPreferences,
             getPreferences,
             getLocalizedStrings,
-            getTemplate,
             setPreferences,
             sendEmail,
             openUrl,

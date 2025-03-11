@@ -49,40 +49,7 @@ export const model: Model = {
         updateSpreadsheetData: action((state, payload) => {
             return { ...state, spreadsheetData: [...payload] };
         }),
-        spreadsheetHasManuallyUpdated: false,
-        updateSpreadsheetHasManuallyUpdated: action((state, payload) => {
-            return { ...state, spreadsheetHasManuallyUpdated: payload };
-        }),
-        template: {},
-        updateTemplate: action((state, payload) => {
-            return { ...state, template: { ...payload } };
-        }),
-        fetchTemplate: thunk(async (actions) => {
-            // grab the template from the parent window
-            const data = await messageParent({ type: "GET_TEMPLATE" });
-            // save the template
-            if (data?.template) {
-                actions.updateTemplate(data.template);
-            }
-        }),
         emails: [],
-        updateEmails: action((state, payload) => {
-            return { ...state, emails: payload };
-        }),
-    },
-    tabs: {
-        currTab: 0,
-        setTab: action((state, payload) => {
-            return { ...state, currTab: payload };
-        }),
-        prevTab: action((state) => ({
-            ...state,
-            currTab: Math.max(state.currTab - 1, 0),
-        })),
-        nextTab: action((state) => ({
-            ...state,
-            currTab: state.currTab + 1,
-        })),
     },
     initialise: thunk(async (_actions, _payload, { dispatch }) => {
         await dispatch.prefs.fetchPrefs();
@@ -102,12 +69,8 @@ export const model: Model = {
         const state = getState();
         const { fileContents } = state.prefs;
 
-        // if we have manually updated spreadsheet data, don't override
-        // the spreadsheet contents with the file's contents
-        if (!state.data.spreadsheetHasManuallyUpdated) {
-            const sheetArray = parseSpreadsheet(fileContents || []);
-            dispatch.data.updateSpreadsheetData(sheetArray);
-        }
+        const sheetArray = parseSpreadsheet(fileContents || []);
+        dispatch.data.updateSpreadsheetData(sheetArray);
     }),
     sendEmails: thunk(async (actions, _payload, { getState }) => {
         const {

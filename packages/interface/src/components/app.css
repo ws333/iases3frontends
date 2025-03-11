@@ -10,3 +10,10 @@ button {
 .header-title {
     margin: 0 2rem;
 }
+
+.iases3-icon {
+    width: 40px;
+    height: 40px;
+    margin-left: -5px;
+    margin-top: -5px;
+}
