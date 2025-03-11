@@ -1,0 +1,64 @@
+.email-options {
+    padding: 20px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+}
+
+.email-options label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.email-options input,
+.email-options select {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid #555;
+    border-radius: 3px;
+    background-color: #222;
+    color: #fff;
+}
+.email-options select {
+    margin: 10px;
+    width: calc(100% - 20px); /* Ensure the input takes the full width minus margins */
+}
+
+.email-options input[type="number"] {
+    width: 3rem;
+}
+
+.email-options .custom-subject {
+    display: inline-block;
+}
+
+.custom-subject {
+    width: 100%; /* Ensure the custom subject container takes the full width of its container */
+}
+
+.custom-subject > input {
+    margin: 10px;
+    width: 100%; /* Make the custom subject input take the full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.delay-input,
+.number-of-emails,
+.subject-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.subject-input {
+    width: 100%; /* Ensure the subject input takes the full width of its container */
+}
+
+.subject-input select {
+    width: 100%; /* Make the select input take the full width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}

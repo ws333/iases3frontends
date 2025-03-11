@@ -12,9 +12,9 @@
 /* Global */
 html,
 body {
-    background: transparent;
+    background: #333;
     box-sizing: border-box;
-    color: #222426;
+    color: white;
     cursor: default;
     display: flex;
     flex-direction: column;
@@ -365,12 +365,9 @@ textarea.browser-style:focus:hover {
 }
 
 .panel-section-header > .icon-section-header {
-    background-position: center center;
-    background-repeat: no-repeat;
-    height: 32px;
-    margin-right: 16px;
-    position: relative;
-    width: 32px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
 }
 
 .panel-section-header > .text-section-header {
@@ -569,8 +566,7 @@ textarea.browser-style:focus:hover {
 }
 
 .panel-section-tabs-button.selected {
-    box-shadow: 0 1px 0 var(--primary-accent) inset,
-        0px 4px 0px var(--primary) inset;
+    box-shadow: 0 1px 0 var(--primary-accent) inset, 0px 4px 0px var(--primary) inset;
     color: var(--primary);
 }
 

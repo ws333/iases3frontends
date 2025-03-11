@@ -1,5 +1,5 @@
 {
-    "name": "@mailmergep/thunderbird-iframe-service",
+    "name": "@mailmergeiase/thunderbird-iframe-service",
     "version": "1.0.0",
     "description": "The iframe service for the thunderbird extension",
     "private": true,

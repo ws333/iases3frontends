@@ -1,0 +1,12 @@
+.scrollable-container {
+    overflow-y: auto;
+    height: 100vh;
+}
+
+button {
+    margin: 0.5rem;
+}
+
+.header-title {
+    margin: 0 2rem;
+}

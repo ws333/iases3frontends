@@ -1,5 +1,5 @@
 function log(...args) {
-    console.log("[MailMerge P]:", ...args);
+    console.log("[MailMerge IASE]:", ...args);
 }
 
 log("Extension loaded...");
@@ -21,9 +21,7 @@ class MailmergeWindow {
     }
     async _onWindowOpened() {
         this.isReady = true;
-        const messagePromises = this._messageQueue.map((message) =>
-            this.sendMessage(message)
-        );
+        const messagePromises = this._messageQueue.map((message) => this.sendMessage(message));
         this._messageQueue.length = 0;
         await Promise.all(messagePromises);
     }
@@ -38,7 +36,7 @@ class MailmergeWindow {
                 type: "popup",
                 allowScriptsToClose: true,
                 height: 800,
-                width: 600,
+                width: 700,
             });
             this.openWindowId = ret.id;
         }
@@ -74,14 +72,13 @@ class MailmergeWindow {
 }
 const mailmergeWindow = new MailmergeWindow();
 
-// Listen for when the "MailMerge P" button is pressed in the compose
-// window.
-browser.composeAction.onClicked.addListener(async (tabInfo) => {
+// Listen for when the "Mail Merge IASE" button is clicked
+browser.browserAction.onClicked.addListener(async (tabInfo) => {
     await mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
     await mailmergeWindow.ensureWindowOpened();
 });
 
-// We are responsible for closing the MailMerge P window if asked.
+// We are responsible for closing the MailMerge IASE window if asked.
 browser.runtime.onMessage.addListener(async (message) => {
     if ((message || {}).action === "close") {
         await mailmergeWindow.close();

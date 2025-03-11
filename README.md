@@ -47,7 +47,7 @@ npm run build-addon
 npm run package-addon
 ```
 
-The extension will be located in the current directory and called `mailmergep@example.net-latest.xpi`.
+The extension will be located in the current directory and called `mailmergep@iase.one-latest.xpi`.
 
 ## Development
 
@@ -99,7 +99,7 @@ The UI is developed using React and Redux with the helper EasyPeasy.
 
 ### Developing the Thunderbird Extension
 
-Copy or link the contents of `thunderbird-src` to `mailmergep@example.net`
+Copy or link the contents of `thunderbird-src` to `mailmergep@iase.one`
 in your Thunderbird profile/extensions directory. Then restart Thunderbird and activate the
 extension.
 
@@ -121,4 +121,4 @@ use the `id` of the tab you want.
 ### Packaging
 
 Note that a version bump must take place in `packages/thunderbird-extension/public/manifest.json`. After that, run `npm run build-and-package`.
-The resulting `mailmergep@example.net-latest.xpi` is a bundle of the extension.
+The resulting `mailmergep@iase.one-latest.xpi` is a bundle of the extension.

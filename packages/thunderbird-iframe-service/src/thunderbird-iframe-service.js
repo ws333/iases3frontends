@@ -1,5 +1,5 @@
-import { iframeService } from "@mailmergep/iframe-service";
-//import interfaceHtml from "@mailmergep/interface/index.html?raw";
+import { iframeService } from "@mailmergeiase/iframe-service";
+//import interfaceHtml from "@mailmergeiase/interface/index.html?raw";
 /*
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
@@ -16,7 +16,7 @@ try {
         // background.js will let us know what the id of the current compose window
         // is with a message.
         browser.runtime.onMessage.addListener(function (message, sender) {
-            if (sender.id.toLowerCase() === "mailmergep@example.net") {
+            if (sender.id.toLowerCase() === "mailmergeiase@iase.one") {
                 if (message.activeTabId != null) {
                     composeTabId = message.activeTabId;
                 }
@@ -38,28 +38,16 @@ try {
             const activeIdentityId = composeDetails.identityId;
             const accounts = await browser.accounts.list();
             const activeAccount = accounts.find((account) =>
-                account.identities.some(
-                    (ident) => ident.id === activeIdentityId
-                )
+                account.identities.some((ident) => ident.id === activeIdentityId)
             );
             if (activeAccount == null) {
-                console.warn(
-                    "Could not find the active account for a message with composeDetails:",
-                    composeDetails
-                );
+                console.warn("Could not find the active account for a message with composeDetails:", composeDetails);
                 return "";
             }
 
-            const identity = activeAccount.identities.find(
-                (ident) => ident.id === activeIdentityId
-            );
+            const identity = activeAccount.identities.find((ident) => ident.id === activeIdentityId);
             if (identity == null) {
-                console.warn(
-                    "Could not find identity",
-                    activeIdentityId,
-                    "in account",
-                    activeAccount
-                );
+                console.warn("Could not find identity", activeIdentityId, "in account", activeAccount);
                 return "";
             }
 
@@ -101,24 +89,14 @@ try {
 
         async function getTemplate() {
             if (composeTabId != null) {
-                const composeDetails = await browser.compose.getComposeDetails(
-                    composeTabId
-                );
+                const composeDetails = await browser.compose.getComposeDetails(composeTabId);
 
                 return {
                     from: await getSenderFromComposeDetails(composeDetails),
-                    to: composeDetails.to
-                        .map(cleanupTemplateAddress)
-                        .join(", "),
-                    cc: composeDetails.cc
-                        .map(cleanupTemplateAddress)
-                        .join(", "),
-                    bcc: composeDetails.bcc
-                        .map(cleanupTemplateAddress)
-                        .join(", "),
-                    replyTo: composeDetails.replyTo
-                        .map(cleanupTemplateAddress)
-                        .join(", "),
+                    to: composeDetails.to.map(cleanupTemplateAddress).join(", "),
+                    cc: composeDetails.cc.map(cleanupTemplateAddress).join(", "),
+                    bcc: composeDetails.bcc.map(cleanupTemplateAddress).join(", "),
+                    replyTo: composeDetails.replyTo.map(cleanupTemplateAddress).join(", "),
                     attachment: "",
                     subject: composeDetails.subject,
                     body: composeDetails.body,
@@ -133,8 +111,7 @@ try {
                 bcc: "To Guy BCC <tobcc@guy.com>",
                 replyTo: "",
                 attachment: "",
-                subject:
-                    "Error processing template; this is a default template",
+                subject: "Error processing template; this is a default template",
                 body: "Hi {{name}}.\n\nPlease ask me about our special offer.",
             };
 
@@ -197,44 +174,12 @@ try {
         }
 
         async function sendEmail(email, sendmode) {
-            // XXX Blocked until https://bugzilla.mozilla.org/show_bug.cgi?id=1545930 is resolved.
-            // We create a new compose window, set the contents, and then use the send API to send it.
-            // That way we don't need to an experiments API.
+            // Sending messages in the background blocked until https://bugzilla.mozilla.org/show_bug.cgi?id=1545930 is resolved.
 
-            // Create a compose window that more-or-less duplicates the active compose window
-            let previousDetails = await browser.compose.getComposeDetails(
-                composeTabId
-            );
-            // Needed because of https://bugzilla.mozilla.org/show_bug.cgi?id=1747408
-            if (previousDetails.isPlainText) {
-                delete previousDetails.body;
-            } else {
-                delete previousDetails.plainTextBody;
-            }
-            const { body, attachment, ...rest } = email;
-            Object.assign(previousDetails, rest);
-            if (previousDetails.isPlainText) {
-                previousDetails.plainTextBody = body;
-            } else {
-                previousDetails.body = body;
-            }
-            // Copy the attachments from the old message
-            const attachments = await Promise.all(
-                (
-                    await browser.compose.listAttachments(composeTabId)
-                ).map(async (attachment) => ({
-                    file: await attachment.getFile(),
-                }))
-            );
-            previousDetails.attachments = attachments;
+            // Create the email in a new compose window and then send it.
+            const newWin = await browser.compose.beginNew(null, email);
 
-            // Duplicate the message in a new compose window and then send it.
-            const newWin = await browser.compose.beginNew(
-                null,
-                previousDetails
-            );
-            // There are theoretically more send options, but https://bugzilla.mozilla.org/show_bug.cgi?id=1747456
-            // is the blocker.
+            // There are theoretically more send options, but https://bugzilla.mozilla.org/show_bug.cgi?id=1747456 is the blocker.
             await browser.compose.sendMessage(newWin.id, {
                 mode: sendmode === "now" ? "sendNow" : "sendLater",
             });
@@ -250,7 +195,7 @@ try {
         }
 
         // attach all our function calls to the iframeService
-        iframeService.log = function () {}; // Comment out if you want to see debug messages
+        // iframeService.log = function () {}; // Comment out if you want to see debug messages
         Object.assign(iframeService.commands, {
             getDefaultPreferences,
             getPreferences,
@@ -280,11 +225,11 @@ try {
 window.onload = () => {
     // We make a blob URL directly from the source code of the worker. This way we don't
     // need to load any other files
- //   const interfaceHtmlUrl = URL.createObjectURL(
- //       new Blob([interfaceHtml], { type: "text/html" })
- //   );
+    //   const interfaceHtmlUrl = URL.createObjectURL(
+    //       new Blob([interfaceHtml], { type: "text/html" })
+    //   );
 
     const iframe = window.document.getElementById("content-frame");
- //   iframe.setAttribute("src", interfaceHtmlUrl);
+    //   iframe.setAttribute("src", interfaceHtmlUrl);
     iframeService.init(iframe);
 };

@@ -1,5 +1,5 @@
 {
-    "name": "@mailmergep/interface",
+    "name": "@mailmergeiase/interface",
     "version": "1.0.0",
     "description": "The preview UI",
     "exports": {

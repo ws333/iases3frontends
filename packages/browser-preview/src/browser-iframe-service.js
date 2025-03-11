@@ -3,8 +3,8 @@
  * running as an extension
  */
 //import { iframeService } from "./iframe-service.js";
-import { iframeService } from "@mailmergep/iframe-service";
-//import interfaceHtml from "@mailmergep/interface/index.html?raw";
+import { iframeService } from "@mailmergeiase/iframe-service";
+//import interfaceHtml from "@mailmergeiase/interface/index.html?raw";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -18,9 +18,7 @@ if (typeof iframeService === "undefined") {
         let div1 = document.createElement("div");
         let div2 = document.createElement("div");
         div1.appendChild(document.createTextNode(type));
-        div2.appendChild(
-            document.createTextNode(JSON.stringify(rest, false, 4))
-        );
+        div2.appendChild(document.createTextNode(JSON.stringify(rest, false, 4)));
 
         li.appendChild(div1);
         li.appendChild(div2);
@@ -116,22 +114,18 @@ if (typeof iframeService === "undefined") {
             settings: "Settings",
             preview: "Preview",
             sendMode: "Send mode:",
-            sendModeDesc:
-                "Set how messages will be delivered. Send Later will leave messages in the Drafts folder.",
+            sendModeDesc: "Set how messages will be delivered. Send Later will leave messages in the Drafts folder.",
             sendModeNow: "Send Now",
             sendModeLater: "Send Later",
             sendModeDraft: "Save as Draft",
             messageDelay: "Message delay:",
             messageDelayDesc: "Dealy, in seconds, between sending messages.",
             sendMessageRange: "Send Message Range:",
-            sendMessageRangeDesc:
-                "Send only specific messages as specified by this range.",
+            sendMessageRangeDesc: "Send only specific messages as specified by this range.",
             parser: "Parser:",
-            parserDesc:
-                "Select the parser that will be used to substitute variables into the email template.",
+            parserDesc: "Select the parser that will be used to substitute variables into the email template.",
             parserLegacy: "Legacy",
-            previewEmpty:
-                "No emails to preview. Try loading data in the {0} tab.",
+            previewEmpty: "No emails to preview. Try loading data in the {0} tab.",
             previewPreviewing: "Previewing {0} of {1}",
             about: "About",
             developers: "Developers",
@@ -152,20 +146,12 @@ if (typeof iframeService === "undefined") {
 
     function sendEmails(emails) {
         for (let email of emails) {
-            console.log(
-                "%c Sending Email",
-                "background: blue; color: white;",
-                email
-            );
+            console.log("%c Sending Email", "background: blue; color: white;", email);
         }
     }
 
     function sendEmail(email, sendmode) {
-        console.log(
-            "%c Sending Email",
-            "background: purple; color: white;",
-            email
-        );
+        console.log("%c Sending Email", "background: purple; color: white;", email);
     }
 
     function cancel() {

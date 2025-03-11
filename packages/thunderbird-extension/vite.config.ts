@@ -8,15 +8,10 @@ const require = createRequire(import.meta.url);
 import path from "node:path";
 
 const IFRAME_PATH = path.join(
-    require.resolve(
-        "@mailmergep/thunderbird-iframe-service/thunderbird-iframe-server.html"
-    ),
+    require.resolve("@mailmergeiase/thunderbird-iframe-service/thunderbird-iframe-server.html"),
     "../*"
 );
-const INTERFACE_PATH = path.join(
-    require.resolve("@mailmergep/interface/index.html"),
-    "../*"
-);
+const INTERFACE_PATH = path.join(require.resolve("@mailmergeiase/interface/index.html"), "../*");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,7 +21,10 @@ export default defineConfig({
         viteTsconfigPaths(),
         svgrPlugin(),
         viteStaticCopy({
-            targets: [{ src: IFRAME_PATH, dest: "content" }, { src: INTERFACE_PATH, dest: "content/interface" }],
+            targets: [
+                { src: IFRAME_PATH, dest: "content" },
+                { src: INTERFACE_PATH, dest: "content/interface" },
+            ],
         }),
     ],
 
