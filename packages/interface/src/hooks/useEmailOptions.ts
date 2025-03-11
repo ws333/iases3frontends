@@ -1,19 +1,20 @@
 import { useRef, useState } from "react";
 import LetterEnglish from "../components/letters/LetterEnglish";
 import { emailComponents, subjects } from "../constants/emailTemplates";
-import { KeyOfTemplatesHTML } from "../types/typesI3C";
+import { TEmailComponent } from "../types/types";
+import { KeyOfEmailComponents } from "../types/typesI3C";
 
 function useEmailOptions() {
     const [delay, setDelay] = useState<number>(1);
-    const [language, _setLanguage] = useState<KeyOfTemplatesHTML>("English");
+    const [language, _setLanguage] = useState<KeyOfEmailComponents>("English");
     const [subjectOption, setSubjectOption] = useState<string>(subjects[language][0]);
     const [customSubject, setCustomSubject] = useState<string>("");
     const selectedSubject =
         subjectOption === "Custom Subject" || subjectOption === "Tilpasset Emne" ? customSubject : subjectOption;
 
-    const EmailComponentRef = useRef<typeof LetterEnglish>(LetterEnglish);
+    const EmailComponentRef = useRef<TEmailComponent>(LetterEnglish);
 
-    const setLanguage = (value: KeyOfTemplatesHTML) => {
+    const setLanguage = (value: KeyOfEmailComponents) => {
         _setLanguage(value);
         setSubjectOption(subjects[value][0]);
         EmailComponentRef.current = emailComponents[value];

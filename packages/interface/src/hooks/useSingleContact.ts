@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { emailTemplates } from "../constants/emailTemplates";
-import { mergeTemplate } from "../helpers/mergeTemplate";
-import { ContactI3C, KeyOfTemplatesHTML } from "../types/typesI3C";
+import { renderEmail } from "../helpers/renderEmail";
+import { TEmailComponent } from "../types/types";
+import { ContactI3C } from "../types/typesI3C";
 
 type UseSingleContactArgs = {
-    language: KeyOfTemplatesHTML;
+    Component: TEmailComponent;
 };
 
-function useSingleContact({ language }: UseSingleContactArgs) {
+function useSingleContact({ Component }: UseSingleContactArgs) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
 
@@ -20,7 +20,8 @@ function useSingleContact({ language }: UseSingleContactArgs) {
         sentDate: "",
         updatedDate: "",
     };
-    const emailText = mergeTemplate(emailTemplates[language], contact);
+
+    const emailText = renderEmail(Component, { name: contact.name });
 
     return {
         name,

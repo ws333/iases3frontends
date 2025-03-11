@@ -1,4 +1,4 @@
-import { templatesHTML } from "../constants/emailTemplates";
+import { emailComponents } from "../constants/emailTemplates";
 
 // Mofdified version of type ContactI3C from IASES3 extractor project
 export type ContactI3C = {
@@ -13,6 +13,6 @@ export type ContactI3C = {
 
 export type Contact = Pick<ContactI3C, "name" | "email">;
 
-export type KeyOfTemplatesHTML = keyof typeof templatesHTML;
+export type KeyOfEmailComponents = keyof typeof emailComponents;
 
-export type Subjects = Record<KeyOfTemplatesHTML, string[]>;
+export type Subjects = Record<KeyOfEmailComponents, string[]>;

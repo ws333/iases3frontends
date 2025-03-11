@@ -3,9 +3,11 @@ import type { ChangeEvent, FocusEvent } from "react";
 
 export type FileContent = number[];
 
-export type LetterProps = {
+export type EmailComponentProps = {
     name: string;
 };
+
+export type TEmailComponent = ({ name }: EmailComponentProps) => JSX.Element;
 
 // Type Template in @types/nunjucks package does not include all possible properties that nunjucks can add to the Template object
 // See 'var Template' in node_modules/nunjucks/browser/nunjucks.js to add additional properties.

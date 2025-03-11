@@ -1,7 +1,7 @@
-import { LetterProps } from "../types/types";
+import { TEmailComponent } from "../types/types";
 
 type EmailPreviewProps = {
-    Component: ({ name }: LetterProps) => JSX.Element;
+    Component: TEmailComponent;
     name: string;
 };
 

@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { __DEV__, SINGLE_CONTACT_MODE } from "../constants/constants";
-import { emailTemplates } from "../constants/emailTemplates";
 import { saveLocalContacts } from "../helpers/contacts";
 import { removeLocalStorageItem } from "../helpers/localStorageHelpers";
-import { mergeTemplate } from "../helpers/mergeTemplate";
+import { renderEmail } from "../helpers/renderEmail";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
+import { useStoreActions } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
+import { Email } from "../types/modelTypes";
 import { ContactI3C } from "../types/typesI3C";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
@@ -18,8 +19,6 @@ import Header from "./Header";
 import SelectNations from "./SelectNations";
 import SendingProgress from "./SendingProgress";
 import SingleContact from "./SingleContact";
-import { Email } from "../types/modelTypes";
-import { useStoreActions } from "../hooks/storeHooks";
 
 const EmailSender = () => {
     const [logMessages, setLogMessages] = useState<string[]>([]);
@@ -31,7 +30,7 @@ const EmailSender = () => {
     const useCL = useContactList({ setMessage });
     const emailOptions = useEmailOptions();
     const singleContactState = useSingleContact({
-        language: emailOptions.language,
+        Component: emailOptions.EmailComponent,
     });
 
     const onClickSubmit = async (e: React.FormEvent) => {
@@ -73,7 +72,7 @@ const EmailSender = () => {
     const prepareAndSendEmail = async (contact: ContactI3C) => {
         setMessage("Sending email, please wait...");
 
-        const emailText = mergeTemplate(emailTemplates[emailOptions.language], contact);
+        const emailText = renderEmail(emailOptions.EmailComponent, { name: contact.name });
 
         const email: Email = {
             to: contact.email,

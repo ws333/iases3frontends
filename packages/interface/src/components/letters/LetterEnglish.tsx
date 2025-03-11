@@ -1,7 +1,7 @@
-import { LetterProps } from "../../types/types";
+import { EmailComponentProps } from "../../types/types";
 import { styles } from "./lettersStyles";
 
-const LetterEnglish = ({ name }: LetterProps) => {
+const LetterEnglish = ({ name }: EmailComponentProps) => {
     return (
         <div style={styles}>
             <meta httpEquiv="content-type" content="text/html; charset=UTF-8" lang="en" />

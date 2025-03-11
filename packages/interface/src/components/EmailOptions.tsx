@@ -1,9 +1,9 @@
 import { FocusEvent, useRef, useState } from "react";
-import { emailTemplates, subjects } from "../constants/emailTemplates";
+import { emailComponents, subjects } from "../constants/emailTemplates";
 import { objectKeys } from "../helpers/objectHelpers";
 import { UseContactListReturnType } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
-import { KeyOfTemplatesHTML } from "../types/typesI3C";
+import { KeyOfEmailComponents } from "../types/typesI3C";
 import "./EmailOptions.css";
 
 export type EmailOptionsProps = {
@@ -70,9 +70,9 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                 Email language <br />
                 <select
                     value={emailOptions.language}
-                    onChange={(e) => emailOptions.setLanguage(e.target.value as KeyOfTemplatesHTML)}
+                    onChange={(e) => emailOptions.setLanguage(e.target.value as KeyOfEmailComponents)}
                 >
-                    {objectKeys(emailTemplates).map((_language) => (
+                    {objectKeys(emailComponents).map((_language) => (
                         <option key={_language} value={_language}>
                             {_language}
                         </option>
