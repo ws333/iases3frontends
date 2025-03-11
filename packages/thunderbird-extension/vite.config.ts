@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import viteTsconfigPaths from "vite-tsconfig-paths";
-import svgrPlugin from "vite-plugin-svgr";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
@@ -19,7 +18,6 @@ export default defineConfig({
     plugins: [
         react(),
         viteTsconfigPaths(),
-        svgrPlugin(),
         viteStaticCopy({
             targets: [
                 { src: IFRAME_PATH, dest: "content" },
