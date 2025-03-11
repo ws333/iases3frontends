@@ -5,12 +5,7 @@
 import { action, thunk } from "easy-peasy";
 import { messageParent } from "./service";
 import type { Model } from "./types/modelTypes";
-import {
-    delay as delayPromise,
-    fillTemplate,
-    formatTime,
-    parseSpreadsheet,
-} from "./utils";
+import { delay as delayPromise, formatTime, parseSpreadsheet } from "./utils";
 
 export const model: Model = {
     locale: {
@@ -23,7 +18,6 @@ export const model: Model = {
         delay: 0,
         sendmode: "now",
         range: "",
-        parser: "nunjucks",
         fileName: "",
         fileContents: [],
         updatePref: thunk(async (actions, payload, { getState }) => {
@@ -102,43 +96,18 @@ export const model: Model = {
     cancel: thunk(async () => {
         await messageParent({ type: "CANCEL" });
     }),
-    parseSpreadsheet: thunk(
-        async (_actions, _payload, { dispatch, getState }) => {
-            // presuming raw data has been loaded into .prefs,
-            // parse with XLSX.js
-            const state = getState();
-            const { fileContents } = state.prefs;
+    parseSpreadsheet: thunk(async (_actions, _payload, { dispatch, getState }) => {
+        // presuming raw data has been loaded into .prefs,
+        // parse with XLSX.js
+        const state = getState();
+        const { fileContents } = state.prefs;
 
-            // if we have manually updated spreadsheet data, don't override
-            // the spreadsheet contents with the file's contents
-            if (!state.data.spreadsheetHasManuallyUpdated) {
-                const sheetArray = parseSpreadsheet(fileContents || []);
-                dispatch.data.updateSpreadsheetData(sheetArray);
-            }
+        // if we have manually updated spreadsheet data, don't override
+        // the spreadsheet contents with the file's contents
+        if (!state.data.spreadsheetHasManuallyUpdated) {
+            const sheetArray = parseSpreadsheet(fileContents || []);
+            dispatch.data.updateSpreadsheetData(sheetArray);
         }
-    ),
-    renderEmails: thunk(async (_actions, payload, { dispatch, getState }) => {
-        await dispatch.data.fetchTemplate();
-        const { data, prefs } = getState();
-
-        let spreadsheetData = [data.spreadsheetData[0]];
-        // if a non-empty range was specified in the payload, filter out only those
-        // rows from the spreadsheet. Note, the range starts at "1".
-        if (!payload || payload.length === 0) {
-            spreadsheetData = data.spreadsheetData;
-        } else {
-            for (const i of payload) {
-                if (data.spreadsheetData[i]) {
-                    spreadsheetData.push(data.spreadsheetData[i]);
-                }
-            }
-        }
-        const emails = fillTemplate(
-            data.template,
-            spreadsheetData,
-            prefs.parser
-        );
-        dispatch.data.updateEmails(emails);
     }),
     sendEmails: thunk(async (actions, _payload, { getState }) => {
         const {
@@ -192,9 +161,7 @@ export const model: Model = {
                 });
 
                 // Compute how long to wait before sending the next email
-                const waitTime = delay
-                    ? 1000 * delay * current - (Date.now() - startTime)
-                    : 0;
+                const waitTime = delay ? 1000 * delay * current - (Date.now() - startTime) : 0;
                 await delayPromise(waitTime, shouldAbort);
             }
         } catch (e) {

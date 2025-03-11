@@ -34,11 +34,6 @@
     "sendMessageRangeDesc": {
         "message": "Envoyez uniquement des messages spécifiques comme spécifié par cette plage."
     },
-    "parser": { "message": "Analyseur:" },
-    "parserDesc": {
-        "message": "Sélectionnez l'analyseur qui sera utilisé pour remplacer les variables dans le modèle d'e-mail."
-    },
-    "parserLegacy": { "message": "Hérité" },
     "previewEmpty": {
         "message": "Pas d'email à afficher. Essayer de charger des données sur l'onglet {0}."
     },

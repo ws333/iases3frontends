@@ -34,11 +34,6 @@
     "sendMessageRangeDesc": {
         "message": "Csak meghatározott üzeneteket küldjön a tartomány által meghatározott módon."
     },
-    "parser": { "message": "Elemző:" },
-    "parserDesc": {
-        "message": "Válassza ki azt az elemzőt, amelyet a változók helyettesítésére használnak az e-mail sablonban."
-    },
-    "parserLegacy": { "message": "Örökölt" },
     "previewEmpty": {
         "message": "Nincs megtekinthető e-mail. Próbálja meg betölteni az adatokat a(z) {0} lapra."
     },

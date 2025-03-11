@@ -34,11 +34,6 @@
     "sendMessageRangeDesc": {
         "message": "Send only specific messages as specified by this range."
     },
-    "parser": { "message": "Parser:" },
-    "parserDesc": {
-        "message": "Select the parser that will be used to substitute variables into the email template."
-    },
-    "parserLegacy": { "message": "Legacy" },
     "previewEmpty": {
         "message": "No emails to preview. Try loading data in the {0} tab."
     },

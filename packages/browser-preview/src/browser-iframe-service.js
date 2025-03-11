@@ -54,7 +54,6 @@ if (typeof iframeService === "undefined") {
             delay: 0,
             sendmode: "now",
             range: "",
-            parser: "nunjucks",
             fileName: "",
             fileContents: [],
         };
@@ -122,9 +121,6 @@ if (typeof iframeService === "undefined") {
             messageDelayDesc: "Dealy, in seconds, between sending messages.",
             sendMessageRange: "Send Message Range:",
             sendMessageRangeDesc: "Send only specific messages as specified by this range.",
-            parser: "Parser:",
-            parserDesc: "Select the parser that will be used to substitute variables into the email template.",
-            parserLegacy: "Legacy",
             previewEmpty: "No emails to preview. Try loading data in the {0} tab.",
             previewPreviewing: "Previewing {0} of {1}",
             about: "About",

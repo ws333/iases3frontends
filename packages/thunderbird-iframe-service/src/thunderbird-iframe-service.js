@@ -63,7 +63,6 @@ try {
                 delay: 0,
                 sendmode: "now",
                 range: "",
-                parser: "nunjucks",
                 fileName: "",
                 fileContents: [],
             };
@@ -146,9 +145,6 @@ try {
                 "messageDelayDesc",
                 "sendMessageRange",
                 "sendMessageRangeDesc",
-                "parser",
-                "parserDesc",
-                "parserLegacy",
                 "previewEmpty",
                 "previewPreviewing",
                 "about",

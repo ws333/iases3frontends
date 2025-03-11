@@ -1,9 +1,5 @@
 import { Action, Thunk } from "easy-peasy";
-import type {
-    Strings,
-    SpreadsheetData,
-    ParseRangeReturnType,
-} from "./types.ts";
+import type { SpreadsheetData, Strings } from "./types.ts";
 
 type SpreadsheetHasManuallyUpdated = boolean;
 
@@ -15,7 +11,6 @@ export interface Model {
     initialise: Thunk<Model, undefined, never, Model>;
     cancel: Thunk<Model>;
     parseSpreadsheet: Thunk<Model, undefined, never, Model>;
-    renderEmails: Thunk<Model, ParseRangeReturnType, unknown, Model>;
     sendEmails: Thunk<Model, undefined, never, Model>;
     sendEmail: Thunk<Model, { email: Email; sendmode: Prefs["sendmode"] }>;
     sendDialog: SendDialog;
@@ -31,7 +26,6 @@ export interface Prefs {
     delay: number;
     sendmode: "now" | "later";
     range: string;
-    parser: "nunjucks" | "legacy";
     fileName: string;
     fileContents: number[];
     fetchPrefs: Thunk<Prefs>;
@@ -43,10 +37,7 @@ interface Data {
     spreadsheetData: SpreadsheetData;
     updateSpreadsheetData: Action<Data, SpreadsheetData>;
     spreadsheetHasManuallyUpdated: SpreadsheetHasManuallyUpdated;
-    updateSpreadsheetHasManuallyUpdated: Action<
-        Data,
-        SpreadsheetHasManuallyUpdated
-    >;
+    updateSpreadsheetHasManuallyUpdated: Action<Data, SpreadsheetHasManuallyUpdated>;
     template: Email;
     updateTemplate: Action<Data, Email>;
     fetchTemplate: Thunk<Data>;
