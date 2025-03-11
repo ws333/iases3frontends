@@ -3,25 +3,25 @@ import { styles } from "./lettersStyles";
 
 const LetterEnglish = ({ name }: EmailComponentProps) => {
     return (
-        <div style={styles}>
+        <>
             <meta httpEquiv="content-type" content="text/html; charset=UTF-8" lang="en" />
             <div>
-                <p style={{ textIndent: 0 }}>Dear {name}</p>
+                <p style={{ ...styles, textIndent: 0 }}>Dear {name}</p>
                 <br />
-                <p>
+                <p style={styles}>
                     <span>
                         Despite military, scientific, and political statements to the contrary, we believe that UFOs or
                         UAPs do not represent a threat of any kind to national or global security or humanity at large.
                     </span>
                 </p>
-                <p>
+                <p style={styles}>
                     <span>
                         There is overwhelming and well-researched evidence and thousands of eyewitness accounts that
                         these objects have been present throughout Earth's history without detrimental effect on the
                         day-to-day affairs of humanity.
                     </span>
                 </p>
-                <p>
+                <p style={styles}>
                     <span>
                         Without supporting or promoting any related conspiracy theories, we believe that certain
                         organizations are withholding knowledge of this phenomenon out of an irrational fear and for
@@ -29,7 +29,7 @@ const LetterEnglish = ({ name }: EmailComponentProps) => {
                         education to begin in service to humanity.
                     </span>
                 </p>
-                <p>
+                <p style={styles}>
                     <span>
                         Therefore, we respectfully, but strongly request that you, in your official capacity,
                         immediately and publicly disclose and release, within one year from your receipt of this letter,
@@ -39,7 +39,7 @@ const LetterEnglish = ({ name }: EmailComponentProps) => {
                         of all such information without limitation, editing, redaction, ridicule, or falsification.
                     </span>
                 </p>
-                <p>
+                <p style={styles}>
                     <span>
                         Please be aware the members of this social movement intend to vote for and elect only those
                         leaders and representatives who publicly and actively support and promote such disclosure and,
@@ -47,11 +47,11 @@ const LetterEnglish = ({ name }: EmailComponentProps) => {
                     </span>
                 </p>
                 <br />
-                <p style={{ textIndent: 0 }}>
+                <p style={{ ...styles, textIndent: 0 }}>
                     <i>- The Interstellar Alliance Social Experiment Group</i>
                 </p>
             </div>
-        </div>
+        </>
     );
 };
 
