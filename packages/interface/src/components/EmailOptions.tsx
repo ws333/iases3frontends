@@ -48,6 +48,7 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                         <div className="container-delay">
                             <div className="column-delay">
                                 <input
+                                    id="delay_input"
                                     type="number"
                                     value={localDelay}
                                     min={minDelay.toString()}

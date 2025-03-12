@@ -28,7 +28,7 @@
 .email-options select,
 .email-options input {
     margin: 10px;
-    width: 100px; /* Ensure the input takes the full width minus margins */
+    width: 100px;
 }
 
 .email-options input[type="number"] {
@@ -75,4 +75,8 @@
 
 .column-delay span {
     margin-top: 0px;
+}
+
+#delay_input {
+    width: 100px;
 }
