@@ -1,4 +1,5 @@
 import { FocusEvent, useRef, useState } from "react";
+import { minDelay } from "../constants/constants";
 import { emailComponents, subjects } from "../constants/emailTemplates";
 import { objectKeys } from "../helpers/objectHelpers";
 import { UseContactListReturnType } from "../hooks/useContactList";
@@ -29,24 +30,36 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
         emailOptions.subjectOption === "Custom Subject" || emailOptions.subjectOption === "Tilpasset Emne"; // TODO:Use last items in the subjects array for these strings
 
     const [localDelay, setLocalDelay] = useState(emailOptions.delay.toString());
+
     return (
         <div className="email-options">
             {!singleContactMode && (
                 <div className="delay-input">
                     <label>
-                        Delay between emails sent{" "}
-                        <input
-                            type="number"
-                            value={localDelay}
-                            min="1"
-                            onChange={(e) => setLocalDelay(e.target.value)}
-                            onBlur={(e) => {
-                                let value = Number(e.target.value);
-                                if (value < 1) value = 1;
-                                setLocalDelay(value.toString());
-                                emailOptions.setDelay(value);
-                            }}
-                        />
+                        Delay in seconds between emails sent
+                        <br />
+                        <div className="container-delay">
+                            <div className="column-delay">
+                                <input
+                                    type="number"
+                                    value={localDelay}
+                                    min={minDelay.toString()}
+                                    onChange={(e) => setLocalDelay(e.target.value)}
+                                    onBlur={(e) => {
+                                        let value = Number(e.target.value);
+                                        if (value < minDelay) value = minDelay;
+                                        setLocalDelay(value.toString());
+                                        emailOptions.setDelay(value);
+                                    }}
+                                />
+                            </div>
+                            <div className="column-delay">
+                                <span className="small-print">{minDelay} is the minimum to avoid rate limits</span>
+                                <span className="small-print">
+                                    Increase if hitting the rate limit for your email provider
+                                </span>
+                            </div>
+                        </div>
                     </label>
                 </div>
             )}
@@ -54,7 +67,8 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
             {!singleContactMode && (
                 <div className="number-of-emails">
                     <label>
-                        Number of emails{" "}
+                        Number of emails to send in this session
+                        <br />
                         <select value={useCL.maxCount} onChange={(e) => useCL.setMaxCount(Number(e.target.value))}>
                             {useCL.maxCountOptions.map((count) => (
                                 <option key={count} value={count}>
@@ -67,7 +81,8 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
             )}
 
             <label>
-                Email language <br />
+                Email language
+                <br />
                 <select
                     value={emailOptions.language}
                     onChange={(e) => emailOptions.setLanguage(e.target.value as KeyOfEmailComponents)}
@@ -82,7 +97,8 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
 
             <div className="subject-input">
                 <label>
-                    Subject{" "}
+                    Subject
+                    <br />
                     <select
                         value={emailOptions.subjectOption}
                         onChange={(e) => emailOptions.setSubjectOption(e.target.value)}

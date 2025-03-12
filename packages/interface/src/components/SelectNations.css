@@ -11,10 +11,14 @@
     margin-bottom: 20px;
 }
 
+.title-container {
+    display: flex;
+    justify-content: flex-start;
+}
+
 .title {
-    font-weight: bold;
-    margin-bottom: 10px;
-    display: block;
+    display: flex;
+    margin-bottom: 1.5rem;
 }
 
 .select-all {
@@ -24,7 +28,6 @@
 .select-all label {
     display: flex;
     align-items: center;
-    justify-content: center;
 }
 
 .select-all input {
@@ -54,8 +57,10 @@
 
 .selected-info {
     margin-top: 20px;
+    margin-left: 26px;
 }
 
 .selected-info > div {
     margin: 0 0 10px 0;
+    font-size: small;
 }

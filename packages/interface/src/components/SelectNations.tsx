@@ -19,9 +19,7 @@ function SelectNations({ useCL, sending }: SelectNationsProps) {
         if (checked) {
             useCL.setSelectedNations((prev) => [...prev, nation]);
         } else {
-            useCL.setSelectedNations((prev) =>
-                prev.filter((n) => n !== nation)
-            );
+            useCL.setSelectedNations((prev) => prev.filter((n) => n !== nation));
         }
     };
 
@@ -29,7 +27,9 @@ function SelectNations({ useCL, sending }: SelectNationsProps) {
         <div className="select-nations">
             {!useCL.isLoading && (
                 <div className="nation-options">
-                    <label className="title">Available contacts</label>
+                    <div className="title-container">
+                        <label className="title">Available contacts</label>
+                    </div>
                     <div className="select-all">
                         <label>
                             <input
@@ -47,12 +47,8 @@ function SelectNations({ useCL, sending }: SelectNationsProps) {
                                 <input
                                     disabled={sending}
                                     type="checkbox"
-                                    onChange={(e) =>
-                                        onChangeNation(nation, e.target.checked)
-                                    }
-                                    checked={useCL.selectedNations.includes(
-                                        nation
-                                    )}
+                                    onChange={(e) => onChangeNation(nation, e.target.checked)}
+                                    checked={useCL.selectedNations.includes(nation)}
                                 />
                                 {nation}
                             </label>
@@ -62,15 +58,8 @@ function SelectNations({ useCL, sending }: SelectNationsProps) {
             )}
             <div className="selected-info">
                 <div>Selected contacts {useCL.selectedContacts.length}</div>
-                <div>
-                    Selected not sent {useCL.selectedContactsNotSent.length}
-                </div>
-                {__DEV__ && (
-                    <div>
-                        mostRecentUidsSentPerNation:{" "}
-                        {objectEntries(useCL.mostRecentUidsSentPerNation)}
-                    </div>
-                )}
+                <div>Selected not sent {useCL.selectedContactsNotSent.length}</div>
+                {__DEV__ && <div>mostRecentUidsSentPerNation: {objectEntries(useCL.mostRecentUidsSentPerNation)}</div>}
             </div>
         </div>
     );

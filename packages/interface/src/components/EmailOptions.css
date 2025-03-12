@@ -4,8 +4,10 @@
     border-radius: 5px;
     background-color: #333;
     color: #fff;
-    text-align: center;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
 
 .email-options label {
@@ -23,9 +25,10 @@
     background-color: #222;
     color: #fff;
 }
-.email-options select {
+.email-options select,
+.email-options input {
     margin: 10px;
-    width: calc(100% - 20px); /* Ensure the input takes the full width minus margins */
+    width: 100px; /* Ensure the input takes the full width minus margins */
 }
 
 .email-options input[type="number"] {
@@ -46,19 +49,30 @@
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
-.delay-input,
-.number-of-emails,
-.subject-input {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.subject-input {
-    width: 100%; /* Ensure the subject input takes the full width of its container */
-}
-
 .subject-input select {
     width: 100%; /* Make the select input take the full width */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.small-print {
+    font-style: italic;
+    font-size: x-small;
+    margin-top: 10px;
+}
+
+.container-delay {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.column-delay {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.column-delay span {
+    margin-top: 0px;
 }
