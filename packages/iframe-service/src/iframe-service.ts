@@ -5,6 +5,8 @@
 import type { Email, Prefs } from "../../interface/src/types/modelTypes";
 import type { Strings } from "../../interface/src/types/types";
 
+export type Message = MessagePayload & { direction: "tochild" | "fromchild" };
+
 export type MessagePayload = {
     type:
         | "ECHO"
@@ -34,7 +36,7 @@ type MessageChildPayload = Pick<MessagePayload, "type" | "id" | "data">;
 
 export type IframeService = {
     iframe: HTMLIFrameElement | null;
-    log: (message: unknown) => void;
+    log: (message: Message) => void;
     init: (iframe: HTMLIFrameElement) => void;
     onmessage: (e: MessageEvent<MessagePayload>) => Promise<void>;
     initChild: () => void;
@@ -153,7 +155,7 @@ export const iframeService: IframeService = {
     initChild: function initChild() {
         iframeService.iframe?.contentWindow?.addEventListener("message", iframeService.onmessage);
 
-        const payload = { type: "INITIALIZE_PARENT" };
+        const payload: MessagePayload = { type: "INITIALIZE_PARENT" };
         iframeService.iframe?.contentWindow?.postMessage(payload, "*");
         iframeService.log({ ...payload, direction: "tochild" });
     },

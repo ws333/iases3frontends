@@ -2,7 +2,8 @@
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
 
-import { iframeService } from "@iases3/iframe-service";
+import { iframeService, Message } from "../../iframe-service/src/iframe-service";
+import { Email, Prefs } from "../../interface/src/types/modelTypes";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -10,13 +11,13 @@ if (typeof iframeService === "undefined") {
 
 (function () {
     // Log a message to #processing-log
-    function log(message) {
-        let { type, direction, ...rest } = message;
-        let li = document.createElement("li");
-        let div1 = document.createElement("div");
-        let div2 = document.createElement("div");
+    function log(message: Message) {
+        const { type, direction, ...rest } = message;
+        const li = document.createElement("li");
+        const div1 = document.createElement("div");
+        const div2 = document.createElement("div");
         div1.appendChild(document.createTextNode(type));
-        div2.appendChild(document.createTextNode(JSON.stringify(rest, false, 4)));
+        div2.appendChild(document.createTextNode(JSON.stringify(rest, null, 4)));
 
         li.appendChild(div1);
         li.appendChild(div2);
@@ -38,7 +39,7 @@ if (typeof iframeService === "undefined") {
         div1.addEventListener("click", hideLogContents);
         hideLogContents();
 
-        let logElm = document.getElementById("processing-log");
+        const logElm = document.getElementById("processing-log");
         if (logElm) {
             logElm.appendChild(li);
         }
@@ -60,15 +61,16 @@ if (typeof iframeService === "undefined") {
     function getPreferences() {
         let prefs = getDefaultPreferences();
         try {
-            prefs = JSON.parse(window.localStorage.getItem("prefs")) || prefs;
-        } catch (e) {
-            console.warn("error when decoding prefs from JSON");
+            const storedPrefs = window.localStorage.getItem("prefs");
+            prefs = storedPrefs ? JSON.parse(storedPrefs) : prefs;
+        } catch (error) {
+            console.warn("error when decoding prefs from JSON", error);
         }
         return prefs;
     }
 
-    function setPreferences(prefs) {
-        let newPrefs = { ...getPreferences(), ...prefs };
+    function setPreferences(prefs: Prefs) {
+        const newPrefs = { ...getPreferences(), ...prefs };
         window.localStorage.setItem("prefs", JSON.stringify(newPrefs));
     }
 
@@ -114,21 +116,21 @@ if (typeof iframeService === "undefined") {
         };
     }
 
-    function sendEmails(emails) {
-        for (let email of emails) {
+    function sendEmails(emails: Email[]) {
+        for (const email of emails) {
             console.log("%c Sending Email", "background: blue; color: white;", email);
         }
     }
 
-    function sendEmail(email, sendmode) {
-        console.log("%c Sending Email", "background: purple; color: white;", email);
+    function sendEmail(email: Email, sendmode: Prefs["sendmode"]) {
+        console.log("%c Sending Email", "background: purple; color: white;", email, sendmode);
     }
 
     function cancel() {
         alert("Cancel pressed");
     }
 
-    function openUrl(url) {
+    function openUrl(url: string | URL) {
         window.open(url, "_blank");
     }
 
@@ -147,5 +149,6 @@ if (typeof iframeService === "undefined") {
 })();
 
 window.onload = () => {
-    iframeService.init(window.document.getElementById("content-frame"));
+    const iframe = window.document.getElementById("content-frame");
+    iframeService.init(iframe as HTMLIFrameElement);
 };
