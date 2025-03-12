@@ -2,7 +2,7 @@
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
  */
-import { iframeService } from "@mailmergeiase/iframe-service";
+import { iframeService } from "@iases3/iframe-service";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");

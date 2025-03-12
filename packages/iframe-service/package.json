@@ -1,5 +1,5 @@
 {
-    "name": "@mailmergeiase/iframe-service",
+    "name": "@iases3/iframe-service",
     "version": "1.0.0",
     "description": "Abstracted service to let the UI run in an iframe",
     "private": true,

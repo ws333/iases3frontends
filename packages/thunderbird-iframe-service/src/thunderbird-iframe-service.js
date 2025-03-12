@@ -1,5 +1,4 @@
-import { iframeService } from "@mailmergeiase/iframe-service";
-//import interfaceHtml from "@mailmergeiase/interface/index.html?raw";
+import { iframeService } from "@iases3/iframe-service";
 /*
  * provide a messaging api equivalent to what is supplied by Thunderbird when
  * running as an extension
@@ -16,7 +15,7 @@ try {
         // background.js will let us know what the id of the current compose window
         // is with a message.
         browser.runtime.onMessage.addListener(function (message, sender) {
-            if (sender.id.toLowerCase() === "mailmergeiase@iase.one") {
+            if (sender.id.toLowerCase() === "iases3@iase.one") {
                 if (message.activeTabId != null) {
                     composeTabId = message.activeTabId;
                 }
@@ -180,13 +179,6 @@ try {
 }
 
 window.onload = () => {
-    // We make a blob URL directly from the source code of the worker. This way we don't
-    // need to load any other files
-    //   const interfaceHtmlUrl = URL.createObjectURL(
-    //       new Blob([interfaceHtml], { type: "text/html" })
-    //   );
-
     const iframe = window.document.getElementById("content-frame");
-    //   iframe.setAttribute("src", interfaceHtmlUrl);
     iframeService.init(iframe);
 };

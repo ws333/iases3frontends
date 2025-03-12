@@ -6,7 +6,7 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 import path from "node:path";
 
-const INTERFACE_PATH = path.join(require.resolve("@mailmergeiase/interface/index.html"), "../*");
+const INTERFACE_PATH = path.join(require.resolve("@iases3/interface/index.html"), "../*");
 
 // https://vitejs.dev/config/
 export default defineConfig({
