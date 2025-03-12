@@ -72,8 +72,7 @@ class MailmergeWindow {
 const mailmergeWindow = new MailmergeWindow();
 
 // Listen for when the "Step 3" button is clicked
-browser.browserAction.onClicked.addListener(async (tabInfo) => {
-    await mailmergeWindow.sendMessage({ activeTabId: tabInfo.id });
+browser.browserAction.onClicked.addListener(async () => {
     await mailmergeWindow.ensureWindowOpened();
 });
 

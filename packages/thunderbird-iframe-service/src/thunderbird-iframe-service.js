@@ -10,17 +10,6 @@ if (typeof iframeService === "undefined") {
 
 try {
     (function () {
-        // Set up some internal globals
-        let composeTabId = null;
-        // background.js will let us know what the id of the current compose window is with a message.
-        browser.runtime.onMessage.addListener(function (message, sender) {
-            if (sender.id.toLowerCase() === "iases3@iase.one") {
-                if (message.activeTabId != null) {
-                    composeTabId = message.activeTabId;
-                }
-            }
-        });
-
         // Let background.js know that we're ready.
         // We must send a message because there is no other way for background.js to know that we're loaded.
         browser.runtime.sendMessage({ status: "loaded" });
