@@ -1,19 +1,17 @@
-function log(...args) {
-    console.log("[MailMerge IASE]:", ...args);
+import { Message } from "@iases3/iframe-service/src/iframe-service";
+
+function log(...args: unknown[]) {
+    console.log("[IASES3]:", ...args);
 }
 
 log("Extension loaded...");
 
-class MailmergeWindow {
-    constructor() {
-        this.openWindowId = null;
-        this.isReady = false;
-        this._messageQueue = [];
-
+class IASES3Window {
+    constructor(private openWindowId: number = 0, private isReady = false, private _messageQueue: Message[] = []) {
         // If we get a message, it means that the window has finished loading.
         // In that case, we are free to send messages to the window
         browser.runtime.onMessage.addListener(async (message) => {
-            log("background.js got", message);
+            log("background.js received message", message);
             if ((message || {}).status === "loaded") {
                 await this._onWindowOpened();
             }
@@ -26,28 +24,31 @@ class MailmergeWindow {
         await Promise.all(messagePromises);
     }
     async ensureWindowOpened() {
-        let ret = null;
+        let ret: browser.windows.Window;
         try {
             ret = await browser.windows.get(this.openWindowId);
             await browser.windows.update(this.openWindowId, { focused: true });
-        } catch (e) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (error) {
+            // No window found, creating a new one.
             ret = await browser.windows.create({
                 url: "content/thunderbird-iframe-server.html",
                 type: "popup",
                 allowScriptsToClose: true,
                 height: 800,
-                width: 700,
+                width: 800,
             });
-            this.openWindowId = ret.id;
+            this.openWindowId = ret.id || 0;
         }
         return ret;
     }
-    async sendMessage(message) {
+    async sendMessage(message: Message) {
         // Check to see if the window is still open. If not, it is no longer ready.
         try {
-            await browser.windows.get(this.openWindowId);
-        } catch (e) {
+            if (this.openWindowId) await browser.windows.get(this.openWindowId);
+        } catch (error) {
             this.isReady = false;
+            log("sendMessage -> error:", error);
         }
 
         // Even if the window is open, it may not be ready
@@ -59,26 +60,28 @@ class MailmergeWindow {
     }
     async close() {
         try {
-            await browser.windows.get(this.openWindowId);
-            await browser.windows.remove(this.openWindowId);
-            this.openWindowId = null;
+            if (this.openWindowId) {
+                await browser.windows.get(this.openWindowId);
+                await browser.windows.remove(this.openWindowId);
+            }
+            this.openWindowId = 0;
             this.isReady = false;
-        } catch (e) {
+        } catch (error) {
             // Already closed
-            log(e);
+            log(error);
         }
     }
 }
-const mailmergeWindow = new MailmergeWindow();
+const iases3Window = new IASES3Window();
 
 // Listen for when the "Step 3" button is clicked
 browser.browserAction.onClicked.addListener(async () => {
-    await mailmergeWindow.ensureWindowOpened();
+    await iases3Window.ensureWindowOpened();
 });
 
 // We are responsible for closing the "Step 3" window if asked.
 browser.runtime.onMessage.addListener(async (message) => {
     if ((message || {}).action === "close") {
-        await mailmergeWindow.close();
+        await iases3Window.close();
     }
 });
