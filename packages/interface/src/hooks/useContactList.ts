@@ -1,9 +1,5 @@
 import { Dispatch, useEffect, useRef, useState } from "react";
-import {
-    fetchAndMergeContacts,
-    fetchOnlineNations,
-    saveLocalContacts,
-} from "../helpers/contacts";
+import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
 import { ContactI3C } from "../types/typesI3C";
 
 const maxCountOptions = [50, 100, 200, 500, 1000];
@@ -34,10 +30,7 @@ function useContactList({ setMessage }: UseContactListArgs) {
                 setIsLoading(false);
             } catch (error) {
                 if (error instanceof Error) {
-                    console.warn(
-                        "*Debug* -> EmailSender.tsx -> useEffect fetch error:",
-                        error.message
-                    );
+                    console.warn("*Debug* -> EmailSender.tsx -> useEffect fetch error:", error.message);
                 }
             }
         };
@@ -48,31 +41,20 @@ function useContactList({ setMessage }: UseContactListArgs) {
         };
     }, []);
 
-    const selectedContacts = contacts.filter((contact) =>
-        selectedNations.includes(contact.nation)
-    );
+    const selectedContacts = contacts.filter((contact) => selectedNations.includes(contact.nation));
 
-    const initialNations = nationOptions.reduce<Record<string, number>>(
-        (acc, nation) => {
-            return { ...acc, [nation]: 0 };
-        },
-        {}
-    );
+    const initialNations = nationOptions.reduce<Record<string, number>>((acc, nation) => ({ ...acc, [nation]: 0 }), {});
 
-    const mostRecentUidsSentPerNation = selectedContacts.reduce<
-        Record<string, number>
-    >(
+    const mostRecentUidsSentPerNation = selectedContacts.reduce<Record<string, number>>(
         (acc, contact) =>
             contact.uid > acc[contact.nation] && contact.sentDate
-                ? { [contact.nation]: contact.uid }
-                : { [contact.nation]: acc[contact.nation] },
+                ? { ...acc, [contact.nation]: contact.uid }
+                : { ...acc, [contact.nation]: acc[contact.nation] },
         initialNations
     );
 
     const selectedContactsNotSent = selectedContacts.filter(
-        (contact) =>
-            !contact.sentDate &&
-            contact.uid > mostRecentUidsSentPerNation[contact.nation]
+        (contact) => !contact.sentDate && contact.uid > mostRecentUidsSentPerNation[contact.nation]
     );
 
     function getMaxSelectedContactsNotSent() {
@@ -91,10 +73,7 @@ function useContactList({ setMessage }: UseContactListArgs) {
     };
 
     useEffect(() => {
-        if (
-            emailsSent > 0 &&
-            emailsSent === maxSelectedContactsNotSent.current
-        ) {
+        if (emailsSent > 0 && emailsSent === maxSelectedContactsNotSent.current) {
             setMessage(`${emailsSent.toString()} emails sent successfully!`);
         }
     }, [emailsSent, setMessage]);
