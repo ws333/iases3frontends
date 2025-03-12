@@ -1,4 +1,4 @@
-import { FocusEvent, useRef, useState } from "react";
+import { FocusEvent, useEffect, useRef, useState } from "react";
 import { minDelay } from "../constants/constants";
 import { emailComponents, subjects } from "../constants/emailTemplates";
 import { objectKeys } from "../helpers/objectHelpers";
@@ -28,6 +28,13 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
 
     const customSubjectVisible =
         emailOptions.subjectOption === "Custom Subject" || emailOptions.subjectOption === "Tilpasset Emne"; // TODO:Use last items in the subjects array for these strings
+
+    useEffect(() => {
+        if (customSubjectVisible) {
+            const input = document.getElementById("custom_subject_input");
+            input?.focus();
+        }
+    }, [customSubjectVisible]);
 
     const [localDelay, setLocalDelay] = useState(emailOptions.delay.toString());
 
@@ -119,7 +126,14 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                 }}
             >
                 Custom Subject <br />
-                <input type="text" ref={customSubjectRef} onChange={() => null} onBlur={onBlurCustomSubject} required />
+                <input
+                    id="custom_subject_input"
+                    type="text"
+                    ref={customSubjectRef}
+                    onChange={() => null}
+                    onBlur={onBlurCustomSubject}
+                    required
+                />
             </label>
         </div>
     );
