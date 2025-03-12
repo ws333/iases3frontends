@@ -26,6 +26,7 @@
         "@types/papaparse": "^5.3.15",
         "@types/react": "^18.3.1",
         "@types/react-dom": "^18.3.1",
+        "@types/thunderbird-webext-browser": "^127.0.0",
         "@vitejs/plugin-react": "^4.3.4",
         "bestzip": "^2.2.1",
         "eslint": "^9.19.0",

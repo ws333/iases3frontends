@@ -2,7 +2,8 @@
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
 
-import { iframeService } from "@iases3/iframe-service";
+import { iframeService } from "../../iframe-service/src/iframe-service";
+import { Email, Prefs } from "../../interface/src/types/modelTypes";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -13,30 +14,6 @@ try {
         // Let background.js know that we're ready.
         // We must send a message because there is no other way for background.js to know that we're loaded.
         browser.runtime.sendMessage({ status: "loaded" });
-
-        /**
-         * Find the sender's email given a `composeDetails` object as returned by the Thunderbird API.
-         */
-        async function getSenderFromComposeDetails(composeDetails) {
-            const activeIdentityId = composeDetails.identityId;
-            const accounts = await browser.accounts.list();
-            const activeAccount = accounts.find((account) =>
-                account.identities.some((ident) => ident.id === activeIdentityId)
-            );
-            if (activeAccount == null) {
-                console.warn("Could not find the active account for a message with composeDetails:", composeDetails);
-                return "";
-            }
-
-            const identity = activeAccount.identities.find((ident) => ident.id === activeIdentityId);
-            if (identity == null) {
-                console.warn("Could not find identity", activeIdentityId, "in account", activeAccount);
-                return "";
-            }
-
-            const sender = identity.name ? `${identity.name} <${identity.email}>` : identity.email;
-            return sender;
-        }
 
         /*
          * Functions to simulate the mailmerge commands
@@ -58,14 +35,14 @@ try {
                 if (fetched.prefs) {
                     prefs = fetched.prefs;
                 }
-            } catch (e) {
-                console.warn("error when loading prefs");
+            } catch (error) {
+                console.warn("error when loading prefs", error);
             }
             return prefs;
         }
 
-        async function setPreferences(prefs) {
-            let newPrefs = { ...(await getPreferences()), ...prefs };
+        async function setPreferences(prefs: Prefs) {
+            const newPrefs = { ...(await getPreferences()), ...prefs };
             await browser.storage.local.set({ prefs: newPrefs });
         }
 
@@ -107,23 +84,25 @@ try {
                 "sending",
                 "waiting",
             ];
-            const ret = {};
+            const ret: Record<string, string> = {};
             for (const name of stringNames) {
                 ret[name] = browser.i18n.getMessage(name);
             }
             return ret;
         }
 
-        async function sendEmail(email, sendmode) {
+        async function sendEmail(email: Email, sendmode: Prefs["sendmode"]) {
             // Sending messages in the background blocked until https://bugzilla.mozilla.org/show_bug.cgi?id=1545930 is resolved.
 
             // Create the email in a new compose window and then send it.
-            const newWin = await browser.compose.beginNew(null, email);
+            const newWin = await browser.compose.beginNew(0, email);
 
             // There are theoretically more send options, but https://bugzilla.mozilla.org/show_bug.cgi?id=1747456 is the blocker.
-            await browser.compose.sendMessage(newWin.id, {
-                mode: sendmode === "now" ? "sendNow" : "sendLater",
-            });
+            if (newWin.id) {
+                await browser.compose.sendMessage(newWin.id, {
+                    mode: sendmode === "now" ? "sendNow" : "sendLater",
+                });
+            }
         }
 
         function cancel() {
@@ -131,7 +110,7 @@ try {
             browser.runtime.sendMessage({ action: "close" });
         }
 
-        function openUrl(url) {
+        function openUrl(url: string | URL) {
             window.open(url, "_blank");
         }
 
@@ -146,14 +125,6 @@ try {
             openUrl,
             cancel,
         });
-
-        /**
-         * When `{{email}}` is specified, since it's invalid, TB 78 will change it to `{{email}} <>`.
-         * We want to strip the extra `<>` away.
-         */
-        function cleanupTemplateAddress(str) {
-            return str.replace("<>", "").trim();
-        }
     })();
 } catch (e) {
     console.error(e);
@@ -161,5 +132,5 @@ try {
 
 window.onload = () => {
     const iframe = window.document.getElementById("content-frame");
-    iframeService.init(iframe);
+    if (iframe) iframeService.init(iframe as HTMLIFrameElement);
 };
