@@ -48,7 +48,7 @@ const EmailSender = () => {
         });
     };
 
-    const onClickSubmit = async (e: React.FormEvent) => {
+    const onClickSendEmail = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (!emailOptions.selectedSubject) {
@@ -117,14 +117,13 @@ const EmailSender = () => {
             : !useCL.selectedContactsNotSent.length);
 
     return (
-        <div className="email-sender-container">
+        <div className="container_email_sender">
             <Header />
-
             <br />
 
-            <form onSubmit={onClickSubmit} className="email-form">
-                <div className="container">
-                    <div className="column">
+            <div className="container_options_and_preview">
+                <div className="container_options">
+                    <div className="column_options_left">
                         {SINGLE_CONTACT_MODE ? (
                             <SingleContact state={singleContactState} />
                         ) : (
@@ -133,7 +132,7 @@ const EmailSender = () => {
                     </div>
                     <br />
 
-                    <div className="columnRight">
+                    <div className="column_options_right">
                         <EmailOptions
                             useCL={useCL}
                             emailOptions={emailOptions}
@@ -143,19 +142,19 @@ const EmailSender = () => {
                     <br />
                 </div>
 
-                <button disabled={sendButtonDisabled} onClick={onClickSubmit}>
+                <button disabled={sendButtonDisabled} onClick={onClickSendEmail}>
                     Send Email
                 </button>
                 {sending && <button onClick={onClickCancel}>Cancel sending</button>}
                 {message && <p>{message}</p>}
 
-                <div className="email-preview-container">
+                <div className="container_email_preview">
                     <EmailPreview
                         Component={emailOptions.EmailComponent}
                         name={SINGLE_CONTACT_MODE ? singleContactState.name : useCL.nextContactNotSent.name}
                     />
                 </div>
-            </form>
+            </div>
 
             {__DEV__ ? (
                 <button onClick={() => removeLocalStorageItem("contactsI3C")}>Empty local storage</button>

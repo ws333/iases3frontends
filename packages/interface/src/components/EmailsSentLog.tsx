@@ -1,18 +1,18 @@
 type EmailsSentLogProps = {
-  logMessages: string[];
+    logMessages: string[];
 };
 
 function EmailsSentLog({ logMessages }: EmailsSentLogProps) {
-  return (
-    <section className="emails-sent-log">
-      <h2>Email Sending Log</h2>
-      <div className="emails-sent-log-container">
-        {logMessages.map((msg, idx) => (
-          <div key={idx}>{msg}</div>
-        ))}
-      </div>
-    </section>
-  );
+    return (
+        <section className="section_emails_sent_log">
+            <h2>Email Sending Log</h2>
+            <div className="container_emails_sent_log">
+                {logMessages.map((msg, idx) => (
+                    <div key={idx}>{msg}</div>
+                ))}
+            </div>
+        </section>
+    );
 }
 
 export default EmailsSentLog;

@@ -18,22 +18,22 @@ function SingleContact({ state }: SingleContactProps) {
     const emailIsValid = validateEmail(state.email);
 
     return (
-        <div className="single-contact-container">
+        <div className="single_contact_container">
             <label>
                 Name
-                <input type="text" value={state.name} onChange={onBlurName} required className="single-contact-input" />
-                <div className="email-validation-message">{state.name ? "" : "Please type recipient name..."}</div>
+                <input type="text" value={state.name} onChange={onBlurName} required className="single_contact_input" />
+                <div className="email_validation_message">{state.name ? "" : "Please type recipient name..."}</div>
             </label>
             <label>
                 Email
                 <input
-                    className={`single-contact-input ${emailIsValid ? "" : "email-not-valid"}`}
+                    className={`single_contact_input`}
                     type="text"
                     value={state.email}
                     onChange={onBlurEmail}
                     required
                 />
-                <div className="email-validation-message">
+                <div className="email_validation_message">
                     {emailIsValid ? "" : "Please type recipient email address..."}
                 </div>
             </label>

@@ -1,29 +1,12 @@
-.container {
+.container_email_sender {
+    margin: auto;
+    max-width: 50rem;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
 }
 
-.column,
-.columnRight {
-    width: 380px;
-}
-
-.column {
-    padding: 1rem;
-    text-align: right;
-    border-radius: 0.8125rem;
-    box-sizing: border-box;
-}
-
-.columnRight {
-    padding: 1rem;
-    text-align: left;
-    border-radius: 0.8125rem;
-    box-sizing: border-box;
-}
-
-.email-form {
+.container_options_and_preview {
     padding: 1.25rem;
     color: #fff;
     text-align: center;
@@ -34,15 +17,36 @@
     align-items: center;
 }
 
-.email-preview-container {
+.container_options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.column_options_left,
+.column_options_right {
+    width: 380px;
+}
+
+.column_options_left {
+    padding: 1rem;
+    text-align: right;
+    border-radius: 0.8125rem;
+    box-sizing: border-box;
+}
+
+.column_options_right {
+    padding: 1rem;
+    text-align: left;
+    border-radius: 0.8125rem;
+    box-sizing: border-box;
+}
+
+.container_email_preview {
     width: 100%;
 }
 
-.email-preview-title {
-    margin: 1rem;
-}
-
-.email-preview-content {
+.email_preview_content {
     border: 1px solid #ccc;
     border-radius: 13px;
     padding: 2rem;
@@ -50,37 +54,20 @@
     text-align: left;
 }
 
-.email-sender-container {
-    margin: auto;
-    max-width: 50rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.emails-sent-log {
+.section_emails_sent_log {
     margin-top: 1.25rem;
 }
 
-.emails-sent-log-container {
+.container_emails_sent_log {
     max-height: 12.5rem;
     overflow-y: scroll;
     padding: 0.625rem;
 }
 
-.email-validation-message {
-    font-size: 0.7rem;
-}
-
-.logged-in-info {
-    font-size: 0.8rem;
-    font-style: italic;
-}
-
-.progress-bar {
-    width: 100%;
-}
-
-.sending-progress {
+.section_sending_progress {
     margin-top: 1.25rem;
+}
+
+.progress_bar {
+    width: 100%;
 }

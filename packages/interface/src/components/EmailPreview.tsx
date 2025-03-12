@@ -8,7 +8,7 @@ type EmailPreviewProps = {
 function EmailPreview({ name, Component }: EmailPreviewProps) {
     return (
         <div>
-            <div className="email-preview-content">
+            <div className="email_preview_content">
                 <Component name={name} />
             </div>
         </div>

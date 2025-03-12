@@ -6,12 +6,12 @@ type SendingProgressProps = {
 
 function SendingProgress({ useCL }: SendingProgressProps) {
     return (
-        <section className="sending-progress">
+        <section className="section_sending_progress">
             <h2>Progress</h2>
             <progress
+                className="progress_bar"
                 value={useCL.emailsSent}
                 max={Math.min(useCL.selectedContacts.length, useCL.maxCount)}
-                className="progress-bar"
             ></progress>
             <p>
                 {useCL.emailsSent} / {useCL.maxSelectedContactsNotSent.current}
