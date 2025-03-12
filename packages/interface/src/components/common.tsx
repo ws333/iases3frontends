@@ -62,8 +62,7 @@ export function ClearableInput(props: ClearableInputProps) {
     );
 }
 
-// helper function to read a file (from an input)
-// using a promise
+// Helper function to read a file (from an input) using a promise
 async function readFile(filename: Blob) {
     return new Promise<ArrayBuffer>((resolve) => {
         const fr = new FileReader();
@@ -90,9 +89,8 @@ type ClearableFileInputProps = {
 };
 
 function ClearableFileInput(props: ClearableFileInputProps) {
-    // if an `id` prop is passed in, it gets assigned
-    // to the file input. That way a label with "for=..."
-    // will attach to it instead of the display input
+    // If an `id` prop is passed in, it gets assigned to the file input.
+    // That way a label with "for=..." will attach to it instead of the display input
     const { accept, onChange = () => {}, className, id, filename, ...otherProps } = props;
     const inputRef = useRef<HTMLInputElement>(null);
     const fileRef = useRef<HTMLInputElement>(null);
@@ -111,8 +109,7 @@ function ClearableFileInput(props: ClearableFileInputProps) {
         }
         let dat = await readFile(file);
         dat = new Uint8Array(dat);
-        // Opening the same file, e.g. after modifying its content, will not trigger
-        // useEffect with parseSpreadsheet unless there is a state change
+        // Opening the same file, e.g. after modifying its content, will not trigger useEffect with parseSpreadsheet unless there is a state change
         onChange({ name: "", data: new ArrayBuffer() });
         onChange({ name: file.name, data: dat });
     }
@@ -127,8 +124,7 @@ function ClearableFileInput(props: ClearableFileInputProps) {
         }
     }
     function inputClicked() {
-        // if no file is loaded, a click
-        // will open the file dialog
+        // If no file is loaded, a click will open the file dialog
         if (!filename) {
             openClicked();
         }

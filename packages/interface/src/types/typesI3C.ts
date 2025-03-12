@@ -1,6 +1,6 @@
 import { emailComponents } from "../constants/emailTemplates";
 
-// Mofdified version of type ContactI3C from IASES3 extractor project
+// Modified version of type ContactI3C from IASES3 extractor project
 export type ContactI3C = {
     uid: number; // Artificial unixtimestamp in milliseconds
     nation: string;

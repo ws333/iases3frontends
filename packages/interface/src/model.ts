@@ -23,7 +23,7 @@ export const model: Model = {
         updatePref: thunk(async (actions, payload, { getState }) => {
             const newPrefs = { ...getState(), ...payload };
 
-            // first send an update to the host window, then update the state.
+            // First send an update to the host window, then update the state.
             await messageParent({
                 type: "SET_PREFERENCES",
                 data: {
@@ -37,7 +37,7 @@ export const model: Model = {
             return { ...state, ...payload };
         }),
         fetchPrefs: thunk(async (actions) => {
-            // send a signal to get the preferences
+            // Send a signal to get the preferences
             const data = await messageParent({ type: "GET_PREFERENCES" });
             if (data?.prefs) {
                 actions.updatePrefNosync(data.prefs);
@@ -64,8 +64,7 @@ export const model: Model = {
         await messageParent({ type: "CANCEL" });
     }),
     parseSpreadsheet: thunk(async (_actions, _payload, { dispatch, getState }) => {
-        // presuming raw data has been loaded into .prefs,
-        // parse with XLSX.js
+        // Presuming raw data has been loaded into .prefs, parse with XLSX.js
         const state = getState();
         const { fileContents } = state.prefs;
 
@@ -131,7 +130,7 @@ export const model: Model = {
             console.error(e);
         }
 
-        // cleanup
+        // Cleanup
         clearTimeout(intervalHandle);
         actions.sendDialog.update({
             open: false,

@@ -1,6 +1,5 @@
 /**
- * This is the interface between the iframe mailMerge UI and
- * the outside world (which has permission to send mail)
+ * This is the interface between the iframe mailMerge UI and the outside world (which has permission to send mail)
  */
 
 import type { MessagePayload } from "../../iframe-service/src/iframe-service";
@@ -16,9 +15,8 @@ const parentInitialized = new Promise((resolve) => {
     resolveParentInitialized = resolve;
 });
 
-// send a message to the parent window
-// including payload. Returns a promise that
-// is resolved by the parent's response.
+// Send a message to the parent window including payload.
+// Returns a promise that is resolved by the parent's response.
 async function messageParent(payload: Pick<MessagePayload, "type" | "data">) {
     const { type, data } = payload;
     const message: MessagePayload = {
@@ -32,16 +30,14 @@ async function messageParent(payload: Pick<MessagePayload, "type" | "data">) {
     await parentInitialized;
 
     return new Promise<MessagePayload["data"]>((resolve) => {
-        // construct a listener that resolves the promise when
-        // getting back a reply, then removes itself from
-        // listening.
+        // Construct a listener that resolves the promise when getting back a reply, then removes itself from listening.
         const listener = (e: MessageEvent<MessagePayload>) => {
             const { data } = e;
-            // bail if this isn't a response for this message
+            // Bail if this isn't a response for this message
             if (data.source !== "PARENT" || data.reply_id !== message.id) {
                 return;
             }
-            // if we're here, it's a response to this message
+            // If we're here, it's a response to this message
             window.removeEventListener("message", listener);
             resolve(data.data);
         };
@@ -57,11 +53,7 @@ window.addEventListener("message", (e) => {
     if (data.type === "INITIALIZE_PARENT") {
         // Let the child (us) know that it's safe to send messages to the parent.
         resolveParentInitialized();
-        console.log(
-            "Got signal from parent window to initialize",
-            data,
-            e.source
-        );
+        console.log("Got signal from parent window to initialize", data, e.source);
     }
 });
 

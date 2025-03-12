@@ -43,8 +43,7 @@ class MailmergeWindow {
         return ret;
     }
     async sendMessage(message) {
-        // Check to see if the window is still open. If not,
-        // it is no longer ready.
+        // Check to see if the window is still open. If not, it is no longer ready.
         try {
             await browser.windows.get(this.openWindowId);
         } catch (e) {

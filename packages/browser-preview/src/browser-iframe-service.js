@@ -1,7 +1,7 @@
 /*
- * provide a messaging api equivalent to what is supplied by Thunderbird when
- * running as an extension
+ * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
+
 import { iframeService } from "@iases3/iframe-service";
 
 if (typeof iframeService === "undefined") {
@@ -23,7 +23,7 @@ if (typeof iframeService === "undefined") {
         li.classList.add(direction);
         div1.classList.add("log-item");
 
-        // set it up so clicking on an item in the log with shrink or expand its contents
+        // Set it up so clicking on an item in the log with shrink or expand its contents
         let hidden = false;
         function hideLogContents() {
             hidden = !hidden;
@@ -132,7 +132,7 @@ if (typeof iframeService === "undefined") {
         window.open(url, "_blank");
     }
 
-    // attach all our function calls to the iframeService
+    // Attach all our function calls to the iframeService
     iframeService.log = log;
     Object.assign(iframeService.commands, {
         getDefaultPreferences,

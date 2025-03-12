@@ -1,6 +1,5 @@
 /*
- * provide a messaging api equivalent to what is supplied by Thunderbird when
- * running as an extension
+ * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
 
 import type { Email, Prefs } from "../../interface/src/types/modelTypes";
@@ -58,8 +57,7 @@ export const iframeService: IframeService = {
         console.log(message);
     },
     init: function init(iframe: HTMLIFrameElement) {
-        // Find our child iframe and send it a message as soon as possible
-        // so it is capable of sending messages back.
+        // Find our child iframe and send it a message as soon as possible so it is capable of sending messages back.
         iframeService.iframe = iframe || window.document.querySelector<HTMLIFrameElement>("#content-frame");
         window.childFrame = iframe;
 
@@ -80,8 +78,7 @@ export const iframeService: IframeService = {
         }
 
         if (source !== "CHILD") {
-            // We got a message that wasn't from our child iframe.
-            // It should be handled by a different event listener.
+            // We got a message that wasn't from our child iframe, it should be handled by a different event listener.
             return;
         }
 
@@ -152,8 +149,7 @@ export const iframeService: IframeService = {
                 console.warn("Unknown message type", type);
         }
     },
-    // send a message to the child iframe so that it has a reference to us,
-    // it's parent.
+    // Send a message to the child iframe so that it has a reference to us, it's parent.
     initChild: function initChild() {
         iframeService.iframe?.contentWindow?.addEventListener("message", iframeService.onmessage);
 
@@ -161,7 +157,7 @@ export const iframeService: IframeService = {
         iframeService.iframe?.contentWindow?.postMessage(payload, "*");
         iframeService.log({ ...payload, direction: "tochild" });
     },
-    // send a message to the child iframe
+    // Send a message to the child iframe
     messageChild: function messageChild(payload: MessageChildPayload) {
         const { type, id, data } = payload;
         const message: MessagePayload = {

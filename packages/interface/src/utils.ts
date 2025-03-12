@@ -2,15 +2,14 @@ import jsCharDet from "jschardet";
 import * as XLSX from "xlsx";
 import type { FileContent, SpreadsheetData } from "./types/types.ts";
 
-// parse an array containing raw bytes from a spreadsheet of some
-// format. XLSX will auto-detect the format
+// Parse an array containing raw bytes from a spreadsheet of some format. XLSX will auto-detect the format
 function parseSpreadsheet(data: FileContent): SpreadsheetData {
     if (data.length === 0) {
         return [[]];
     }
 
     try {
-        // use xlsx.js to parse the spreadsheet data
+        // Use xlsx.js to parse the spreadsheet data
         const parsed = XLSX.read(data.slice(), {
             type: "array",
             // According to the docs dateNF can be set to a string value to specify date format.
@@ -50,8 +49,7 @@ function parseSpreadsheet(data: FileContent): SpreadsheetData {
         console.warn("Error when parsing spreading as unicode", e);
     }
 
-    // CSV parsing may fail when trying to process date cells, so we fall
-    // back to not processing the date cells.
+    // CSV parsing may fail when trying to process date cells, so we fall back to not processing the date cells.
     try {
         const parsed = XLSX.read(data, {
             type: "array",
@@ -74,8 +72,6 @@ function parseSpreadsheet(data: FileContent): SpreadsheetData {
 
 /**
  * Returns a promise that delays for number of milliseconds
- *
- * @param abortFunction - called repeatedly to test if the promise should be aborted
  */
 function delay(duration: number, abortFunction = () => false) {
     // ms to poll before testing if we should abort

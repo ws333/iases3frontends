@@ -1,8 +1,8 @@
-import { iframeService } from "@iases3/iframe-service";
 /*
- * provide a messaging api equivalent to what is supplied by Thunderbird when
- * running as an extension
+ * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
+
+import { iframeService } from "@iases3/iframe-service";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -12,8 +12,7 @@ try {
     (function () {
         // Set up some internal globals
         let composeTabId = null;
-        // background.js will let us know what the id of the current compose window
-        // is with a message.
+        // background.js will let us know what the id of the current compose window is with a message.
         browser.runtime.onMessage.addListener(function (message, sender) {
             if (sender.id.toLowerCase() === "iases3@iase.one") {
                 if (message.activeTabId != null) {
@@ -22,16 +21,12 @@ try {
             }
         });
 
-        // Let background.js know that we're ready. We must send a message
-        // because there is no other way for background.js to know that we're
-        // loaded.
+        // Let background.js know that we're ready.
+        // We must send a message because there is no other way for background.js to know that we're loaded.
         browser.runtime.sendMessage({ status: "loaded" });
 
         /**
-         * Find the sender's email given a `composeDetails` object as
-         * returned by the Thunderbird API.
-         *
-         * @param {*} composeDetails
+         * Find the sender's email given a `composeDetails` object as returned by the Thunderbird API.
          */
         async function getSenderFromComposeDetails(composeDetails) {
             const activeIdentityId = composeDetails.identityId;
@@ -151,8 +146,8 @@ try {
             window.open(url, "_blank");
         }
 
-        // attach all our function calls to the iframeService
-        // iframeService.log = function () {}; // Comment out if you want to see debug messages
+        // Attach all our function calls to the iframeService
+        // iframeService.log = function () {}; // Comment out if you want to see debug messages // Todo - comment this line out
         Object.assign(iframeService.commands, {
             getDefaultPreferences,
             getPreferences,
@@ -164,11 +159,8 @@ try {
         });
 
         /**
-         * When `{{email}}` is specified, since it's invalid, TB 78 will change
-         * it to `{{email}} <>`. We want to strip the extra `<>` away.
-         *
-         * @param {string} str
-         * @returns
+         * When `{{email}}` is specified, since it's invalid, TB 78 will change it to `{{email}} <>`.
+         * We want to strip the extra `<>` away.
          */
         function cleanupTemplateAddress(str) {
             return str.replace("<>", "").trim();
