@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { __DEV__, SINGLE_CONTACT_MODE } from "../constants/constants";
 import { saveLocalContacts } from "../helpers/contacts";
 import { removeLocalStorageItem } from "../helpers/localStorageHelpers";
 import { renderEmail } from "../helpers/renderEmail";
+import { readSendingLog, storeSendingLog } from "../helpers/sendingLog";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
 import { useStoreActions } from "../hooks/storeHooks";
@@ -21,17 +22,31 @@ import SendingProgress from "./SendingProgress";
 import SingleContact from "./SingleContact";
 
 const EmailSender = () => {
-    const [logMessages, setLogMessages] = useState<string[]>([]);
     const [message, setMessage] = useState<string>("");
     const [sending, setSending] = useState<boolean>(false);
+    const [sendingLog, setSendingLog] = useState<string[]>([]);
+
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
-    const cancel = useStoreActions((actions) => actions.cancel);
+    const controller = useRef(new AbortController());
 
     const useCL = useContactList({ setMessage });
     const emailOptions = useEmailOptions();
     const singleContactState = useSingleContact({
         Component: emailOptions.EmailComponent,
     });
+
+    useEffect(() => {
+        const storedLog = readSendingLog();
+        setSendingLog(storedLog);
+    }, []);
+
+    const logMessage = (message: string) => {
+        setSendingLog((prev) => {
+            const newValue = [...prev, message];
+            storeSendingLog(newValue);
+            return newValue;
+        });
+    };
 
     const onClickSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -50,19 +65,23 @@ const EmailSender = () => {
             : useCL.selectedContactsNotSent.slice(0, useCL.maxCount);
         for await (const contact of toSend) {
             try {
+                const { aborted } = controller.current.signal;
+                if (aborted) {
+                    controller.current = new AbortController();
+                    break;
+                }
                 const sentStatus = await prepareAndSendEmail(contact);
                 if (!sentStatus) return;
                 contact.sentDate = new Date().toISOString();
-                setLogMessages((prev) => [...prev, `Email sent to ${contact.email}`]);
+                logMessage(`Email sent to ${contact.name} - ${contact.email}`);
+                count++;
+                useCL.setEmailsSent(count);
+                saveLocalContacts([...useCL.contacts, ...toSend]); // Save updated contacts for each email sent
                 await waitRandomSeconds(emailOptions.delay);
             } catch (error) {
                 console.log("*Debug* -> EmailSender.tsx -> handleSendEmails -> error:", error);
-                setLogMessages((prev) => [...prev, `Failed to send email to ${contact.email}`]);
+                logMessage(`Failed to send email to ${contact.name} - ${contact.email}`);
             }
-            count++;
-            useCL.setEmailsSent(count);
-            saveLocalContacts([...useCL.contacts, ...toSend]); // Save updated contacts for each email sent
-            await new Promise((res) => setTimeout(res, emailOptions.delay * 1000));
         }
         useCL.setContacts([...useCL.contacts, ...toSend]); // Update local state when done
         setMessage("");
@@ -85,11 +104,14 @@ const EmailSender = () => {
     };
 
     const onClickCancel = () => {
-        cancel();
+        setSending(false);
+        setMessage("Sending cancelled");
+        controller.current.abort();
     };
 
     const sendButtonDisabled =
-        sending ||
+        isSending ||
+        controller.current.signal.aborted ||
         (SINGLE_CONTACT_MODE
             ? !validateEmail(singleContactState.email) || !singleContactState.name
             : !useCL.selectedContactsNotSent.length);
@@ -141,7 +163,7 @@ const EmailSender = () => {
             <br />
             {!SINGLE_CONTACT_MODE && <SendingProgress useCL={useCL} />}
             <br />
-            {!SINGLE_CONTACT_MODE && <EmailsSentLog logMessages={logMessages} />}
+            {!SINGLE_CONTACT_MODE && <EmailsSentLog logMessages={sendingLog} />}
         </div>
     );
 };
