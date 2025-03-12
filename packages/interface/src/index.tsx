@@ -1,21 +1,8 @@
 import ReactDOM from "react-dom/client";
-import { createStore, StoreProvider } from "easy-peasy";
-
-import { model } from "./model";
-import App from "./components/app";
 
 import "./css/browser-style.css";
 import "./css/email-preview.css";
-
-const store = createStore(model, { disableImmer: true });
-
-function Root() {
-    return (
-        <StoreProvider store={store}>
-            <App />
-        </StoreProvider>
-    );
-}
+import { Root } from "./components/Root";
 
 const rootElement = document.getElementById("root");
 
