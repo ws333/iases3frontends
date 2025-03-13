@@ -10,10 +10,11 @@ import "./EmailOptions.css";
 export type EmailOptionsProps = {
     useCL: UseContactListReturnType;
     emailOptions: ReturnType<typeof useEmailOptions>;
+    isSending: boolean;
     singleContactMode: boolean;
 };
 
-function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsProps) {
+function EmailOptions({ useCL, emailOptions, isSending, singleContactMode }: EmailOptionsProps) {
     const customSubjectRef = useRef<HTMLInputElement>(null);
     if (customSubjectRef.current) {
         customSubjectRef.current.value = emailOptions.customSubject;
@@ -51,6 +52,7 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                                     id="delay_input"
                                     type="number"
                                     value={localDelay}
+                                    disabled={isSending}
                                     min={minDelay.toString()}
                                     onChange={(e) => setLocalDelay(e.target.value)}
                                     onBlur={(e) => {
@@ -77,7 +79,11 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                     <label>
                         Number of emails to send in this session
                         <br />
-                        <select value={useCL.maxCount} onChange={(e) => useCL.setMaxCount(Number(e.target.value))}>
+                        <select
+                            value={useCL.maxCount}
+                            disabled={isSending}
+                            onChange={(e) => useCL.setMaxCount(Number(e.target.value))}
+                        >
                             {useCL.maxCountOptions.map((count) => (
                                 <option key={count} value={count}>
                                     {count}
@@ -93,6 +99,7 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                 <br />
                 <select
                     value={emailOptions.language}
+                    disabled={isSending}
                     onChange={(e) => emailOptions.setLanguage(e.target.value as KeyOfEmailComponents)}
                 >
                     {objectKeys(emailComponents).map((_language) => (
@@ -109,6 +116,7 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                     <br />
                     <select
                         value={emailOptions.subjectOption}
+                        disabled={isSending}
                         onChange={(e) => emailOptions.setSubjectOption(e.target.value)}
                     >
                         {subjects[emailOptions.language].map((_subject) => (
@@ -130,6 +138,7 @@ function EmailOptions({ useCL, emailOptions, singleContactMode }: EmailOptionsPr
                 <input
                     id="custom_subject_input"
                     type="text"
+                    disabled={isSending}
                     ref={customSubjectRef}
                     onChange={() => null}
                     onBlur={onBlurCustomSubject}

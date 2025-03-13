@@ -5,10 +5,10 @@ import "./SelectNations.css";
 
 type SelectNationsProps = {
     useCL: UseContactListReturnType;
-    sending: boolean;
+    isSending: boolean;
 };
 
-function SelectNations({ useCL, sending }: SelectNationsProps) {
+function SelectNations({ useCL, isSending }: SelectNationsProps) {
     const onChangeSelectAll = () => {
         const newState = !useCL.selectAll;
         useCL.setSelectAll(newState);
@@ -30,23 +30,23 @@ function SelectNations({ useCL, sending }: SelectNationsProps) {
                     <div className="title-container">
                         <label className="title">Available contacts</label>
                     </div>
-                    <div className="select-all">
-                        <label>
+                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
+                        <label className="nation-item">
                             <input
-                                disabled={sending}
                                 type="checkbox"
+                                disabled={isSending}
                                 checked={useCL.selectAll}
                                 onChange={onChangeSelectAll}
                             />
                             Select All
                         </label>
                     </div>
-                    <div className="nation-list">
+                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
                         {useCL.nationOptions.map((nation) => (
                             <label key={nation} className="nation-item">
                                 <input
-                                    disabled={sending}
                                     type="checkbox"
+                                    disabled={isSending}
                                     onChange={(e) => onChangeNation(nation, e.target.checked)}
                                     checked={useCL.selectedNations.includes(nation)}
                                 />

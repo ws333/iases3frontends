@@ -12,6 +12,7 @@ import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
 import { Email } from "../types/modelTypes";
 import { ContactI3C } from "../types/typesI3C";
+import ButtonSendEmail from "./ButtonSendEmail";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
 import "./EmailSender.css";
@@ -23,13 +24,21 @@ import SingleContact from "./SingleContact";
 
 const EmailSender = () => {
     const [message, setMessage] = useState<string>("");
-    const [sending, setSending] = useState<boolean>(false);
+    const [isSending, setIsSending] = useState<boolean>(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());
 
-    const useCL = useContactList({ setMessage });
+    const logMessage = (message: string) => {
+        setSendingLog((prev) => {
+            const newValue = [...prev, message];
+            storeSendingLog(newValue);
+            return newValue;
+        });
+    };
+
+    const useCL = useContactList();
     const emailOptions = useEmailOptions();
     const singleContactState = useSingleContact({
         Component: emailOptions.EmailComponent,
@@ -48,7 +57,7 @@ const EmailSender = () => {
         });
     };
 
-    const onClickSendEmail = async (e: React.FormEvent) => {
+    const onClickSendEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if (!emailOptions.selectedSubject) {
@@ -56,13 +65,12 @@ const EmailSender = () => {
             return false;
         }
 
-        setSending(true);
-        useCL.setEmailsSent(0);
+        setIsSending(true);
         useCL.updateMaxSelectedContactsNotSent();
-        let count = 0;
+        const toSendCount = useCL.maxCount - useCL.emailsSent;
         const toSend = SINGLE_CONTACT_MODE
             ? [singleContactState.contact]
-            : useCL.selectedContactsNotSent.slice(0, useCL.maxCount);
+            : useCL.selectedContactsNotSent.slice(0, toSendCount);
         for await (const contact of toSend) {
             try {
                 const { aborted } = controller.current.signal;
@@ -74,18 +82,16 @@ const EmailSender = () => {
                 if (!sentStatus) return;
                 contact.sentDate = new Date().toISOString();
                 logMessage(`Email sent to ${contact.name} - ${contact.email}`);
-                count++;
-                useCL.setEmailsSent(count);
+                useCL.setEmailsSent((count) => ++count);
                 saveLocalContacts([...useCL.contacts, ...toSend]); // Save updated contacts for each email sent
                 await waitRandomSeconds(emailOptions.delay);
             } catch (error) {
-                console.log("*Debug* -> EmailSender.tsx -> handleSendEmails -> error:", error);
+                console.warn("*Debug* -> EmailSender.tsx -> handleSendEmails -> error:", error);
                 logMessage(`Failed to send email to ${contact.name} - ${contact.email}`);
             }
         }
-        useCL.setContacts([...useCL.contacts, ...toSend]); // Update local state when done
         setMessage("");
-        setSending(false);
+        setIsSending(false);
     };
 
     const prepareAndSendEmail = async (contact: ContactI3C) => {
@@ -104,7 +110,7 @@ const EmailSender = () => {
     };
 
     const onClickCancel = () => {
-        setSending(false);
+        setIsSending(false);
         setMessage("Sending cancelled");
         controller.current.abort();
     };
@@ -127,7 +133,7 @@ const EmailSender = () => {
                         {SINGLE_CONTACT_MODE ? (
                             <SingleContact state={singleContactState} />
                         ) : (
-                            <SelectNations useCL={useCL} sending={sending} />
+                            <SelectNations useCL={useCL} isSending={isSending} />
                         )}
                     </div>
                     <br />
@@ -136,16 +142,20 @@ const EmailSender = () => {
                         <EmailOptions
                             useCL={useCL}
                             emailOptions={emailOptions}
+                            isSending={isSending}
                             singleContactMode={SINGLE_CONTACT_MODE}
                         />
                     </div>
                     <br />
                 </div>
 
-                <button disabled={sendButtonDisabled} onClick={onClickSendEmail}>
-                    Send Email
-                </button>
-                {sending && <button onClick={onClickCancel}>Cancel sending</button>}
+                <ButtonSendEmail
+                    disabled={sendButtonDisabled}
+                    onClick={onClickSendEmail}
+                    emailsSent={useCL.emailsSent}
+                />
+
+                {isSending && <button onClick={onClickCancel}>Cancel sending</button>}
                 {message && <p>{message}</p>}
 
                 <div className="container_email_preview">
