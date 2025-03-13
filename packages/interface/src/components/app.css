@@ -22,3 +22,7 @@ button {
 [disabled] {
     opacity: 0.8;
 }
+
+h2 {
+    margin: 0.5rem;
+}

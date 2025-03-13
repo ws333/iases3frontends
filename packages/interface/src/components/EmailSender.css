@@ -23,6 +23,10 @@
     justify-content: space-between;
 }
 
+p {
+    margin: 8px 0px 9px;
+}
+
 .column_options_left,
 .column_options_right {
     width: 380px;
@@ -58,7 +62,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.25rem;
 }
 
 .container_emails_sent_log {
@@ -72,7 +75,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 1.25rem;
+    margin-top: 0.5rem;
+    width: 50vw;
 }
 
 .progress_bar {

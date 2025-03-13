@@ -6,12 +6,12 @@ type Props = {
     emailsSent: number;
 };
 
-function ButtonSendEmail({ disabled, onClick, emailsSent }: Props) {
+function ButtonSendEmails({ disabled, onClick, emailsSent }: Props) {
     return (
         <button disabled={disabled} onClick={onClick}>
-            {emailsSent === 0 ? "Send Email" : "Continue Sending"}
+            {emailsSent === 0 ? "Send Emails" : "Continue"}
         </button>
     );
 }
 
-export default ButtonSendEmail;
+export default ButtonSendEmails;

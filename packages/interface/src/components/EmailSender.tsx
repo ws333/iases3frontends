@@ -13,7 +13,8 @@ import { renderEmail } from "../helpers/renderEmail";
 import { readSendingLog } from "../helpers/sendingLog";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
-import ButtonSendEmail from "./ButtonSendEmail";
+import ButtonCancel from "./ButtonCancel";
+import ButtonSendEmails from "./ButtonSendEmails";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
 import EmailsSentLog from "./EmailsSentLog";
@@ -24,7 +25,7 @@ import SingleContact from "./SingleContact";
 import "./EmailSender.css";
 
 const EmailSender = () => {
-    const [message, setMessage] = useState<string>("");
+    const [message, setMessage] = useState<string>("Select one or more contact lists to activate the button");
     const [isSending, setIsSending] = useState<boolean>(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
@@ -55,9 +56,10 @@ const EmailSender = () => {
         ).length;
         const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== useCL.selectedNations;
         if (useCL.emailsSent > 0 && leftToSendCount === 0 && !selectedNationsChangedSinceLastSending) {
-            const message = `Session is done! ${useCL.emailsSent.toString()} emails were sent.`;
+            const message = `Session finished! ${useCL.emailsSent.toString()} emails were sent.`;
             setMessage(message);
             logMessage(message, { addNewline: true });
+
             useCL.setEmailsSent(0);
         }
     }, [useCL]);
@@ -89,25 +91,23 @@ const EmailSender = () => {
                 }
                 const sentStatus = await prepareAndSendEmail(contact);
                 if (!sentStatus) return;
-                contact.sentDate = new Date().toISOString();
-                logMessage(`Email sent to ${logContact}`);
                 useCL.setEmailsSent((count) => ++count);
+                contact.sentDate = new Date().toISOString();
                 saveLocalContacts([...useCL.contacts, ...toSend]); // Store updated contacts for each email sent
+                logMessage(`Email sent to ${logContact}`);
                 await waitRandomSeconds(emailOptions.delay);
             } catch (error) {
                 console.warn("*Debug* -> EmailSender.tsx -> handleSendEmails -> error:", error);
                 logMessage(`Failed to send email to ${logContact}`);
             }
         }
-        setMessage("");
         setIsSending(false);
     };
 
     const prepareAndSendEmail = async (contact: ContactI3C) => {
-        setMessage("Sending email, please wait...");
+        setMessage("Sending emails...");
 
         const emailText = renderEmail(emailOptions.EmailComponent, { name: contact.name });
-
         const email: Email = {
             to: contact.email,
             subject: emailOptions.selectedSubject,
@@ -119,9 +119,8 @@ const EmailSender = () => {
     };
 
     const onClickCancel = () => {
-        setIsSending(false);
-        setMessage("Sending cancelled");
         controller.current.abort();
+        setMessage("Sending stopped by user...");
     };
 
     const sendButtonDisabled =
@@ -130,6 +129,8 @@ const EmailSender = () => {
         (SINGLE_CONTACT_MODE
             ? !validateEmail(singleContactState.email) || !singleContactState.name
             : !useCL.selectedContactsNotSent.length);
+
+    const cancelButtonDisabled = useCL.emailsSent === 0 || controller.current.signal.aborted;
 
     return (
         <div className="container_email_sender">
@@ -158,14 +159,19 @@ const EmailSender = () => {
                     <br />
                 </div>
 
-                <ButtonSendEmail
-                    disabled={sendButtonDisabled}
-                    onClick={onClickSendEmail}
-                    emailsSent={useCL.emailsSent}
-                />
-
-                {isSending && useCL.emailsSent > 0 && <button onClick={onClickCancel}>Cancel sending</button>}
                 {message && <p>{message}</p>}
+
+                {!isSending && (
+                    <ButtonSendEmails
+                        disabled={sendButtonDisabled}
+                        onClick={onClickSendEmail}
+                        emailsSent={useCL.emailsSent}
+                    />
+                )}
+
+                {isSending && <ButtonCancel disabled={cancelButtonDisabled} onClick={onClickCancel} />}
+
+                {!SINGLE_CONTACT_MODE && <SendingProgress useCL={useCL} />}
 
                 <div className="container_email_preview">
                     <EmailPreview
@@ -178,9 +184,6 @@ const EmailSender = () => {
             {__DEV__ ? (
                 <button onClick={() => removeLocalStorageItem("contactsI3C")}>Empty local storage</button>
             ) : null}
-            <br />
-            {!SINGLE_CONTACT_MODE && <SendingProgress useCL={useCL} />}
-            <br />
             {!SINGLE_CONTACT_MODE && <EmailsSentLog logMessages={sendingLog} />}
         </div>
     );
