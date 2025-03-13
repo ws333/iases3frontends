@@ -55,16 +55,23 @@
 }
 
 .section_emails_sent_log {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 1.25rem;
 }
 
 .container_emails_sent_log {
+    font-size: x-small;
     max-height: 12.5rem;
     overflow-y: scroll;
     padding: 0.625rem;
 }
 
 .section_sending_progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 1.25rem;
 }
 

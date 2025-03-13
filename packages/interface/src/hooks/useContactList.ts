@@ -1,18 +1,14 @@
-import { Dispatch, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
 import { ContactI3C } from "../types/typesI3C";
 
-const maxCountOptions = [50, 100, 200, 500, 1000];
+const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
-type UseContactListArgs = {
-    setMessage: Dispatch<React.SetStateAction<string>>;
-};
-
-function useContactList({ setMessage }: UseContactListArgs) {
+function useContactList() {
     const [contacts, setContacts] = useState<ContactI3C[]>([]);
-    const [emailsSent, setEmailsSent] = useState<number>(0);
+    const [emailsSent, setEmailsSent] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [maxCount, setMaxCount] = useState<number>(maxCountOptions[1]);
+    const [maxCount, setMaxCount] = useState(maxCountOptions[1]);
     const [nationOptions, setNationOptions] = useState<string[]>([]);
     const [selectedNations, setSelectedNations] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
@@ -71,12 +67,6 @@ function useContactList({ setMessage }: UseContactListArgs) {
         name: "",
         email: "",
     };
-
-    useEffect(() => {
-        if (emailsSent > 0 && emailsSent === maxSelectedContactsNotSent.current) {
-            setMessage(`${emailsSent.toString()} emails sent successfully!`);
-        }
-    }, [emailsSent, setMessage]);
 
     return {
         contacts,

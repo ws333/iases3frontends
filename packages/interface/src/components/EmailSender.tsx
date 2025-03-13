@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { __DEV__, SINGLE_CONTACT_MODE } from "../constants/constants";
 import { saveLocalContacts } from "../helpers/contacts";
 import { removeLocalStorageItem } from "../helpers/localStorageHelpers";
+import { LogMessageOptions, logSendingMessage } from "../helpers/logSendingMessage";
 import { renderEmail } from "../helpers/renderEmail";
-import { readSendingLog, storeSendingLog } from "../helpers/sendingLog";
+import { readSendingLog } from "../helpers/sendingLog";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
 import { useStoreActions } from "../hooks/storeHooks";
@@ -30,12 +31,8 @@ const EmailSender = () => {
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());
 
-    const logMessage = (message: string) => {
-        setSendingLog((prev) => {
-            const newValue = [...prev, message];
-            storeSendingLog(newValue);
-            return newValue;
-        });
+    const logMessage = (message: string, options?: LogMessageOptions) => {
+        logSendingMessage(message, { setFn: setSendingLog, ...options });
     };
 
     const useCL = useContactList();
@@ -49,13 +46,18 @@ const EmailSender = () => {
         setSendingLog(storedLog);
     }, []);
 
-    const logMessage = (message: string) => {
-        setSendingLog((prev) => {
-            const newValue = [...prev, message];
-            storeSendingLog(newValue);
-            return newValue;
-        });
-    };
+    const selectedNationsAtSendTime = useRef<string[]>([]);
+
+    useEffect(() => {
+        const leftToSendCount = useCL.selectedContactsNotSent.slice(0, useCL.maxCount - useCL.emailsSent).length;
+        const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== useCL.selectedNations;
+        if (useCL.emailsSent > 0 && leftToSendCount === 0 && !selectedNationsChangedSinceLastSending) {
+            const message = `${useCL.emailsSent.toString()} emails sent successfully!`;
+            setMessage(message);
+            logMessage(message, { addNewline: true });
+            useCL.setEmailsSent(0);
+        }
+    }, [useCL]);
 
     const onClickSendEmail = async (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -67,11 +69,15 @@ const EmailSender = () => {
 
         setIsSending(true);
         useCL.updateMaxSelectedContactsNotSent();
+        selectedNationsAtSendTime.current = useCL.selectedNations;
         const toSendCount = useCL.maxCount - useCL.emailsSent;
         const toSend = SINGLE_CONTACT_MODE
             ? [singleContactState.contact]
             : useCL.selectedContactsNotSent.slice(0, toSendCount);
+
         for await (const contact of toSend) {
+            const logContact = `${contact.name} - ${contact.email}`;
+
             try {
                 const { aborted } = controller.current.signal;
                 if (aborted) {
@@ -81,13 +87,13 @@ const EmailSender = () => {
                 const sentStatus = await prepareAndSendEmail(contact);
                 if (!sentStatus) return;
                 contact.sentDate = new Date().toISOString();
-                logMessage(`Email sent to ${contact.name} - ${contact.email}`);
+                logMessage(`Email sent to ${logContact}`);
                 useCL.setEmailsSent((count) => ++count);
-                saveLocalContacts([...useCL.contacts, ...toSend]); // Save updated contacts for each email sent
+                saveLocalContacts([...useCL.contacts, ...toSend]); // Store updated contacts for each email sent
                 await waitRandomSeconds(emailOptions.delay);
             } catch (error) {
                 console.warn("*Debug* -> EmailSender.tsx -> handleSendEmails -> error:", error);
-                logMessage(`Failed to send email to ${contact.name} - ${contact.email}`);
+                logMessage(`Failed to send email to ${logContact}`);
             }
         }
         setMessage("");
@@ -155,7 +161,7 @@ const EmailSender = () => {
                     emailsSent={useCL.emailsSent}
                 />
 
-                {isSending && <button onClick={onClickCancel}>Cancel sending</button>}
+                {isSending && useCL.emailsSent > 0 && <button onClick={onClickCancel}>Cancel sending</button>}
                 {message && <p>{message}</p>}
 
                 <div className="container_email_preview">
