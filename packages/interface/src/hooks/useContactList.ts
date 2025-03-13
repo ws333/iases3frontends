@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
 import { ContactI3C } from "../types/typesI3C";
+import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
@@ -8,10 +8,22 @@ function useContactList() {
     const [contacts, setContacts] = useState<ContactI3C[]>([]);
     const [emailsSent, setEmailsSent] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
-    const [maxCount, setMaxCount] = useState(maxCountOptions[1]);
+    const [maxCount, _setMaxCount] = useState(maxCountOptions[1]);
     const [nationOptions, setNationOptions] = useState<string[]>([]);
     const [selectedNations, setSelectedNations] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
+
+    function setMaxCount(value: number) {
+        if (value < emailsSent) {
+            const userConfirm = confirm(
+                'You are about to set "Number of emails" to a lower value than the number of emails already sent, so the current session will end.\n\nAre you sure you want to continue?'
+            );
+            if (!userConfirm) return;
+        }
+
+        _setMaxCount(value);
+        updateMaxSelectedContactsNotSent(value);
+    }
 
     // Fetch nations and contacts on first render
     useEffect(() => {
@@ -57,8 +69,8 @@ function useContactList() {
         return Math.min(selectedContactsNotSent.length, maxCount);
     }
 
-    function updateMaxSelectedContactsNotSent() {
-        maxSelectedContactsNotSent.current = getMaxSelectedContactsNotSent();
+    function updateMaxSelectedContactsNotSent(newMaxCount?: number) {
+        maxSelectedContactsNotSent.current = newMaxCount ? newMaxCount : getMaxSelectedContactsNotSent();
     }
 
     const maxSelectedContactsNotSent = useRef(getMaxSelectedContactsNotSent());

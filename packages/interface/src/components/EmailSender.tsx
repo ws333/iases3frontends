@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { __DEV__, SINGLE_CONTACT_MODE } from "../constants/constants";
+import { Email } from "../types/modelTypes";
+import { ContactI3C } from "../types/typesI3C";
+import { SINGLE_CONTACT_MODE, __DEV__ } from "../constants/constants";
+import { useStoreActions } from "../hooks/storeHooks";
+import { useContactList } from "../hooks/useContactList";
+import { useEmailOptions } from "../hooks/useEmailOptions";
+import { useSingleContact } from "../hooks/useSingleContact";
 import { saveLocalContacts } from "../helpers/contacts";
 import { removeLocalStorageItem } from "../helpers/localStorageHelpers";
 import { LogMessageOptions, logSendingMessage } from "../helpers/logSendingMessage";
@@ -7,21 +13,15 @@ import { renderEmail } from "../helpers/renderEmail";
 import { readSendingLog } from "../helpers/sendingLog";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
-import { useStoreActions } from "../hooks/storeHooks";
-import { useContactList } from "../hooks/useContactList";
-import { useEmailOptions } from "../hooks/useEmailOptions";
-import { useSingleContact } from "../hooks/useSingleContact";
-import { Email } from "../types/modelTypes";
-import { ContactI3C } from "../types/typesI3C";
 import ButtonSendEmail from "./ButtonSendEmail";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
-import "./EmailSender.css";
 import EmailsSentLog from "./EmailsSentLog";
 import Header from "./Header";
 import SelectNations from "./SelectNations";
 import SendingProgress from "./SendingProgress";
 import SingleContact from "./SingleContact";
+import "./EmailSender.css";
 
 const EmailSender = () => {
     const [message, setMessage] = useState<string>("");
@@ -49,10 +49,13 @@ const EmailSender = () => {
     const selectedNationsAtSendTime = useRef<string[]>([]);
 
     useEffect(() => {
-        const leftToSendCount = useCL.selectedContactsNotSent.slice(0, useCL.maxCount - useCL.emailsSent).length;
+        const leftToSendCount = useCL.selectedContactsNotSent.slice(
+            0,
+            Math.max(0, useCL.maxCount - useCL.emailsSent)
+        ).length;
         const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== useCL.selectedNations;
         if (useCL.emailsSent > 0 && leftToSendCount === 0 && !selectedNationsChangedSinceLastSending) {
-            const message = `${useCL.emailsSent.toString()} emails sent successfully!`;
+            const message = `Session is done! ${useCL.emailsSent.toString()} emails were sent.`;
             setMessage(message);
             logMessage(message, { addNewline: true });
             useCL.setEmailsSent(0);
