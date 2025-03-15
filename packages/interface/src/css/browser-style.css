@@ -361,12 +361,13 @@ textarea.browser-style:focus:hover {
 /* Panel Section - Header */
 .panel-section-header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-    padding: 16px;
+    margin: 0px 22px 0px 14px;
 }
 
 .panel-section-header > .icon-section-header {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
 }
 

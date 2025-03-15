@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Email } from "../types/modelTypes";
 import { ContactI3C } from "../types/typesI3C";
-import { SINGLE_CONTACT_MODE, __DEV__, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
+import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
 import { useStoreActions } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
 import { saveLocalContacts } from "../helpers/contacts";
-import { removeLocalStorageItem } from "../helpers/localStorageHelpers";
 import { LogMessageOptions, logSendingMessage } from "../helpers/logSendingMessage";
 import { renderEmail } from "../helpers/renderEmail";
 import { readSendingLog } from "../helpers/sendingLog";
@@ -198,9 +197,6 @@ const EmailSender = () => {
                 </div>
             </div>
 
-            {__DEV__ ? (
-                <button onClick={() => removeLocalStorageItem("contactsI3C")}>Empty local storage</button>
-            ) : null}
             {!SINGLE_CONTACT_MODE && <EmailsSentLog logMessages={sendingLog} />}
         </div>
     );

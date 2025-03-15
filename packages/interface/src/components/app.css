@@ -12,10 +12,13 @@ button {
 }
 
 .iases3-icon {
-    width: 40px;
-    height: 40px;
-    margin-left: -5px;
-    margin-top: -5px;
+    width: 70px;
+    height: 70px;
+}
+
+.iases3-settings-icon {
+    width: 22px;
+    height: 22px;
 }
 
 .disabled,

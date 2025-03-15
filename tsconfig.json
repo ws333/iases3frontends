@@ -23,7 +23,11 @@
         "noUncheckedSideEffectImports": true,
 
         /* To show expanded type on hover */
-        "noErrorTruncation": true
+        "noErrorTruncation": true,
+        "baseUrl": ".",
+        "paths": {
+            "@lib/*": ["lib/*"]
+        }
     },
     "include": ["packages"]
 }
