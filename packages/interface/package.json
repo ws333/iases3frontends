@@ -8,7 +8,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build"
+        "build": "vite build",
+        "watch": "NODE_ENV=development npx vite build --watch"
     },
     "author": "",
     "license": "LGPL-3.0-or-later"
