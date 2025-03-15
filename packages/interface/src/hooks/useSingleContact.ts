@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { renderEmail } from "../helpers/renderEmail";
 import { TEmailComponent } from "../types/types";
 import { ContactI3C } from "../types/typesI3C";
+import { renderEmail } from "../helpers/renderEmail";
 
 type UseSingleContactArgs = {
     Component: TEmailComponent;
@@ -17,8 +17,13 @@ function useSingleContact({ Component }: UseSingleContactArgs) {
         email,
         nation: "",
         institution: "",
-        sentDate: "",
+        subGroup: "",
+        sentDate: 0,
+        sentCount: 0,
         updatedDate: "",
+        custom01: "",
+        custom02: "",
+        custom03: "",
     };
 
     const emailText = renderEmail(Component, { name: contact.name });

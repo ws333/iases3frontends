@@ -103,7 +103,8 @@ const EmailSender = () => {
                 if (!sentStatus) return;
 
                 useCL.setEmailsSent((count) => ++count);
-                contact.sentDate = new Date().toISOString();
+                contact.sentDate = Date.now();
+                contact.sentCount++;
                 saveLocalContacts([...useCL.contacts, ...toSend]); // Store updated contacts for each email sent
                 logMessage(`Email sent to ${logContact}`);
 

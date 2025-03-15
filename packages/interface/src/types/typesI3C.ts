@@ -5,10 +5,15 @@ export type ContactI3C = {
     uid: number; // Artificial unixtimestamp in milliseconds
     nation: string;
     institution: string;
+    subGroup: string;
     name: string;
     email: string;
-    sentDate: string;
+    sentDate: number;
+    sentCount: number;
     updatedDate: string;
+    custom01: string;
+    custom02: string;
+    custom03: string;
 };
 
 export type Contact = Pick<ContactI3C, "name" | "email">;
