@@ -1,4 +1,4 @@
-export const __DEV__ = !import.meta.env.PROD;
+export const __DEV__ = import.meta.env.DEV;
 
 export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C_test.csv";
 
