@@ -1,9 +1,6 @@
-import { OpenMenuButton } from "@lib/ui/buttons/OpenMenuButton";
-import { EditIcon } from "@lib/ui/icons/EditIcon";
-import { MoonIcon } from "@lib/ui/icons/MoonIcon";
-import { TrashBinIcon } from "@lib/ui/icons/TrashBinIcon";
-import { Menu } from "@lib/ui/menu";
-import { MenuOption, MenuOptionProps } from "@lib/ui/menu/MenuOption";
+import { EditIcon, Menu, MenuOption, MoonIcon, OpenMenuButton } from "radzion-lib-ui";
+import { TrashBinIcon } from "radzion-lib-ui/icons/TrashBinIcon";
+import { MenuOptionProps } from "radzion-lib-ui/menu/MenuOption";
 import { cleanupLocalStorage } from "../helpers/cleanupLocalStorage";
 
 function SettingsMenu() {

@@ -1,6 +1,5 @@
 import react from "@vitejs/plugin-react";
 // import { viteSingleFile } from "vite-plugin-singlefile";
-import path from "path";
 import { defineConfig } from "vite";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
@@ -14,11 +13,6 @@ export default defineConfig({
         // This will make it easier to load files in the extension
         // viteSingleFile(),
     ],
-    resolve: {
-        alias: {
-            "@lib": path.resolve("../../", "lib"),
-        },
-    },
     build: {
         sourcemap: true,
         minify: true,
