@@ -1,15 +1,19 @@
+import { Button } from "radzion-ui";
 import { MouseEventHandler } from "react";
 
 type Props = {
+    aborted?: boolean;
+    checkInProgress?: boolean;
     disabled?: boolean;
     onClick: MouseEventHandler;
 };
 
-function ButtonCancel({ disabled, onClick }: Props) {
+function ButtonCancel({ aborted, checkInProgress, disabled, onClick }: Props) {
+    const buttonText = aborted || checkInProgress ? "Please wait..." : "Cancel";
     return (
-        <button disabled={disabled} onClick={onClick}>
-            Cancel
-        </button>
+        <Button disabled={disabled} onClick={onClick}>
+            {buttonText}
+        </Button>
     );
 }
 

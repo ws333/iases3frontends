@@ -1,17 +1,26 @@
+import { Button } from "radzion-ui";
 import { MouseEventHandler } from "react";
 
 type Props = {
+    checkInProgress: boolean;
     disabled: boolean;
-    onClick: MouseEventHandler;
     emailsSent: number;
     leftToSendCount: number;
+    onClick: MouseEventHandler;
 };
 
-function ButtonSendEmails({ disabled, onClick, emailsSent, leftToSendCount }: Props) {
+function ButtonSendEmails({ checkInProgress, disabled, emailsSent, leftToSendCount, onClick }: Props) {
+    const buttonText = checkInProgress
+        ? "Please wait..."
+        : !leftToSendCount
+          ? "No contacts selected"
+          : !emailsSent
+            ? "Send Emails"
+            : "Continue";
     return (
-        <button disabled={disabled} onClick={onClick}>
-            {emailsSent === 0 || leftToSendCount === 0 ? "Send Emails" : "Continue"}
-        </button>
+        <Button kind="primary" disabled={disabled} onClick={onClick}>
+            {buttonText}
+        </Button>
     );
 }
 

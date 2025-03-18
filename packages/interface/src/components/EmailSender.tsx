@@ -71,6 +71,8 @@ const EmailSender = () => {
                 await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
                 checkInProgress.current = false;
                 useCL.setEmailsSent(0);
+                const messageReady = `${message} Ready to start new session!`;
+                setMessage(messageReady);
             }
         }
         void checkIfSessionFinished();
@@ -98,6 +100,7 @@ const EmailSender = () => {
             try {
                 if (controller.current.signal.aborted) {
                     controller.current = new AbortController();
+                    await waitRandomSeconds(fullProgressBarDelay / 2, 0);
                     break;
                 }
 
@@ -118,6 +121,7 @@ const EmailSender = () => {
                 logMessage(`Failed to send email to ${logContact}`);
             }
         }
+
         setIsSending(false);
     }
 
@@ -191,13 +195,21 @@ const EmailSender = () => {
                 {!isSending && (
                     <ButtonSendEmails
                         disabled={sendButtonDisabled}
+                        checkInProgress={checkInProgress.current}
                         onClick={onClickSendEmail}
                         emailsSent={useCL.emailsSent}
                         leftToSendCount={leftToSendCount.current}
                     />
                 )}
 
-                {isSending && <ButtonCancel disabled={cancelButtonDisabled} onClick={onClickCancel} />}
+                {isSending && (
+                    <ButtonCancel
+                        aborted={controller.current.signal.aborted}
+                        checkInProgress={checkInProgress.current}
+                        disabled={cancelButtonDisabled}
+                        onClick={onClickCancel}
+                    />
+                )}
 
                 {!SINGLE_CONTACT_MODE && <SendingProgress useCL={useCL} />}
 
