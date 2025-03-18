@@ -1,5 +1,3 @@
-import { __DEV__ } from "../constants/constants";
-import { objectEntries } from "../helpers/objectHelpers";
 import { UseContactListReturnType } from "../hooks/useContactList";
 import "./SelectNations.css";
 
@@ -59,7 +57,24 @@ function SelectNations({ useCL, isSending }: SelectNationsProps) {
             <div className="selected-info">
                 <div>Selected contacts {useCL.selectedContacts.length}</div>
                 <div>Selected not sent {useCL.selectedContactsNotSent.length}</div>
-                {__DEV__ && <div>mostRecentUidsSentPerNation: {objectEntries(useCL.mostRecentUidsSentPerNation)}</div>}
+            </div>
+            <div className="container_sent_counts">
+                <div className="column_left_sent_counts">
+                    <div>Total sent count</div>
+                    <div>Last hour</div>
+                    <div>24 hours</div>
+                    <div>7 days</div>
+                    <div>30 days</div>
+                    <div>3 months</div>
+                </div>
+                <div className="column_right_sent_counts">
+                    <div>{useCL.totalSentCount}</div>
+                    <div>{useCL.totalSentCountLastHour}</div>
+                    <div>{useCL.totalSentCount24Hours}</div>
+                    <div>{useCL.totalSentCountLast7Days}</div>
+                    <div>{useCL.totalSentCountLast30Days}</div>
+                    <div>{useCL.totalSentCountLast3Months}</div>
+                </div>
             </div>
         </div>
     );

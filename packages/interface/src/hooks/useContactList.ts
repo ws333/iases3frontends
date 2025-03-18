@@ -6,6 +6,12 @@ import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "..
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
+const oneHour = 1000 * 60 * 60;
+const oneDay = oneHour * 24;
+const sevenDays = oneDay * 7;
+const oneMonth = sevenDays * 30;
+const threeMonths = oneMonth * 3;
+
 type Props = {
     setUserDialog: React.Dispatch<React.SetStateAction<UserDialog>>;
 };
@@ -67,18 +73,32 @@ function useContactList({ setUserDialog }: Props) {
 
     const selectedContacts = contacts.filter((contact) => selectedNations.includes(contact.nation));
 
-    const initialNations = nationOptions.reduce<Record<string, number>>((acc, nation) => ({ ...acc, [nation]: 0 }), {});
+    const now = Date.now();
+    const oneHourAgo = now - oneHour;
+    const oneDayAgo = now - oneDay;
+    const sevenDaysAgo = now - sevenDays;
+    const oneMonthAgo = now - oneMonth;
+    const threeMonthsAgo = now - threeMonths;
 
-    const mostRecentUidsSentPerNation = selectedContacts.reduce<Record<string, number>>(
-        (acc, contact) =>
-            contact.uid > acc[contact.nation] && contact.sentDate
-                ? { ...acc, [contact.nation]: contact.uid }
-                : { ...acc, [contact.nation]: acc[contact.nation] },
-        initialNations
+    const selectedContactsNotSent = selectedContacts.filter((contact) => contact.sentDate < threeMonthsAgo);
+
+    const totalSentCount = contacts.reduce((acc, contact) => acc + contact.sentCount, 0);
+    const totalSentCountLastHour = contacts.reduce(
+        (acc, contact) => (contact.sentDate > oneHourAgo ? acc + 1 : acc),
+        0
     );
-
-    const selectedContactsNotSent = selectedContacts.filter(
-        (contact) => !contact.sentDate && contact.uid > mostRecentUidsSentPerNation[contact.nation]
+    const totalSentCount24Hours = contacts.reduce((acc, contact) => (contact.sentDate > oneDayAgo ? acc + 1 : acc), 0);
+    const totalSentCountLast7Days = contacts.reduce(
+        (acc, contact) => (contact.sentDate > sevenDaysAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCountLast30Days = contacts.reduce(
+        (acc, contact) => (contact.sentDate > oneMonthAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCountLast3Months = contacts.reduce(
+        (acc, contact) => (contact.sentDate > threeMonthsAgo ? acc + 1 : acc),
+        0
     );
 
     function getMaxSelectedContactsNotSent() {
@@ -105,7 +125,6 @@ function useContactList({ setUserDialog }: Props) {
         maxCount,
         maxCountOptions,
         maxSelectedContactsNotSent,
-        mostRecentUidsSentPerNation,
         updateMaxSelectedContactsNotSent,
         selectedContacts,
         selectedContactsNotSent,
@@ -117,6 +136,12 @@ function useContactList({ setUserDialog }: Props) {
         setSelectedNations,
         selectAll,
         setSelectAll,
+        totalSentCount,
+        totalSentCountLastHour,
+        totalSentCount24Hours,
+        totalSentCountLast7Days,
+        totalSentCountLast30Days,
+        totalSentCountLast3Months,
     };
 }
 
