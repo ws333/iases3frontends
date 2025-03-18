@@ -1,10 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import { UserDialog } from "../types/types";
 import { ContactI3C } from "../types/typesI3C";
+import TextEndingSession from "../components/dialogTexts/TextEndingSession";
 import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
-function useContactList() {
+type Props = {
+    setUserDialog: React.Dispatch<React.SetStateAction<UserDialog>>;
+};
+
+function useContactList({ setUserDialog }: Props) {
     const [contacts, setContacts] = useState<ContactI3C[]>([]);
     const [emailsSent, setEmailsSent] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -15,12 +21,22 @@ function useContactList() {
 
     function setMaxCount(value: number) {
         if (value <= emailsSent) {
-            const userConfirm = confirm(
-                "You are about to set 'Number of emails' to the same or a lower value than the number of emails already sent, this will end the current session.\n\nAre you sure you want to continue?"
-            );
-            if (!userConfirm) return;
+            setUserDialog({
+                title: "Confirm ending sission...",
+                message: TextEndingSession,
+                onClose: () => {
+                    console.log("onClose");
+                    setUserDialog({ message: "" });
+                },
+                onConfirm: () => {
+                    console.log("onConfirm");
+                    _setMaxCount(value);
+                    updateMaxSelectedContactsNotSent(value);
+                    setUserDialog({ message: "" });
+                },
+            });
+            return;
         }
-
         _setMaxCount(value);
         updateMaxSelectedContactsNotSent(value);
     }

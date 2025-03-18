@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Email } from "../types/modelTypes";
+import { UserDialog } from "../types/types";
 import { ContactI3C } from "../types/typesI3C";
 import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
 import { useStoreActions } from "../hooks/storeHooks";
@@ -14,6 +15,7 @@ import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
 import ButtonCancel from "./ButtonCancel";
 import ButtonSendEmails from "./ButtonSendEmails";
+import ConfirmationDialog from "./ConfirmationModal";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
 import EmailsSentLog from "./EmailsSentLog";
@@ -27,6 +29,7 @@ const EmailSender = () => {
     const [message, setMessage] = useState<string>("Select one or more contact lists to activate the button");
     const [isSending, setIsSending] = useState<boolean>(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
+    const [userDialog, setUserDialog] = useState<UserDialog>({ message: "" });
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());
@@ -35,7 +38,7 @@ const EmailSender = () => {
         logSendingMessage(message, { setFn: setSendingLog, ...options });
     };
 
-    const useCL = useContactList();
+    const useCL = useContactList({ setUserDialog });
     const emailOptions = useEmailOptions();
     const singleContactState = useSingleContact({
         Component: emailOptions.EmailComponent,
@@ -151,6 +154,15 @@ const EmailSender = () => {
         <div className="container_email_sender">
             <Header />
             <br />
+
+            {userDialog.message && (
+                <ConfirmationDialog
+                    title={userDialog.title}
+                    message={userDialog.message}
+                    onClose={userDialog.onClose}
+                    onConfirm={userDialog.onConfirm}
+                />
+            )}
 
             <div className="container_options_and_preview">
                 <div className="container_options">
