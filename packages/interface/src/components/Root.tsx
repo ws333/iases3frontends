@@ -1,7 +1,5 @@
 import { StoreProvider, createStore } from "easy-peasy";
-import { GlobalStyle } from "radzion-lib-ui/css/GlobalStyle";
-import { DarkLightThemeProvider } from "radzion-lib-ui/theme/DarkLightThemeProvider";
-import { ThemePreference } from "radzion-lib-ui/theme/ThemePreference";
+import { DarkLightThemeProvider, GlobalStyle, ThemePreference } from "radzion-ui";
 import { model } from "../model";
 import { PersistentStateKey, usePersistentState } from "../state/persistentState";
 import App from "./app";
