@@ -1,4 +1,4 @@
-import { ConfirmationModal, VStack } from "radzion-ui";
+import { ConfirmationModal, VStack } from "radzionkit";
 import { UserDialog } from "../types/types";
 
 type Props = UserDialog;

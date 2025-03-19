@@ -1,4 +1,4 @@
-import { Text } from "radzion-ui";
+import { Text } from "radzionkit";
 
 const TextEndingSession = (
     <>

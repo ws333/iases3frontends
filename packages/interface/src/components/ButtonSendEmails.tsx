@@ -1,4 +1,4 @@
-import { Button } from "radzion-ui";
+import { Button } from "radzionkit";
 import { MouseEventHandler } from "react";
 
 type Props = {

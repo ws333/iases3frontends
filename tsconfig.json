@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-        "target": "ES2020",
+        "target": "ESNext",
         "useDefineForClassFields": true,
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "module": "ESNext",
@@ -23,7 +23,15 @@
         "noUncheckedSideEffectImports": true,
 
         /* To show expanded type on hover */
-        "noErrorTruncation": true
+        "noErrorTruncation": true,
+        "paths": {
+            // For internal resolution and subpaths, for optimal setup see
+            // https://www.typescriptlang.org/docs/handbook/modules/reference.html#paths-should-not-point-to-monorepo-packages-or-node_modules-packages
+            "radzionkit/*": ["./node_modules/radzionkit/lib/*"],
+            "@lib/ui/*": ["./node_modules/radzionkit/lib/ui/*"],
+            "@lib/utils/*": ["./node_modules/radzionkit/lib/utils/*"],
+            "@lib/codegen/*": ["./node_modules/radzionkit/lib/codegen/*"]
+        }
     },
     "include": ["packages"]
 }
