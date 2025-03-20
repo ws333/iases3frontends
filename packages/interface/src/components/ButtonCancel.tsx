@@ -4,14 +4,14 @@ import { MouseEventHandler } from "react";
 type Props = {
     aborted?: boolean;
     checkInProgress?: boolean;
-    disabled?: boolean;
+    disabled?: boolean | string;
     onClick: MouseEventHandler;
 };
 
 function ButtonCancel({ aborted, checkInProgress, disabled, onClick }: Props) {
     const buttonText = aborted || checkInProgress ? "Please wait..." : "Cancel";
     return (
-        <Button disabled={disabled} onClick={onClick}>
+        <Button isDisabled={disabled} onClick={onClick}>
             {buttonText}
         </Button>
     );
