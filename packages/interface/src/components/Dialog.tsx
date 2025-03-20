@@ -1,12 +1,15 @@
 import { ConfirmationModal, VStack } from "radzionkit";
+import styled from "styled-components";
 import { UserDialog } from "../types/modelTypes";
 import { useStoreActions } from "../hooks/storeHooks";
 
 type Props = Partial<UserDialog>;
 
-const styles = {
-    width: 400,
-};
+// Inject styles into ConfirmationModal
+const StyledConfirmationModal = styled(ConfirmationModal)`
+    overflow-y: auto;
+    overflow: hidden auto;
+`;
 
 function Dialog({
     title = "Confirmation",
@@ -23,15 +26,14 @@ function Dialog({
     };
 
     return (
-        <ConfirmationModal
-            style={styles}
+        <StyledConfirmationModal
             title={title}
             onClose={_onClose}
             confirmActionText={confirmActionText}
             onConfirm={onConfirm}
         >
             <VStack gap={12}>{message}</VStack>
-        </ConfirmationModal>
+        </StyledConfirmationModal>
     );
 }
 
