@@ -9,6 +9,16 @@ type Props = Partial<UserDialog>;
 const StyledConfirmationModal = styled(ConfirmationModal)`
     overflow-y: auto;
     overflow: hidden auto;
+
+    /* Target the confirm button to allow text wrapping */
+    button {
+        white-space: normal;
+        word-break: break-word;
+        height: auto;
+        min-height: 40px;
+        padding: 8px 16px;
+        text-align: center;
+    }
 `;
 
 function Dialog({
