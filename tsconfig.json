@@ -33,5 +33,6 @@
             "@lib/codegen/*": ["./node_modules/radzionkit/lib/codegen/*"]
         }
     },
-    "include": ["packages"]
+    "include": ["packages"],
+    "exclude": ["node_modules", "packages/**/node_modules"]
 }
