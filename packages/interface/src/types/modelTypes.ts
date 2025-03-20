@@ -1,4 +1,5 @@
 import { Action, Thunk } from "easy-peasy";
+import { JSX } from "react";
 import type { SpreadsheetData, Strings } from "./types.ts";
 
 export interface Model {
@@ -12,6 +13,7 @@ export interface Model {
     sendEmail: Thunk<Model, { email: Email; sendmode: Prefs["sendmode"] }>;
     sendDialog: SendDialog;
     openUrl: Thunk<Model, string>;
+    userDialog: UserDialog;
 }
 
 interface Locale {
@@ -46,6 +48,17 @@ interface SendDialog {
     status: string;
     update: Action<SendDialog, Partial<SendDialog>>;
     cancel: Thunk<SendDialog>;
+}
+
+export interface UserDialog {
+    title?: string;
+    message: string | JSX.Element;
+    confirmActionText?: string;
+    isOpen?: boolean;
+    onClose?: () => void;
+    onConfirm?: () => void;
+    closeDialog: Thunk<UserDialog>;
+    setUserDialog: Action<UserDialog, Partial<UserDialog>>;
 }
 
 // Type based on defaultTemplate in packages/thunderbird-iframe-service/src/thunderbird-iframe-service.js

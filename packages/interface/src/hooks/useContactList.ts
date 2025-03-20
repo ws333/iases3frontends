@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { UserDialog } from "../types/types";
 import { ContactI3C } from "../types/typesI3C";
 import TextEndingSession from "../components/dialogTexts/TextEndingSession";
 import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
+import { useStoreActions } from "./storeHooks";
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
@@ -12,11 +12,7 @@ const sevenDays = oneDay * 7;
 const oneMonth = sevenDays * 30;
 const threeMonths = oneMonth * 3;
 
-type Props = {
-    setUserDialog: React.Dispatch<React.SetStateAction<UserDialog>>;
-};
-
-function useContactList({ setUserDialog }: Props) {
+function useContactList() {
     const [contacts, setContacts] = useState<ContactI3C[]>([]);
     const [emailsSent, setEmailsSent] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
@@ -25,17 +21,14 @@ function useContactList({ setUserDialog }: Props) {
     const [selectedNations, setSelectedNations] = useState<string[]>([]);
     const [selectAll, setSelectAll] = useState(false);
 
+    const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
+
     function setMaxCount(value: number) {
         if (value <= emailsSent) {
             setUserDialog({
-                title: "Confirm ending sission...",
+                title: "Confirm ending session...",
                 message: TextEndingSession,
-                onClose: () => {
-                    console.log("onClose");
-                    setUserDialog({ message: "" });
-                },
                 onConfirm: () => {
-                    console.log("onConfirm");
                     _setMaxCount(value);
                     updateMaxSelectedContactsNotSent(value);
                     setUserDialog({ message: "" });

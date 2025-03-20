@@ -17,11 +17,3 @@ export type SpreadsheetData = string[][];
 export type Strings = Record<string, string>;
 
 export type UpdatePrefEvent = ChangeEvent<HTMLSelectElement> | FocusEvent<HTMLInputElement>;
-
-export type UserDialog = {
-    title?: string;
-    message: string | JSX.Element;
-    confirmActionText?: string;
-    onClose?: () => void;
-    onConfirm?: () => void;
-};

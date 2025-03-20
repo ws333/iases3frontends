@@ -3,8 +3,8 @@
  * All persistent state is stored via this model.
  */
 import { action, thunk } from "easy-peasy";
-import { messageParent } from "./service";
 import type { Model } from "./types/modelTypes";
+import { messageParent } from "./service";
 import { delay as delayPromise, formatTime, parseSpreadsheet } from "./utils";
 
 export const model: Model = {
@@ -159,4 +159,13 @@ export const model: Model = {
     openUrl: thunk(async (_actions, payload) => {
         await messageParent({ type: "OPEN_URL", data: { url: payload } });
     }),
+    userDialog: {
+        title: "",
+        message: "",
+        isOpen: false,
+        closeDialog: thunk((actions) => {
+            actions.setUserDialog({ ...model.userDialog });
+        }),
+        setUserDialog: action((state, payload) => ({ ...state, isOpen: true, ...payload })),
+    },
 };

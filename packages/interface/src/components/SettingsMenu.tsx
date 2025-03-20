@@ -3,10 +3,13 @@ import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
 import { EditIcon } from "radzionkit/ui/icons/EditIcon";
 import { MoonIcon } from "radzionkit/ui/icons/MoonIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
+import { useStoreActions } from "../hooks/storeHooks";
 import { cleanupLocalStorage } from "../helpers/cleanupLocalStorage";
 import { exportLocalStorage } from "../helpers/exportLocalStorage";
 
 function SettingsMenu() {
+    const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
+
     return (
         <Menu
             title="Settings"
@@ -39,7 +42,7 @@ function SettingsMenu() {
                         text: "Reset all data",
                         kind: "alert",
                         onSelect: () => {
-                            cleanupLocalStorage();
+                            cleanupLocalStorage({ setUserDialog });
                             console.log("Sending data has been reset!");
                             onClose();
                         },
