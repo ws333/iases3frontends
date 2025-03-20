@@ -26,7 +26,7 @@ function useContactList() {
     function setMaxCount(value: number) {
         if (value <= emailsSent) {
             setUserDialog({
-                title: "Confirm ending session...",
+                title: "Ending session!",
                 message: TextEndingSession,
                 onConfirm: () => {
                     _setMaxCount(value);
