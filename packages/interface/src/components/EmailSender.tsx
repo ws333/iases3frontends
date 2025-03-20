@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Email } from "../types/modelTypes";
 import { ContactI3C } from "../types/typesI3C";
-import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
+import {
+    SINGLE_CONTACT_MODE,
+    defaultRandomWindow,
+    fullProgressBarDelay,
+    sessionFinishedText,
+} from "../constants/constants";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
@@ -64,7 +69,7 @@ const EmailSender = () => {
                 !checkInProgress.current
             ) {
                 checkInProgress.current = true;
-                const message = `Session finished! ${useCL.emailsSent.toString()} emails were sent.`;
+                const message = `${sessionFinishedText} ${useCL.emailsSent.toString()} emails were sent.`;
                 setMessage(message);
                 logMessage(message, { addNewline: true });
                 await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
