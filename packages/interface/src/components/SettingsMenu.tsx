@@ -1,8 +1,10 @@
 import { Menu, MenuOption, MenuOptionProps, OpenMenuButton } from "radzionkit";
+import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
 import { EditIcon } from "radzionkit/ui/icons/EditIcon";
 import { MoonIcon } from "radzionkit/ui/icons/MoonIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
 import { cleanupLocalStorage } from "../helpers/cleanupLocalStorage";
+import { exportLocalStorage } from "../helpers/exportLocalStorage";
 
 function SettingsMenu() {
     return (
@@ -24,6 +26,14 @@ function SettingsMenu() {
                             onClose();
                         },
                         icon: <MoonIcon />,
+                    },
+                    {
+                        text: "Export sending data",
+                        onSelect: () => {
+                            exportLocalStorage();
+                            onClose();
+                        },
+                        icon: <DownloadIcon />,
                     },
                     {
                         text: "Reset all data",
