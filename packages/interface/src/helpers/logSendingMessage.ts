@@ -13,7 +13,9 @@ export const logSendingMessage = (message: string, options: LogSendingMessageOpt
     const { addNewline, setFn } = options;
     const messageWithTime = `${getDateTime()} - ${message}`;
     setFn((prev) => {
-        const newValue = [addNewline ? "\u200b" : "", messageWithTime, ...prev]; // Using zero-width space to force newline
+        const newValue = [messageWithTime, ...prev];
+        if (addNewline) newValue.unshift("\u200b"); // Using zero-width space to force newline
+
         storeSendingLog(newValue);
         return newValue;
     });
