@@ -1,4 +1,4 @@
-import { Action, Computed, Thunk } from "easy-peasy";
+import { Action, ActionOn, Computed, Thunk } from "easy-peasy";
 import { JSX } from "react";
 import type { SpreadsheetData, Strings } from "./types.ts";
 import { ContactI3C } from "./typesI3C.ts";
@@ -69,6 +69,10 @@ interface ContactList {
 
     nationOptions: string[];
     setNationOptions: Action<ContactList, string[]>;
+    nationOptionsFetched: string[];
+    setNationOptionsFetched: Action<ContactList, string[]>;
+    updateNationOptions: ActionOn<ContactList>;
+    updateSelectedNations: ActionOn<ContactList>;
 
     selectedNations: string[];
     setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;

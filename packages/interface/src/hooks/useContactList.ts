@@ -28,6 +28,8 @@ function useContactList() {
     const nationOptions = useStoreState((state) => state.contactList.nationOptions);
     const setNationOptions = useStoreActions((actions) => actions.contactList.setNationOptions);
 
+    const setNationOptionsFetched = useStoreActions((actions) => actions.contactList.setNationOptionsFetched);
+
     const selectedNations = useStoreState((state) => state.contactList.selectedNations);
     const setSelectedNations = useStoreActions((actions) => actions.contactList.setSelectedNations);
 
@@ -40,7 +42,7 @@ function useContactList() {
         const loadContacts = async () => {
             try {
                 const _nations = await fetchOnlineNations(controller.signal);
-                setNationOptions(_nations);
+                setNationOptionsFetched(_nations);
                 if (__DEV__) toggleIsSelectedAllNations();
                 const merged = await fetchAndMergeContacts(controller.signal);
                 setContacts(merged);
@@ -57,7 +59,7 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, [setContacts, setIsLoading, setNationOptions, toggleIsSelectedAllNations]);
+    }, [setContacts, setIsLoading, setNationOptionsFetched, toggleIsSelectedAllNations]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;
