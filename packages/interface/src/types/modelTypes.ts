@@ -1,6 +1,7 @@
-import { Action, Thunk } from "easy-peasy";
+import { Action, Computed, Thunk } from "easy-peasy";
 import { JSX } from "react";
 import type { SpreadsheetData, Strings } from "./types.ts";
+import { ContactI3C } from "./typesI3C.ts";
 
 export interface Model {
     locale: Locale;
@@ -14,6 +15,7 @@ export interface Model {
     sendDialog: SendDialog;
     openUrl: Thunk<Model, string>;
     userDialog: UserDialog;
+    contactList: ContactList;
 }
 
 interface Locale {
@@ -48,6 +50,31 @@ interface SendDialog {
     status: string;
     update: Action<SendDialog, Partial<SendDialog>>;
     cancel: Thunk<SendDialog>;
+}
+
+interface ContactList {
+    contacts: ContactI3C[];
+    setContacts: Action<ContactList, ContactI3C[]>;
+    selectedContacts: Computed<ContactList, ContactI3C[]>;
+
+    emailsSent: number;
+    setEmailsSent: Action<ContactList, number | ((prev: number) => number)>;
+
+    isLoading: boolean;
+    setIsLoading: Action<ContactList, boolean>;
+
+    maxCount: number;
+    _setMaxCount: Action<ContactList, number>; // Internal use only
+    setMaxCount: Thunk<ContactList, number, undefined, Model>;
+
+    nationOptions: string[];
+    setNationOptions: Action<ContactList, string[]>;
+
+    selectedNations: string[];
+    setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
+
+    isSelectedAllNations: boolean;
+    toggleIsSelectedAllNations: Action<ContactList>;
 }
 
 export interface UserDialog {

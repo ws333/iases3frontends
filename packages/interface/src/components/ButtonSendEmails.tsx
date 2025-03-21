@@ -1,24 +1,27 @@
 import { Button } from "radzionkit";
 import { MouseEventHandler } from "react";
+import { UseContactListReturnType } from "../hooks/useContactList";
 
 type Props = {
     checkInProgress: boolean;
     disabled: boolean | string;
-    emailsSent: number;
     leftToSendCount: number;
     onClick: MouseEventHandler;
+    useCL: UseContactListReturnType;
 };
 
-function ButtonSendEmails({ checkInProgress, disabled, emailsSent, leftToSendCount, onClick }: Props) {
+function ButtonSendEmails({ checkInProgress, disabled, leftToSendCount, onClick, useCL }: Props) {
     const buttonText = checkInProgress
         ? "Please wait..."
-        : !leftToSendCount
+        : !useCL.selectedNations.length
           ? "No contacts selected"
-          : !emailsSent
-            ? "Send Emails"
-            : "Continue";
+          : !leftToSendCount
+            ? "Selected contacts already processed"
+            : !useCL.emailsSent
+              ? "Send Emails"
+              : "Continue";
     return (
-        <Button kind="primary" isDisabled={disabled} onClick={onClick}>
+        <Button kind="primary" isDisabled={disabled} onClick={onClick} style={{ marginLeft: "0.5rem" }}>
             {buttonText}
         </Button>
     );

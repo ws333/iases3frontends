@@ -18,6 +18,7 @@ import { readSendingLog } from "../helpers/sendingLog";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
 import ButtonCancel from "./ButtonCancel";
+import ButtonEndSession from "./ButtonEndSession";
 import ButtonSendEmails from "./ButtonSendEmails";
 import Dialog from "./Dialog";
 import EmailOptions from "./EmailOptions";
@@ -30,8 +31,9 @@ import SingleContact from "./SingleContact";
 import "./EmailSender.css";
 
 const EmailSender = () => {
-    const [message, setMessage] = useState<string>("Select one or more contact lists to activate the button");
-    const [isSending, setIsSending] = useState<boolean>(false);
+    const [message, setMessage] = useState<string>("To begin select contact lists to process above");
+    const [endSession, setEndSession] = useState(false);
+    const [isSending, setIsSending] = useState(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
     const userDialog = useStoreState((state) => state.userDialog);
 
@@ -64,9 +66,8 @@ const EmailSender = () => {
             const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== useCL.selectedNations;
             if (
                 useCL.emailsSent > 0 &&
-                leftToSendCount.current === 0 &&
-                !selectedNationsChangedSinceLastSending &&
-                !checkInProgress.current
+                !checkInProgress.current &&
+                (endSession || (leftToSendCount.current === 0 && !selectedNationsChangedSinceLastSending))
             ) {
                 checkInProgress.current = true;
                 const message = `${sessionFinishedText} ${useCL.emailsSent.toString()} emails were sent.`;
@@ -75,12 +76,13 @@ const EmailSender = () => {
                 await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
                 checkInProgress.current = false;
                 useCL.setEmailsSent(0);
+                setEndSession(false);
                 const messageReady = `${message} Ready to start new session!`;
                 setMessage(messageReady);
             }
         }
         void checkIfSessionFinished();
-    }, [useCL]);
+    }, [endSession, useCL]);
 
     async function onClickSendEmail(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -91,7 +93,6 @@ const EmailSender = () => {
         }
 
         setIsSending(true);
-        useCL.updateMaxSelectedContactsNotSent();
         selectedNationsAtSendTime.current = useCL.selectedNations;
         const toSendCount = useCL.maxCount - useCL.emailsSent;
         const toSend = SINGLE_CONTACT_MODE
@@ -141,6 +142,11 @@ const EmailSender = () => {
 
         await sendEmail({ email, sendmode: "now" }); // TODO Implement sendmode?
         return true; // TODO Implement error handling?
+    };
+
+    const onClickEndSession = () => {
+        setEndSession(true);
+        setMessage("Session ended by user...");
     };
 
     const onClickCancel = () => {
@@ -199,13 +205,18 @@ const EmailSender = () => {
                 {message && <p>{message}</p>}
 
                 {!isSending && (
-                    <ButtonSendEmails
-                        disabled={sendButtonDisabled}
-                        checkInProgress={checkInProgress.current}
-                        onClick={onClickSendEmail}
-                        emailsSent={useCL.emailsSent}
-                        leftToSendCount={leftToSendCount.current}
-                    />
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        {useCL.emailsSent > 0 && !endSession && !checkInProgress.current && (
+                            <ButtonEndSession onClick={onClickEndSession} />
+                        )}
+                        <ButtonSendEmails
+                            disabled={sendButtonDisabled}
+                            checkInProgress={checkInProgress.current}
+                            onClick={onClickSendEmail}
+                            useCL={useCL}
+                            leftToSendCount={leftToSendCount.current}
+                        />
+                    </div>
                 )}
 
                 {isSending && (

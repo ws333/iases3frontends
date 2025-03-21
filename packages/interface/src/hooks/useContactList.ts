@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { ContactI3C } from "../types/typesI3C";
-import TextEndingSession from "../components/dialogTexts/TextEndingSession";
+import { useEffect } from "react";
+import { __DEV__ } from "../constants/constants";
 import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
-import { useStoreActions } from "./storeHooks";
+import { useStoreActions, useStoreState } from "./storeHooks";
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
@@ -13,32 +12,27 @@ const oneMonth = sevenDays * 30;
 const threeMonths = oneMonth * 3;
 
 function useContactList() {
-    const [contacts, setContacts] = useState<ContactI3C[]>([]);
-    const [emailsSent, setEmailsSent] = useState(0);
-    const [isLoading, setIsLoading] = useState(true);
-    const [maxCount, _setMaxCount] = useState(maxCountOptions[1]);
-    const [nationOptions, setNationOptions] = useState<string[]>([]);
-    const [selectedNations, setSelectedNations] = useState<string[]>([]);
-    const [selectAll, setSelectAll] = useState(false);
+    const contacts = useStoreState((state) => state.contactList.contacts);
+    const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
+    const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
 
-    const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
+    const emailsSent = useStoreState((state) => state.contactList.emailsSent);
+    const setEmailsSent = useStoreActions((actions) => actions.contactList.setEmailsSent);
 
-    function setMaxCount(value: number) {
-        if (value <= emailsSent) {
-            setUserDialog({
-                title: "Ending session!",
-                message: TextEndingSession,
-                onConfirm: () => {
-                    _setMaxCount(value);
-                    updateMaxSelectedContactsNotSent(value);
-                    setUserDialog({ message: "" });
-                },
-            });
-            return;
-        }
-        _setMaxCount(value);
-        updateMaxSelectedContactsNotSent(value);
-    }
+    const isLoading = useStoreState((state) => state.contactList.isLoading);
+    const setIsLoading = useStoreActions((actions) => actions.contactList.setIsLoading);
+
+    const maxCount = useStoreState((state) => state.contactList.maxCount);
+    const setMaxCount = useStoreActions((actions) => actions.contactList.setMaxCount);
+
+    const nationOptions = useStoreState((state) => state.contactList.nationOptions);
+    const setNationOptions = useStoreActions((actions) => actions.contactList.setNationOptions);
+
+    const selectedNations = useStoreState((state) => state.contactList.selectedNations);
+    const setSelectedNations = useStoreActions((actions) => actions.contactList.setSelectedNations);
+
+    const isSelectedAllNations = useStoreState((state) => state.contactList.isSelectedAllNations);
+    const toggleIsSelectedAllNations = useStoreActions((actions) => actions.contactList.toggleIsSelectedAllNations);
 
     // Fetch nations and contacts on first render
     useEffect(() => {
@@ -47,6 +41,7 @@ function useContactList() {
             try {
                 const _nations = await fetchOnlineNations(controller.signal);
                 setNationOptions(_nations);
+                if (__DEV__) toggleIsSelectedAllNations();
                 const merged = await fetchAndMergeContacts(controller.signal);
                 setContacts(merged);
                 saveLocalContacts(merged);
@@ -62,9 +57,7 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, []);
-
-    const selectedContacts = contacts.filter((contact) => selectedNations.includes(contact.nation));
+    }, [setContacts, setIsLoading, setNationOptions, toggleIsSelectedAllNations]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;
@@ -94,15 +87,7 @@ function useContactList() {
         0
     );
 
-    function getMaxSelectedContactsNotSent() {
-        return Math.min(selectedContactsNotSent.length, maxCount);
-    }
-
-    function updateMaxSelectedContactsNotSent(newMaxCount?: number) {
-        maxSelectedContactsNotSent.current = newMaxCount ? newMaxCount : getMaxSelectedContactsNotSent();
-    }
-
-    const maxSelectedContactsNotSent = useRef(getMaxSelectedContactsNotSent());
+    const maxSelectedContactsNotSent = Math.min(selectedContactsNotSent.length, maxCount);
 
     const nextContactNotSent = selectedContactsNotSent[0] || {
         name: "",
@@ -118,7 +103,6 @@ function useContactList() {
         maxCount,
         maxCountOptions,
         maxSelectedContactsNotSent,
-        updateMaxSelectedContactsNotSent,
         selectedContacts,
         selectedContactsNotSent,
         nextContactNotSent,
@@ -127,8 +111,8 @@ function useContactList() {
         setNationOptions,
         selectedNations,
         setSelectedNations,
-        selectAll,
-        setSelectAll,
+        isSelectedAllNations,
+        toggleIsSelectedAllNations,
         totalSentCount,
         totalSentCountLastHour,
         totalSentCount24Hours,

@@ -2,10 +2,13 @@
  * A model for a Redux store (using easy-peasy) for all mailmerge code.
  * All persistent state is stored via this model.
  */
-import { action, thunk } from "easy-peasy";
+import { action, computed, thunk } from "easy-peasy";
 import type { Model } from "./types/modelTypes";
+import TextEndingSession from "./components/dialogTexts/TextEndingSession";
 import { messageParent } from "./service";
 import { delay as delayPromise, formatTime, parseSpreadsheet } from "./utils";
+
+const maxCountOptions = [5, 50, 100, 200, 500, 1000];
 
 export const model: Model = {
     locale: {
@@ -167,5 +170,63 @@ export const model: Model = {
             actions.setUserDialog({ ...model.userDialog });
         }),
         setUserDialog: action((state, payload) => ({ ...state, isOpen: true, ...payload })),
+    },
+    contactList: {
+        contacts: [],
+        setContacts: action((state, payload) => ({ ...state, contacts: [...payload] })),
+        selectedContacts: computed((state) =>
+            state.contacts.filter((contact) => state.selectedNations.includes(contact.nation))
+        ),
+
+        emailsSent: 0,
+        setEmailsSent: action((state, payload) => ({
+            ...state,
+            emailsSent: typeof payload === "number" ? payload : payload(state.emailsSent),
+        })),
+
+        isLoading: true,
+        setIsLoading: action((state, payload) => ({ ...state, isLoading: payload })),
+
+        maxCount: maxCountOptions[1],
+        _setMaxCount: action((state, payload) => ({ ...state, maxCount: payload })), // Internal use only
+        setMaxCount: thunk((_, payload, { getStoreState, getStoreActions }) => {
+            const storeState = getStoreState();
+            const storeActions = getStoreActions();
+            if (payload <= storeState.contactList.emailsSent) {
+                storeActions.userDialog.setUserDialog({
+                    title: "Ending session!",
+                    message: TextEndingSession,
+                    onConfirm: () => {
+                        storeActions.contactList._setMaxCount(payload);
+                        storeActions.userDialog.setUserDialog({ message: "" });
+                    },
+                });
+                return;
+            }
+            storeActions.contactList._setMaxCount(payload);
+            return { ...storeState, maxCount: payload };
+        }),
+
+        nationOptions: [],
+        setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload] })),
+
+        selectedNations: [],
+        setSelectedNations: action((state, payload) => {
+            const { checked, nation } = payload;
+            const updatedSN = checked
+                ? [...state.selectedNations, nation]
+                : state.selectedNations.filter((n) => n !== nation);
+            return {
+                ...state,
+                selectedNations: updatedSN,
+            };
+        }),
+
+        isSelectedAllNations: false,
+        toggleIsSelectedAllNations: action((state) => ({
+            ...state,
+            isSelectedAllNations: !state.isSelectedAllNations,
+            selectedNations: !state.isSelectedAllNations ? [...state.nationOptions] : [],
+        })),
     },
 };

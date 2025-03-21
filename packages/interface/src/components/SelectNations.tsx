@@ -8,17 +8,11 @@ type SelectNationsProps = {
 
 function SelectNations({ useCL, isSending }: SelectNationsProps) {
     const onChangeSelectAll = () => {
-        const newState = !useCL.selectAll;
-        useCL.setSelectAll(newState);
-        useCL.setSelectedNations(newState ? [...useCL.nationOptions] : []);
+        useCL.toggleIsSelectedAllNations();
     };
 
-    const onChangeNation = (nation: string, checked: boolean) => {
-        if (checked) {
-            useCL.setSelectedNations((prev) => [...prev, nation]);
-        } else {
-            useCL.setSelectedNations((prev) => prev.filter((n) => n !== nation));
-        }
+    const onChangeNation = (checked: boolean, nation: string) => {
+        useCL.setSelectedNations({ checked, nation });
     };
 
     return (
@@ -33,7 +27,7 @@ function SelectNations({ useCL, isSending }: SelectNationsProps) {
                             <input
                                 type="checkbox"
                                 disabled={isSending}
-                                checked={useCL.selectAll}
+                                checked={useCL.isSelectedAllNations}
                                 onChange={onChangeSelectAll}
                             />
                             Select All
@@ -45,7 +39,7 @@ function SelectNations({ useCL, isSending }: SelectNationsProps) {
                                 <input
                                     type="checkbox"
                                     disabled={isSending}
-                                    onChange={(e) => onChangeNation(nation, e.target.checked)}
+                                    onChange={(e) => onChangeNation(e.target.checked, nation)}
                                     checked={useCL.selectedNations.includes(nation)}
                                 />
                                 {nation}
