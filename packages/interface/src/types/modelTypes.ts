@@ -60,6 +60,9 @@ interface ContactList {
     emailsSent: number;
     setEmailsSent: Action<ContactList, number | ((prev: number) => number)>;
 
+    forcedRender: number;
+    initiateForcedRender: Action<ContactList>;
+
     isLoading: boolean;
     setIsLoading: Action<ContactList, boolean>;
 

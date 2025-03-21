@@ -19,6 +19,8 @@ function useContactList() {
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
     const setEmailsSent = useStoreActions((actions) => actions.contactList.setEmailsSent);
 
+    const forcedRender = useStoreState((state) => state.contactList.forcedRender);
+
     const isLoading = useStoreState((state) => state.contactList.isLoading);
     const setIsLoading = useStoreActions((actions) => actions.contactList.setIsLoading);
 
@@ -38,6 +40,7 @@ function useContactList() {
 
     // Fetch nations and contacts on first render
     useEffect(() => {
+        console.log(`Fetching contacts and nations on render #${forcedRender}`); // Don't remove, forcedRender is used to force rerender and thus refetch
         const controller = new AbortController();
         const loadContacts = async () => {
             try {
@@ -59,7 +62,7 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, [setContacts, setIsLoading, setNationOptionsFetched, toggleIsSelectedAllNations]);
+    }, [forcedRender, setContacts, setIsLoading, setNationOptionsFetched, toggleIsSelectedAllNations]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;

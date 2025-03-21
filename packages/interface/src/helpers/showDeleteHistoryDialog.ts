@@ -5,10 +5,11 @@ import TextDeletingData from "../components/dialogTexts/TextDeletingData";
 import { removeLocalStorageItem } from "./localStorageHelpers";
 
 type Args = {
+    initiateForcedRender: ActionCreator<void>;
     setUserDialog: ActionCreator<Partial<UserDialog>>;
 };
 
-export function cleanupLocalStorage({ setUserDialog }: Args) {
+export function showDeleteHistoryDialog({ initiateForcedRender, setUserDialog }: Args) {
     setUserDialog({
         title: "Deletion warning!",
         message: TextDeletingData,
@@ -16,7 +17,9 @@ export function cleanupLocalStorage({ setUserDialog }: Args) {
         onConfirm: () => {
             removeLocalStorageItem(LOCAL_STORAGE_CONTACTS_KEY);
             removeLocalStorageItem(LOCAL_STORAGE_SENDING_LOG_KEY);
-            setUserDialog({ message: "" });
+            setUserDialog({ message: "Sending history deleted!" });
+            initiateForcedRender();
+            console.log("Sending data has been deleted!");
         },
     });
 }

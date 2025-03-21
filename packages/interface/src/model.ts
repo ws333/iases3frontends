@@ -184,6 +184,9 @@ export const model: Model = {
             emailsSent: typeof payload === "number" ? payload : payload(state.emailsSent),
         })),
 
+        forcedRender: 1,
+        initiateForcedRender: action((state) => ({ ...state, forcedRender: state.forcedRender + 1 })),
+
         isLoading: true,
         setIsLoading: action((state, payload) => ({ ...state, isLoading: payload })),
 

@@ -35,7 +35,9 @@ const EmailSender = () => {
     const [endSession, setEndSession] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
+
     const userDialog = useStoreState((state) => state.userDialog);
+    const forcedRender = useStoreState((state) => state.contactList.forcedRender);
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());
@@ -51,9 +53,10 @@ const EmailSender = () => {
     });
 
     useEffect(() => {
+        console.log(`Updating sendingLog after reset on render #${forcedRender}`);
         const storedLog = readSendingLog();
         setSendingLog(storedLog);
-    }, []);
+    }, [forcedRender]);
 
     const leftToSendCount = useRef(0);
     const remainingCountSession = Math.max(0, useCL.maxCount - useCL.emailsSent);

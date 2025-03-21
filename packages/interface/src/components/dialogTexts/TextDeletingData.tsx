@@ -13,10 +13,11 @@ const styles: CSSProperties = {
 const TextDeletingData = (
     <>
         <Text color="supporting" style={styles}>
-            You are about to delete information about last sending time and sending count to individual contacts.
+            You are about to delete all sending history!
         </Text>
         <Text color="supporting" style={styles}>
-            This means that all sending statitstics and history will be removed.
+            This means that information about last sending date and sending count to individual contacts will be
+            removed.
         </Text>
         <Text color="supporting" style={styles}>
             If you intend to continue sending later or on another computer make sure to export the data first!
@@ -25,7 +26,7 @@ const TextDeletingData = (
             Export data
         </Button>
         <Text color="regular" style={{ ...styles, textAlign: "center" }}>
-            Are you sure you want to delete the sending data?
+            Are you sure you want to delete the sending history?
         </Text>
     </>
 );
