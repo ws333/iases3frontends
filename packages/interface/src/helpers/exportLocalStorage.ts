@@ -1,8 +1,9 @@
 import { BlobWriter, TextReader, ZipWriter } from "@zip.js/zip.js";
-import { LOCAL_STORAGE_CONTACTS_KEY, LOCAL_STORAGE_SENDING_LOG_KEY } from "../constants/constants";
+import { ContactI3C } from "../types/typesI3C";
+import { STORAGE_KEY } from "../constants/constants";
 
 export async function exportLocalStorage() {
-    const keys = [LOCAL_STORAGE_CONTACTS_KEY, LOCAL_STORAGE_SENDING_LOG_KEY];
+    const keys = [STORAGE_KEY.CONTACTS, STORAGE_KEY.CONTACTS_DELETED, STORAGE_KEY.SENDING_LOG];
 
     // Create a zip file
     const blobWriter = new BlobWriter("application/zip");
@@ -12,7 +13,38 @@ export async function exportLocalStorage() {
     for (const key of keys) {
         const data = localStorage.getItem(key);
         if (data) {
-            await zipWriter.add(`${key}.json`, new TextReader(data));
+            // Parse data and extract fields to be exported
+            const dataToExport =
+                key === "sendingLog"
+                    ? data
+                    : key === "contactsI3C"
+                      ? JSON.stringify(
+                            (JSON.parse(data) as ContactI3C[]).map(
+                                (d): Partial<ContactI3C> => ({
+                                    uid: d.uid,
+                                    sentDate: d.sentDate,
+                                    sentCount: d.sentCount,
+                                    customFrontend01: d.customFrontend01,
+                                    customFrontend02: d.customFrontend02,
+                                })
+                            )
+                        )
+                      : key === "contactsI3C_deleted"
+                        ? JSON.stringify(
+                              (JSON.parse(data) as ContactI3C[]).map(
+                                  (d): Partial<ContactI3C> => ({
+                                      uid: d.uid,
+                                      sentDate: d.sentDate,
+                                      sentCount: d.sentCount,
+                                      deletionDate: d.deletionDate,
+                                      customFrontend01: d.customFrontend01,
+                                      customFrontend02: d.customFrontend02,
+                                  })
+                              )
+                          )
+                        : "Error";
+
+            await zipWriter.add(`${key}.json`, new TextReader(dataToExport));
         }
     }
 

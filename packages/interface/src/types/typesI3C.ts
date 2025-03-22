@@ -8,12 +8,14 @@ export type ContactI3C = {
     subGroup: string;
     name: string;
     email: string;
+    updatedDate: string;
     sentDate: number;
     sentCount: number;
-    updatedDate: string;
-    custom01: string;
-    custom02: string;
-    custom03: string;
+    deletionDate: number;
+    customBackend01: string;
+    customBackend02: string;
+    customFrontend01: string;
+    customFrontend02: string;
 };
 
 export type Contact = Pick<ContactI3C, "name" | "email">;

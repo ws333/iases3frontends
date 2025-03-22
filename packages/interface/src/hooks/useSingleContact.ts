@@ -21,9 +21,11 @@ function useSingleContact({ Component }: UseSingleContactArgs) {
         sentDate: 0,
         sentCount: 0,
         updatedDate: "",
-        custom01: "",
-        custom02: "",
-        custom03: "",
+        deletionDate: 0,
+        customBackend01: "",
+        customBackend02: "",
+        customFrontend01: "",
+        customFrontend02: "",
     };
 
     const emailText = renderEmail(Component, { name: contact.name });
