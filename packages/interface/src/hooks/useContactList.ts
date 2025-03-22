@@ -36,6 +36,7 @@ function useContactList() {
     const setSelectedNations = useStoreActions((actions) => actions.contactList.setSelectedNations);
 
     const isSelectedAllNations = useStoreState((state) => state.contactList.isSelectedAllNations);
+    const setIsSelectedAllNations = useStoreActions((actions) => actions.contactList.setIsSelectedAllNations);
     const toggleIsSelectedAllNations = useStoreActions((actions) => actions.contactList.toggleIsSelectedAllNations);
 
     // Fetch nations and contacts on first render
@@ -46,7 +47,7 @@ function useContactList() {
             try {
                 const _nations = await fetchOnlineNations(controller.signal);
                 setNationOptionsFetched(_nations);
-                if (__DEV__) toggleIsSelectedAllNations();
+                if (__DEV__) setIsSelectedAllNations(true);
                 const merged = await fetchAndMergeContacts(controller.signal);
                 setContacts(merged);
                 saveLocalActiveContacts(merged);
@@ -62,7 +63,7 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, [forcedRender, setContacts, setIsLoading, setNationOptionsFetched, toggleIsSelectedAllNations]);
+    }, [forcedRender, setContacts, setIsLoading, setIsSelectedAllNations, setNationOptionsFetched]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;
@@ -117,6 +118,7 @@ function useContactList() {
         selectedNations,
         setSelectedNations,
         isSelectedAllNations,
+        setIsSelectedAllNations,
         toggleIsSelectedAllNations,
         totalSentCount,
         totalSentCountLastHour,

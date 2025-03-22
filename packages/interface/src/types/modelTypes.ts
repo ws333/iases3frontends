@@ -81,7 +81,8 @@ interface ContactList {
     setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
 
     isSelectedAllNations: boolean;
-    toggleIsSelectedAllNations: Action<ContactList>;
+    setIsSelectedAllNations: Action<ContactList, boolean>;
+    toggleIsSelectedAllNations: Thunk<ContactList>;
 }
 
 export interface UserDialog {

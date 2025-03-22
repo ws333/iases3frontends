@@ -242,10 +242,14 @@ export const model: Model = {
         }),
 
         isSelectedAllNations: false,
-        toggleIsSelectedAllNations: action((state) => ({
+        setIsSelectedAllNations: action((state, payload) => ({
             ...state,
-            isSelectedAllNations: !state.isSelectedAllNations,
-            selectedNations: !state.isSelectedAllNations ? [...state.nationOptions] : [],
+            isSelectedAllNations: payload,
+            selectedNations: payload ? [...state.nationOptions] : [],
         })),
+        toggleIsSelectedAllNations: thunk((actions, _, { getState }) => {
+            const state = getState();
+            actions.setIsSelectedAllNations(!state.isSelectedAllNations);
+        }),
     },
 };
