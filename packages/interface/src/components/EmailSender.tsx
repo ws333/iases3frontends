@@ -11,7 +11,7 @@ import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
-import { saveLocalContacts } from "../helpers/contacts";
+import { saveLocalActiveContacts } from "../helpers/contacts";
 import { LogMessageOptions, logSendingMessage } from "../helpers/logSendingMessage";
 import { renderEmail } from "../helpers/renderEmail";
 import { readSendingLog } from "../helpers/sendingLog";
@@ -118,7 +118,7 @@ const EmailSender = () => {
                 useCL.setEmailsSent((count) => ++count);
                 contact.sentDate = Date.now();
                 contact.sentCount++;
-                saveLocalContacts([...useCL.contacts, ...toSend]); // Store updated contacts for each email sent
+                saveLocalActiveContacts([...useCL.contacts, ...toSend]); // Store updated contacts for each email sent
                 logMessage(`Email sent to ${logContact}`);
 
                 const delay = leftToSendCount.current > 1 ? emailOptions.delay : fullProgressBarDelay;

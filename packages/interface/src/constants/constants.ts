@@ -1,9 +1,12 @@
 export const __DEV__ = import.meta.env.DEV;
 
-export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C_test.csv";
+export const STORAGE_KEY = {
+    CONTACTS: "contactsI3C",
+    CONTACTS_DELETED: "contactsI3C_deleted",
+    SENDING_LOG: "sendingLog",
+} as const;
 
-export const LOCAL_STORAGE_CONTACTS_KEY = "contactsI3C";
-export const LOCAL_STORAGE_SENDING_LOG_KEY = "sendingLog";
+export type StorageKey = keyof typeof STORAGE_KEY;
 
 export const minDelay = 3; // Minimum delay between emails being sent in seconds
 export const defaultRandomWindow = 1;

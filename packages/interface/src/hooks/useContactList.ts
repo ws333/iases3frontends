@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { __DEV__ } from "../constants/constants";
-import { fetchAndMergeContacts, fetchOnlineNations, saveLocalContacts } from "../helpers/contacts";
+import { fetchAndMergeContacts, fetchOnlineNations, saveLocalActiveContacts } from "../helpers/contacts";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
 const maxCountOptions = [5, 50, 100, 200, 500, 1000];
@@ -49,7 +49,7 @@ function useContactList() {
                 if (__DEV__) toggleIsSelectedAllNations();
                 const merged = await fetchAndMergeContacts(controller.signal);
                 setContacts(merged);
-                saveLocalContacts(merged);
+                saveLocalActiveContacts(merged);
                 setIsLoading(false);
             } catch (error) {
                 if (error instanceof Error) {
