@@ -25,6 +25,9 @@ function useContactList() {
     const isLoading = useStoreState((state) => state.contactList.isLoading);
     const setIsLoading = useStoreActions((actions) => actions.contactList.setIsLoading);
 
+    const fetchError = useStoreState((state) => state.contactList.fetchError);
+    const setFetchError = useStoreActions((actions) => actions.contactList.setFetchError);
+
     const maxCount = useStoreState((state) => state.contactList.maxCount);
     const setMaxCount = useStoreActions((actions) => actions.contactList.setMaxCount);
 
@@ -56,6 +59,8 @@ function useContactList() {
             } catch (error) {
                 if (error instanceof Error) {
                     console.warn("*Debug* -> EmailSender.tsx -> useEffect fetch error:", error.message);
+                    const message = "Failed to download contact lists! Please make sure you are online and try again.";
+                    setFetchError(message);
                 }
             }
         };
@@ -64,7 +69,7 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, [forcedRender, setContacts, setIsLoading, setIsSelectedAllNations, setNationOptionsFetched]);
+    }, [forcedRender, setContacts, setFetchError, setIsLoading, setIsSelectedAllNations, setNationOptionsFetched]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;
@@ -106,6 +111,8 @@ function useContactList() {
         setContacts,
         emailsSent,
         isLoading,
+        fetchError,
+        setFetchError,
         setEmailsSent,
         maxCount,
         maxCountOptions,
