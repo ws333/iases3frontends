@@ -60,6 +60,9 @@ interface ContactList {
     emailsSent: number;
     setEmailsSent: Action<ContactList, number | ((prev: number) => number)>;
 
+    fetchError: string;
+    setFetchError: Action<ContactList, string>;
+
     forcedRender: number;
     initiateForcedRender: Action<ContactList>;
 

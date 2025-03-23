@@ -1,4 +1,5 @@
 import { UseContactListReturnType } from "../hooks/useContactList";
+import LoadingContacts from "./LoadingContacts";
 import "./SelectNations.css";
 
 type SelectNationsProps = {
@@ -17,37 +18,44 @@ function SelectNations({ useCL, isSending }: SelectNationsProps) {
 
     return (
         <div className="select-nations">
-            {!useCL.isLoading && (
-                <div className="nation-options">
-                    <div className="title-container">
-                        <label className="title">Available contacts</label>
+            <div className="nation-options">
+                <div className="title-container">
+                    <label className="title">Available contacts</label>
+                </div>
+                {useCL.isLoading ? (
+                    <div className={"nation-list"}>
+                        <LoadingContacts fetchError={useCL.fetchError} />
                     </div>
-                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
-                        <label className="nation-item">
-                            <input
-                                type="checkbox"
-                                disabled={isSending}
-                                checked={useCL.isSelectedAllNations}
-                                onChange={onChangeSelectAll}
-                            />
-                            Select All
-                        </label>
-                    </div>
-                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
-                        {useCL.nationOptions.map((nation) => (
-                            <label key={nation} className="nation-item">
+                ) : (
+                    <>
+                        <div className={`nation-list ${isSending ? "disabled" : ""}`}>
+                            <label className="nation-item">
                                 <input
                                     type="checkbox"
                                     disabled={isSending}
-                                    onChange={(e) => onChangeNation(e.target.checked, nation)}
-                                    checked={useCL.selectedNations.includes(nation)}
+                                    checked={useCL.isSelectedAllNations}
+                                    onChange={onChangeSelectAll}
                                 />
-                                {nation}
+                                Select All
                             </label>
-                        ))}
-                    </div>
-                </div>
-            )}
+                        </div>
+                        <div className={`nation-list ${isSending ? "disabled" : ""}`}>
+                            {useCL.nationOptions.map((nation) => (
+                                <label key={nation} className="nation-item">
+                                    <input
+                                        type="checkbox"
+                                        disabled={isSending}
+                                        onChange={(e) => onChangeNation(e.target.checked, nation)}
+                                        checked={useCL.selectedNations.includes(nation)}
+                                    />
+                                    {nation}
+                                </label>
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+
             <div className="selected-info">
                 <div>Selected contacts {useCL.selectedContacts.length}</div>
                 <div>Selected not sent {useCL.selectedContactsNotSent.length}</div>
