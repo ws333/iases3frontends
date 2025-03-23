@@ -1,6 +1,11 @@
-import { ContactI3C } from "../types/typesI3C";
-import { CONTACTS_CSV_URL, NATIONS_CSV_URL, NATIONS_FALLBACK, STORAGE_KEY } from "../constants/constants";
+import { CONTACTS_CSV_URL, NATIONS_CSV_URL, NATIONS_FALLBACK } from "../constants/constants";
 import { csvParse } from "./csvParse";
+import {
+    getLocalStorageActiveContacts,
+    getLocalStorageDeletedContacts,
+    saveLocalStorageDeletedContacts,
+} from "./localStorage";
+import { ContactI3C } from "./mergeContacts";
 
 export async function fetchOnlineNations(signal: AbortSignal): Promise<string[]> {
     const response = await fetch(NATIONS_CSV_URL, { signal });
@@ -9,15 +14,15 @@ export async function fetchOnlineNations(signal: AbortSignal): Promise<string[]>
     return nations ?? NATIONS_FALLBACK;
 }
 
-export async function fetchOnlineContacts(signal: AbortSignal): Promise<ContactI3C[]> {
+async function fetchOnlineContacts(signal: AbortSignal): Promise<ContactI3C[]> {
     const response = await fetch(CONTACTS_CSV_URL, { signal });
     const csvText = await response.text();
     return csvParse<ContactI3C>(csvText).data;
 }
 
-export async function fetchAndMergeContacts(signal: AbortSignal): Promise<ContactI3C[]> {
-    const onlineContacts = await fetchOnlineContacts(signal);
-    const localContacts = getLocalActiveContacts();
+export async function fetchAndMergeContacts(signal: AbortSignal, fetchFn = fetchOnlineContacts): Promise<ContactI3C[]> {
+    const onlineContacts = await fetchFn(signal);
+    const localContacts = getLocalStorageActiveContacts();
 
     // Create a Set of online UIDs for O(1) lookups
     const onlineContactUids = new Set(onlineContacts.map((contact) => contact.uid));
@@ -33,9 +38,9 @@ export async function fetchAndMergeContacts(signal: AbortSignal): Promise<Contac
     console.table(deletedContacts);
 
     // Merge the deleted contacts with any stored deleted contacts
-    const storedDeletedContacts = getLocalDeletedContacts();
+    const storedDeletedContacts = getLocalStorageDeletedContacts();
     const mergedDeletedContacts = storedDeletedContacts.concat(deletedContacts);
-    saveLocalDeletedContacts(mergedDeletedContacts);
+    saveLocalStorageDeletedContacts(mergedDeletedContacts);
 
     // Create a Map for local contacts using UID as key for O(1) lookups
     const localContactsMap = new Map(localContacts.map((contact) => [contact.uid, contact]));
@@ -55,21 +60,4 @@ export async function fetchAndMergeContacts(signal: AbortSignal): Promise<Contac
     });
 
     return merged;
-}
-
-export function saveLocalActiveContacts(contacts: ContactI3C[]) {
-    localStorage.setItem(STORAGE_KEY.CONTACTS, JSON.stringify(contacts));
-}
-
-export function saveLocalDeletedContacts(contacts: ContactI3C[]) {
-    localStorage.setItem(STORAGE_KEY.CONTACTS_DELETED, JSON.stringify(contacts));
-}
-
-export function getLocalActiveContacts(): ContactI3C[] {
-    const stored = localStorage.getItem(STORAGE_KEY.CONTACTS);
-    return stored ? (JSON.parse(stored) as ContactI3C[]) : [];
-}
-export function getLocalDeletedContacts(): ContactI3C[] {
-    const stored = localStorage.getItem(STORAGE_KEY.CONTACTS_DELETED);
-    return stored ? (JSON.parse(stored) as ContactI3C[]) : [];
 }

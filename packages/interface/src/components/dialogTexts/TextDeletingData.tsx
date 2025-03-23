@@ -1,9 +1,9 @@
 import { Button, Text } from "radzionkit";
 import { CSSProperties } from "styled-components";
-import { exportLocalStorage } from "../../helpers/exportLocalStorage";
+import { exportFromLocalStorage } from "../../helpers/exportFromLocalStorage";
 
 const onClickButton = () => {
-    exportLocalStorage();
+    exportFromLocalStorage();
 };
 
 const styles: CSSProperties = {
