@@ -3,7 +3,9 @@ export const __DEV__ = import.meta.env.DEV;
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",
     CONTACTS_DELETED: "contactsI3C_deleted",
-    SENDING_LOG: "sendingLog",
+    SENDING_LOG: "contactsI3C_sendingLog",
+    LAST_IMPORT_EXPORT_DATE: "contactsI3C_lastImportExportDate",
+    EXPORT_DATE: "contactsI3C_exportDate",
 } as const;
 
 export type StorageKey = keyof typeof STORAGE_KEY;

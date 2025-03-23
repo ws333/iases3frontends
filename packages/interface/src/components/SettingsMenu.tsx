@@ -1,43 +1,43 @@
-import { Menu, MenuOption, MenuOptionProps, OpenMenuButton } from "radzionkit";
+import { Menu, MenuOptionProps, OpenMenuButton } from "radzionkit";
 import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
-import { EditIcon } from "radzionkit/ui/icons/EditIcon";
-import { MoonIcon } from "radzionkit/ui/icons/MoonIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
+import styled from "styled-components";
 import { useStoreActions } from "../hooks/storeHooks";
-import { exportLocalStorage } from "../helpers/exportLocalStorage";
+import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
+import ImportMenuOption from "./ImportMenuOption";
+import { MenuOption } from "./customRadzionkit/MenuOption";
+
+const StyledTitle = styled.span`
+    font-weight: 600;
+    font-size: 16px;
+    color: ${({ theme }) => theme.colors.text.toCssValue()};
+`;
 
 function SettingsMenu() {
     const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
     const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
 
+    const importSendingHistory = "Import sending history";
+
     return (
         <Menu
-            title="Settings"
+            title={<StyledTitle>Settings</StyledTitle>}
             renderOpener={({ props: { ref, ...props } }) => <OpenMenuButton ref={ref} {...props} />}
             renderContent={({ view, onClose }) => {
                 const options: MenuOptionProps[] = [
                     {
-                        text: "View stats",
+                        text: "Export sending history",
                         onSelect: () => {
-                            onClose();
-                        },
-                        icon: <EditIcon />,
-                    },
-                    {
-                        text: "Reset stats",
-                        onSelect: () => {
-                            onClose();
-                        },
-                        icon: <MoonIcon />,
-                    },
-                    {
-                        text: "Export sending data",
-                        onSelect: () => {
-                            exportLocalStorage();
+                            exportFromLocalStorage();
                             onClose();
                         },
                         icon: <DownloadIcon />,
+                    },
+                    {
+                        // Dummy to position ImportMenuOption in MenuList below
+                        text: importSendingHistory,
+                        onSelect: () => {},
                     },
                     {
                         text: "Reset all data",
@@ -50,7 +50,14 @@ function SettingsMenu() {
                     },
                 ];
 
-                return options.map((props, index) => <MenuOption view={view} key={index} {...props} />);
+                const MenuList = options.map((props, index) =>
+                    props.text === importSendingHistory ? (
+                        <ImportMenuOption key={index} view={view} />
+                    ) : (
+                        <MenuOption key={index} view={view} {...props} />
+                    )
+                );
+                return <div style={{ display: "flex", flexDirection: "column" }}>{MenuList}</div>;
             }}
         />
     );
