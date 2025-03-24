@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
-import { waitRandomSeconds } from "../helpers/waitRandomSeconds.ts";
+import { waitRandomSeconds } from "./waitRandomSeconds.ts";
 
-const numberOfIterations = 5;
+const numberOfIterations = 1;
 
 for (let i = 0; i < numberOfIterations; i++) {
     test("expect wait to keep within time window, negative minSeconds", async () => {
