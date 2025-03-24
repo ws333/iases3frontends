@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import icon from "../../../thunderbird-extension/public/skin/icon64.png";
 import EmailSender from "./EmailSender";
@@ -29,6 +30,7 @@ export default function App() {
             </header>
             <EmailSender />
             <SendDialog />
+            <ToastContainer />
         </div>
     );
 }

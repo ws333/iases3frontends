@@ -52,7 +52,7 @@ function SettingsMenu() {
 
                 const MenuList = options.map((props, index) =>
                     props.text === importSendingHistory ? (
-                        <ImportMenuOption key={index} view={view} />
+                        <ImportMenuOption key={index} view={view} onClose={onClose} />
                     ) : (
                         <MenuOption key={index} view={view} {...props} />
                     )
