@@ -22,6 +22,7 @@
         "react-dom": "^19.0.0",
         "react-focus-lock": "^2.13.6",
         "react-localization": "^2.0.6",
+        "react-toastify": "^11.0.5",
         "styled-components": "^6.1.15",
         "xlsx": "file:vendor/xlsx-0.20.3.tgz"
     },
