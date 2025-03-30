@@ -99,7 +99,7 @@ export async function fetchAndMergeContacts(
     const localContactsMap = new Map(localContacts.map((contact) => [contact.uid, contact]));
 
     // Merge the online contacts with the local contacts - O(n) operation
-    const merged = onlineContacts.map((oc): ContactI3C => {
+    const mergedContacts = onlineContacts.map((oc): ContactI3C => {
         const local = localContactsMap.get(oc.uid);
         return local?.sd
             ? {
@@ -112,7 +112,7 @@ export async function fetchAndMergeContacts(
             : oc;
     });
 
-    await storeActiveContacts(merged);
+    await storeActiveContacts(mergedContacts);
 
-    return merged;
+    return mergedContacts;
 }
