@@ -47,16 +47,17 @@ function useContactList() {
         const controller = new AbortController();
         const loadContacts = async () => {
             try {
-                const _nations = await fetchOnlineNations(controller.signal);
+                const _nations = await fetchOnlineNations(controller);
                 setNationOptionsFetched(_nations);
                 if (!isExtension()) setIsSelectedAllNations(true);
 
-                const merged = await fetchAndMergeContacts(controller.signal);
+                const merged = await fetchAndMergeContacts(controller);
+                if (merged.length === 0) throw Error("Empty contacts array returned by fetchAndMergeContacts");
                 setContacts(merged);
                 setIsLoading(false);
             } catch (error) {
                 if (error instanceof Error) {
-                    console.warn("*Debug* -> EmailSender.tsx -> useEffect fetch error:", error.message);
+                    console.warn("EmailSender.tsx -> useEffect fetch error:", error.message);
                     const message = "Failed to download contact lists! Please make sure you are online and try again.";
                     setFetchError(message);
                 }
