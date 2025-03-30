@@ -57,6 +57,9 @@ interface ContactList {
     setContacts: Action<ContactList, ContactI3C[]>;
     selectedContacts: Computed<ContactList, ContactI3C[]>;
 
+    deletedContacts: ContactI3C[];
+    setDeletedContacts: Action<ContactList, ContactI3C[]>;
+
     emailsSent: number;
     setEmailsSent: Action<ContactList, number | ((prev: number) => number)>;
 

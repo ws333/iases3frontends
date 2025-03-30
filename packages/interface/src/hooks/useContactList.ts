@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { maxCountOptions } from "../constants/constants";
 import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMergeContacts";
+import { getDeletedContacts } from "../helpers/indexedDB";
 import { isExtension } from "../helpers/isExtension";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
@@ -14,6 +15,9 @@ function useContactList() {
     const contacts = useStoreState((state) => state.contactList.contacts);
     const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
     const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
+
+    const deletedContacts = useStoreState((state) => state.contactList.deletedContacts);
+    const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
 
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
     const setEmailsSent = useStoreActions((actions) => actions.contactList.setEmailsSent);
@@ -51,9 +55,13 @@ function useContactList() {
                 setNationOptionsFetched(_nations);
                 if (!isExtension()) setIsSelectedAllNations(true);
 
-                const merged = await fetchAndMergeContacts(controller);
-                if (merged.length === 0) throw Error("Empty contacts array returned by fetchAndMergeContacts");
-                setContacts(merged);
+                const contacts = await fetchAndMergeContacts(controller);
+                if (contacts.length === 0) throw Error("Empty contacts array returned by fetchAndMergeContacts");
+                setContacts(contacts);
+
+                const _deletedContacts = await getDeletedContacts();
+                setDeletedContacts(_deletedContacts);
+
                 setIsLoading(false);
             } catch (error) {
                 if (error instanceof Error) {
@@ -68,7 +76,15 @@ function useContactList() {
         return () => {
             controller.abort();
         };
-    }, [forcedRender, setContacts, setFetchError, setIsLoading, setIsSelectedAllNations, setNationOptionsFetched]);
+    }, [
+        forcedRender,
+        setContacts,
+        setDeletedContacts,
+        setFetchError,
+        setIsLoading,
+        setIsSelectedAllNations,
+        setNationOptionsFetched,
+    ]);
 
     const now = Date.now();
     const oneHourAgo = now - oneHour;
@@ -78,23 +94,35 @@ function useContactList() {
     const threeMonthsAgo = now - threeMonths;
 
     const selectedContactsNotSent = selectedContacts.filter((contact) => contact.sd < threeMonthsAgo);
-
-    const totalSentCount = contacts.reduce((acc, contact) => acc + contact.sc, 0);
-    const totalSentCountLastHour = contacts.reduce((acc, contact) => (contact.sd > oneHourAgo ? acc + 1 : acc), 0);
-    const totalSentCount24Hours = contacts.reduce((acc, contact) => (contact.sd > oneDayAgo ? acc + 1 : acc), 0);
-    const totalSentCountLast7Days = contacts.reduce((acc, contact) => (contact.sd > sevenDaysAgo ? acc + 1 : acc), 0);
-    const totalSentCountLast30Days = contacts.reduce((acc, contact) => (contact.sd > oneMonthAgo ? acc + 1 : acc), 0);
-    const totalSentCountLast3Months = contacts.reduce(
-        (acc, contact) => (contact.sd > threeMonthsAgo ? acc + 1 : acc),
-        0
-    );
-
     const maxSelectedContactsNotSent = Math.min(selectedContactsNotSent.length, maxCount);
-
     const nextContactNotSent = selectedContactsNotSent[0] || {
         n: "",
         e: "",
     };
+
+    // Calculate emails sent counts using both active and deleted contacts
+    const combinedContacts = contacts.concat(deletedContacts);
+    const totalSentCount = combinedContacts.reduce((acc, contact) => acc + contact.sc, 0);
+    const totalSentCountLastHour = combinedContacts.reduce(
+        (acc, contact) => (contact.sd > oneHourAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCount24Hours = combinedContacts.reduce(
+        (acc, contact) => (contact.sd > oneDayAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCountLast7Days = combinedContacts.reduce(
+        (acc, contact) => (contact.sd > sevenDaysAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCountLast30Days = combinedContacts.reduce(
+        (acc, contact) => (contact.sd > oneMonthAgo ? acc + 1 : acc),
+        0
+    );
+    const totalSentCountLast3Months = combinedContacts.reduce(
+        (acc, contact) => (contact.sd > threeMonthsAgo ? acc + 1 : acc),
+        0
+    );
 
     return {
         contacts,

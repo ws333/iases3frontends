@@ -177,6 +177,9 @@ export const model: Model = {
             state.contacts.filter((contact) => state.selectedNations.includes(contact.na))
         ),
 
+        deletedContacts: [],
+        setDeletedContacts: action((state, payload) => ({ ...state, deletedContacts: [...payload] })),
+
         emailsSent: 0,
         setEmailsSent: action((state, payload) => ({
             ...state,
