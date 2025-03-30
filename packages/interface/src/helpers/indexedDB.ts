@@ -86,7 +86,6 @@ export async function storeActiveContactsBatch(contacts: ContactI3C[]): Promise<
         );
     } catch (error) {
         console.error("Error storing active contacts batch:", error);
-        throw error;
     } finally {
         db.close();
     }
@@ -111,7 +110,6 @@ export async function removeActiveContactByUid(uid: number): Promise<void> {
         });
     } catch (error) {
         console.error(`Error removing contact with uid ${uid}:`, error);
-        throw error;
     } finally {
         db.close();
     }
@@ -137,7 +135,6 @@ export async function storeDeletedContacts(contacts: ContactI3C | ContactI3C[]):
         );
     } catch (error) {
         console.error("Error storing deleted contacts:", error);
-        throw error;
     } finally {
         db.close();
     }
@@ -163,7 +160,6 @@ export async function storeSendingLog(entries: SendingLogEntry | SendingLogEntry
         );
     } catch (error) {
         console.error("Error storing sending log:", error);
-        throw error;
     } finally {
         db.close();
     }
@@ -181,7 +177,6 @@ export async function storeMetadataKey(timestamp: number, key: MetadataKey): Pro
         });
     } catch (error) {
         console.error(`Error storing key: ${key}`, error);
-        throw error; // Todo: Remove throw before publishing
     } finally {
         db.close();
     }
@@ -333,7 +328,6 @@ export async function removeStorageItem(
         });
     } catch (error) {
         console.error(`Error removing ${key}:`, error);
-        throw error;
     } finally {
         db.close();
     }
@@ -358,7 +352,6 @@ export async function resetStorage(): Promise<void> {
         );
     } catch (error) {
         console.error("Error resetting IndexedDB:", error);
-        throw error;
     } finally {
         db.close();
     }
