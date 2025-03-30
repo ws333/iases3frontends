@@ -2,6 +2,8 @@ export const __DEV__ = import.meta.env.DEV;
 
 export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C.csv"; // Production
 
+export const DEFAULT_FETCH_TIMEOUT = 5000;
+
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",
     CONTACTS_DELETED: "contactsI3C_deleted",
