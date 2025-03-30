@@ -13,8 +13,8 @@ export function showDeleteHistoryDialog({ initiateForcedRender, setUserDialog }:
         title: "Deletion warning!",
         message: TextDeletingData,
         confirmActionText: "Confirm deletion",
-        onConfirm: () => {
-            resetStorage();
+        onConfirm: async () => {
+            await resetStorage();
             setUserDialog({ message: "Sending history deleted!" });
             initiateForcedRender();
             console.log("Sending data has been deleted!");
