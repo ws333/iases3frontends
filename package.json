@@ -17,7 +17,7 @@
         "easy-peasy": "^6.1.0",
         "jschardet": "^3.1.4",
         "papaparse": "^5.5.2",
-        "radzionkit": "file:../radzionkit/radzionkit-0.0.1.tgz",
+        "radzionkit": "file:vendor/radzionkit-0.0.1.tgz",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-focus-lock": "^2.13.6",
