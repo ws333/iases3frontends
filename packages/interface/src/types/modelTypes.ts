@@ -63,6 +63,9 @@ interface ContactList {
     emailsSent: number;
     setEmailsSent: Action<ContactList, number | ((prev: number) => number)>;
 
+    endSession: boolean;
+    setEndSession: Action<ContactList, boolean>;
+
     fetchError: string;
     setFetchError: Action<ContactList, string>;
 

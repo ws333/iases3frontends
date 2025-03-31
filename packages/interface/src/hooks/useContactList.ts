@@ -19,6 +19,9 @@ function useContactList() {
     const deletedContacts = useStoreState((state) => state.contactList.deletedContacts);
     const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
 
+    const endSession = useStoreState((state) => state.contactList.endSession);
+    const setEndSession = useStoreActions((actions) => actions.contactList.setEndSession);
+
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
     const setEmailsSent = useStoreActions((actions) => actions.contactList.setEmailsSent);
 
@@ -127,6 +130,8 @@ function useContactList() {
     return {
         contacts,
         setContacts,
+        endSession,
+        setEndSession,
         emailsSent,
         isLoading,
         fetchError,

@@ -31,7 +31,6 @@ const EmailSender = () => {
     const [message, setMessage] = useState<string>(
         isExtension() ? "Send disabled in extension while developing" : "To begin select contact lists to process above"
     );
-    const [endSession, setEndSession] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
@@ -77,7 +76,7 @@ const EmailSender = () => {
             if (
                 useCL.emailsSent > 0 &&
                 !checkInProgress.current &&
-                (endSession || (leftToSendCount.current === 0 && !selectedNationsChangedSinceLastSending))
+                (useCL.endSession || (leftToSendCount.current === 0 && !selectedNationsChangedSinceLastSending))
             ) {
                 checkInProgress.current = true;
                 await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
@@ -87,13 +86,13 @@ const EmailSender = () => {
                 clearSessionState();
                 checkInProgress.current = false;
                 useCL.setEmailsSent(0);
-                setEndSession(false);
+                useCL.setEndSession(false);
                 const messageReady = `${message} Ready to start new session!`;
                 setMessage(messageReady);
             }
         }
         void checkIfSessionFinished();
-    }, [endSession, useCL]);
+    }, [useCL]);
 
     async function onClickSendEmail(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
@@ -159,7 +158,7 @@ const EmailSender = () => {
     };
 
     const onClickEndSession = () => {
-        setEndSession(true);
+        useCL.setEndSession(true);
         setMessage("Session ended by user...");
     };
 
@@ -171,7 +170,7 @@ const EmailSender = () => {
     const sendButtonDisabled =
         isExtension() || // To avoid sending emails from the extension while developing
         isSending ||
-        endSession === true ||
+        useCL.endSession === true ||
         controller.current.signal.aborted ||
         checkInProgress.current ||
         (SINGLE_CONTACT_MODE
@@ -226,13 +225,13 @@ const EmailSender = () => {
 
                 {!isSending && (
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        {useCL.emailsSent > 0 && !endSession && !checkInProgress.current && (
+                        {useCL.emailsSent > 0 && !useCL.endSession && !checkInProgress.current && (
                             <ButtonEndSession onClick={onClickEndSession} />
                         )}
                         <ButtonSendEmails
                             checkInProgress={checkInProgress.current}
                             disabled={sendButtonDisabled}
-                            endSession={endSession}
+                            endSession={useCL.endSession}
                             leftToSendCount={leftToSendCount.current}
                             onClick={onClickSendEmail}
                             useCL={useCL}

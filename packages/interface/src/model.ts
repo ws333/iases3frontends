@@ -180,6 +180,9 @@ export const model: Model = {
         deletedContacts: [],
         setDeletedContacts: action((state, payload) => ({ ...state, deletedContacts: [...payload] })),
 
+        endSession: false,
+        setEndSession: action((state, payload) => ({ ...state, endSession: payload })),
+
         emailsSent: 0,
         setEmailsSent: action((state, payload) => ({
             ...state,
@@ -206,7 +209,7 @@ export const model: Model = {
                     message: TextEndingSession,
                     onConfirm: () => {
                         storeActions.contactList._setMaxCount(payload);
-                        storeActions.userDialog.setUserDialog({ message: "" });
+                        storeActions.contactList.setEndSession(true);
                     },
                 });
                 return;
