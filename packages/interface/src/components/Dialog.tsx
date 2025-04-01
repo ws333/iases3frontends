@@ -39,6 +39,7 @@ function Dialog({
         <StyledConfirmationModal
             title={title}
             onClose={_onClose}
+            noCloseOnClickBackdrop
             confirmActionText={confirmActionText}
             onConfirm={onConfirm}
         >
