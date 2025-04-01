@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useStoreActions } from "../hooks/storeHooks";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
-import ImportMenuOption from "./ImportMenuOption";
+import MenuOptionImport from "./MenuOptionImport";
 import { MenuOption } from "./customRadzionkit/MenuOption";
 
 const StyledTitle = styled.span`
@@ -35,7 +35,7 @@ function SettingsMenu() {
                         icon: <DownloadIcon />,
                     },
                     {
-                        // Dummy to position ImportMenuOption in MenuList below
+                        // Dummy to position menu option in MenuList below
                         text: importSendingHistory,
                         onSelect: () => {},
                     },
@@ -52,7 +52,7 @@ function SettingsMenu() {
 
                 const MenuList = options.map((props, index) =>
                     props.text === importSendingHistory ? (
-                        <ImportMenuOption key={index} view={view} onClose={onClose} />
+                        <MenuOptionImport key={index} view={view} onClose={onClose} />
                     ) : (
                         <MenuOption key={index} view={view} {...props} />
                     )

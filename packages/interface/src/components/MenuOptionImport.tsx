@@ -12,7 +12,7 @@ type Props = {
     onClose: () => void;
 };
 
-const ImportMenuOption = ({ view, onClose }: Props) => {
+const MenuOptionImport = ({ view, onClose }: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
@@ -102,4 +102,4 @@ const ImportMenuOption = ({ view, onClose }: Props) => {
     );
 };
 
-export default ImportMenuOption;
+export default MenuOptionImport;
