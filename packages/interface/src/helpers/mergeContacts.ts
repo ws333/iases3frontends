@@ -23,7 +23,7 @@ export function mergeContacts(
     };
 
     const exportDate = importData.metadata.find((item) => item.key === "exportDate")?.value;
-    if (!exportDate) return [current, importContactsStats, new Error("Export date not found in import data")];
+    if (!exportDate) return [current, importContactsStats, new Error("Invalid import\nNo export date found!")];
 
     // Merge active contacts from the import
     for (const importContact of importData.contacts.active) {

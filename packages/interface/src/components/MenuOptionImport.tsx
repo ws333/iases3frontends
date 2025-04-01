@@ -1,10 +1,12 @@
-import { MenuView } from "radzionkit";
+import { MenuView, Text } from "radzionkit";
 import { RefreshIcon } from "radzionkit/ui/icons/RefreshIcon";
 import { ChangeEvent, useRef } from "react";
-import { ToastContent, toast } from "react-toastify";
+import { ToastContentProps, toast } from "react-toastify";
+import { CSSProperties } from "styled-components";
 import { ImportStats } from "../types/typesI3C";
 import { useStoreActions } from "../hooks/storeHooks";
 import { importToLocalStorage } from "../helpers/importToLocalStorage";
+import { toastOptions } from "../css/styles";
 import { MenuOption } from "./customRadzionkit/MenuOption";
 
 type Props = {
@@ -17,7 +19,27 @@ const MenuOptionImport = ({ view, onClose }: Props) => {
 
     const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
 
-    const ImportStatsComponent: ToastContent<ImportStats> = ({ closeToast, data }) => {
+    const ImportStatsComponent = ({ closeToast, data }: ToastContentProps<ImportStats | Error>) => {
+        if (data instanceof Error) {
+            const messages = data.message.split("\n");
+
+            return (
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    {messages.map((message, index) => (
+                        <Text key={index} style={{ margin: "0.5rem" }} weight="bold">
+                            {message}
+                        </Text>
+                    ))}
+                </div>
+            );
+        }
+
+        const liStyles: CSSProperties = {
+            display: "flex",
+            justifyContent: "space-between",
+            marginBottom: "0.5rem",
+        };
+
         return (
             <div
                 onClick={(e) => {
@@ -25,19 +47,31 @@ const MenuOptionImport = ({ view, onClose }: Props) => {
                     if (closeToast) closeToast();
                 }}
                 style={{
-                    marginRight: "0.5rem",
-                    marginLeft: "24px",
-                    backgroundColor: "#333",
-                    padding: "0.8rem",
-                    border: "1px solid #fff1",
-                    borderRadius: "5px",
+                    marginRight: "1rem",
+                    marginLeft: "1rem",
+                    padding: "1rem",
+                    width: "auto",
                 }}
             >
-                <p style={{ marginTop: "0" }}>Import complete!</p>
-                <ul style={{ paddingLeft: "1.5rem", marginTop: "0.25rem" }}>
-                    <li>Contacts processed: {data?.contactsProcessed}</li>
-                    <li>Contacts deleted: {data?.contactsDeleted}</li>
-                    <li>Log entries processed: {data?.logsProcessed}</li>
+                <Text size={20} style={{ marginTop: "0", marginBottom: "1.5rem" }}>
+                    Import completed!
+                </Text>
+                <ul>
+                    <li style={liStyles}>
+                        <span>Contacts processed:</span>
+                        <pre>{"  "}</pre>
+                        <span>{data?.contactsProcessed}</span>
+                    </li>
+                    <li style={liStyles}>
+                        <span>Log entries processed:</span>
+                        <pre>{"  "}</pre>
+                        <span>{data?.logsProcessed}</span>
+                    </li>
+                    <li style={liStyles}>
+                        <span>Moved to deleted:</span>
+                        <pre>{"  "}</pre>
+                        <span>{data?.contactsDeleted}</span>
+                    </li>
                 </ul>
             </div>
         );
@@ -60,17 +94,18 @@ const MenuOptionImport = ({ view, onClose }: Props) => {
             }, 300);
 
             if (importStatsOrError instanceof Error) {
-                toast.dark(ImportStatsComponent as ToastContent, {
+                toast(ImportStatsComponent, {
+                    ...toastOptions,
                     data: importStatsOrError,
-                    autoClose: false,
+                    type: "error",
                 });
                 throw importStatsOrError;
             }
 
             initiateForcedRender();
-            toast.dark(ImportStatsComponent as ToastContent, {
+            toast(ImportStatsComponent, {
+                ...toastOptions,
                 data: importStatsOrError,
-                autoClose: false,
             });
         } catch (error) {
             console.error(error);

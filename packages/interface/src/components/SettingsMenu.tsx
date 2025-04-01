@@ -47,7 +47,7 @@ function SettingsMenu() {
                         onSelect: () => {},
                     },
                     {
-                        text: "Reset all data",
+                        text: "Reset sending history",
                         kind: "alert",
                         onSelect: () => {
                             showDeleteHistoryDialog({ initiateForcedRender, setUserDialog });

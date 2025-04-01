@@ -334,7 +334,7 @@ export async function removeStorageItem(
 }
 
 // Resets all stores (clears all data)
-export async function resetStorage(): Promise<void> {
+export async function resetStorage(): Promise<boolean> {
     const db = await openDatabase();
     try {
         const stores = [STORE.ACTIVE_CONTACTS, STORE.DELETED_CONTACTS, STORE.SENDING_LOG, STORE.METADATA];
@@ -350,8 +350,10 @@ export async function resetStorage(): Promise<void> {
                     })
             )
         );
+        return true;
     } catch (error) {
         console.error("Error resetting IndexedDB:", error);
+        return false;
     } finally {
         db.close();
     }

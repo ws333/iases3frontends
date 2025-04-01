@@ -1,6 +1,8 @@
 import { ActionCreator } from "easy-peasy";
+import { toast } from "react-toastify";
 import { UserDialog } from "../types/modelTypes";
 import TextDeletingData from "../components/dialogTexts/TextDeletingData";
+import { toastOptions } from "../css/styles";
 import { resetStorage } from "./indexedDB";
 
 type Args = {
@@ -14,10 +16,19 @@ export function showDeleteHistoryDialog({ initiateForcedRender, setUserDialog }:
         message: TextDeletingData,
         confirmActionText: "Confirm deletion",
         onConfirm: async () => {
-            await resetStorage();
-            setUserDialog({ message: "Sending history deleted!" });
-            initiateForcedRender();
-            console.log("Sending data has been deleted!");
+            const resetOk = await resetStorage();
+            if (resetOk) {
+                const message = "Sending history has been deleted!";
+                toast(message, toastOptions);
+                console.log(message);
+                initiateForcedRender();
+            } else {
+                const message = "Failed to delete history!";
+                toast(message, {
+                    ...toastOptions,
+                    type: "error",
+                });
+            }
         },
     });
 }
