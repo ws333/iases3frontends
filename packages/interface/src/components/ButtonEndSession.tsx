@@ -9,7 +9,7 @@ type Props = {
 function ButtonEndSession({ disabled, onClick }: Props) {
     const buttonText = "End session";
     return (
-        <Button isDisabled={disabled} onClick={onClick} style={{ marginRight: "0.5rem" }}>
+        <Button className="session_buttons" isDisabled={disabled} onClick={onClick}>
             {buttonText}
         </Button>
     );

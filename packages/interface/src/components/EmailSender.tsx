@@ -223,31 +223,33 @@ const EmailSender = () => {
 
                 {message && <p>{message}</p>}
 
-                {!isSending && (
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                        {useCL.emailsSent > 0 && !useCL.endSession && !checkInProgress.current && (
-                            <ButtonEndSession onClick={onClickEndSession} />
-                        )}
-                        <ButtonSendEmails
-                            checkInProgress={checkInProgress.current}
-                            disabled={sendButtonDisabled}
-                            endSession={useCL.endSession}
-                            leftToSendCount={leftToSendCount.current}
-                            onClick={onClickSendEmail}
-                            useCL={useCL}
-                        />
-                    </div>
-                )}
+                <div className="container_buttons">
+                    {!isSending && (
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            {useCL.emailsSent > 0 && !useCL.endSession && !checkInProgress.current && (
+                                <ButtonEndSession onClick={onClickEndSession} />
+                            )}
+                            <ButtonSendEmails
+                                checkInProgress={checkInProgress.current}
+                                disabled={sendButtonDisabled}
+                                endSession={useCL.endSession}
+                                leftToSendCount={leftToSendCount.current}
+                                onClick={onClickSendEmail}
+                                useCL={useCL}
+                            />
+                        </div>
+                    )}
 
-                {isSending && (
-                    <ButtonCancel
-                        aborted={controller.current.signal.aborted}
-                        checkInProgress={checkInProgress.current}
-                        disabled={cancelButtonDisabled}
-                        onClick={onClickCancel}
-                        toSendCount={leftToSendCount.current}
-                    />
-                )}
+                    {isSending && (
+                        <ButtonCancel
+                            aborted={controller.current.signal.aborted}
+                            checkInProgress={checkInProgress.current}
+                            disabled={cancelButtonDisabled}
+                            onClick={onClickCancel}
+                            toSendCount={leftToSendCount.current}
+                        />
+                    )}
+                </div>
 
                 {!SINGLE_CONTACT_MODE && <SendingProgress useCL={useCL} />}
 

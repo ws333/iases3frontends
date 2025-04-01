@@ -23,7 +23,7 @@ function ButtonSendEmails({ checkInProgress, disabled, endSession, leftToSendCou
                   ? "Send Emails"
                   : "Continue";
     return (
-        <Button kind="primary" isDisabled={disabled} onClick={onClick} style={{ marginLeft: "0.5rem" }}>
+        <Button className="session_buttons" isDisabled={disabled} onClick={onClick}>
             {buttonText}
         </Button>
     );
