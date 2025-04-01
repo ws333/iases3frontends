@@ -81,7 +81,10 @@ export async function fetchAndMergeContacts(
     deletedContacts.forEach((contact) => {
         contact.dd = now;
     });
-    if (deletedContacts.length) console.table(deletedContacts);
+    if (deletedContacts.length) {
+        console.log("Deleted contacts:");
+        console.table(deletedContacts);
+    }
 
     // Update indexedDB store deletedContacts
     await storeDeletedContacts(deletedContacts);
