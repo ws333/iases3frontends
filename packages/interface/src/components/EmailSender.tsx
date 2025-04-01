@@ -196,6 +196,7 @@ const EmailSender = () => {
                     isOpen={userDialog.isOpen}
                     onClose={userDialog.onClose}
                     onConfirm={userDialog.onConfirm}
+                    showConfirmationModal={userDialog.showConfirmationModal}
                 />
             )}
 

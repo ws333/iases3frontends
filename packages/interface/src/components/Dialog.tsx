@@ -1,4 +1,5 @@
-import { ConfirmationModal, VStack } from "radzionkit";
+import { Button, ConfirmationModal, VStack } from "radzionkit";
+import { Modal } from "radzionkit/ui/modal";
 import styled from "styled-components";
 import { UserDialog } from "../types/modelTypes";
 import { useStoreActions } from "../hooks/storeHooks";
@@ -21,12 +22,20 @@ const StyledConfirmationModal = styled(ConfirmationModal)`
     }
 `;
 
+// Inject styles into Modal
+const StyledModal = styled(Modal)`
+    overflow-y: auto;
+    overflow: hidden auto;
+    width: 92%;
+`;
+
 function Dialog({
     title = "Confirmation",
     message,
     confirmActionText = "Confirm",
     onClose = () => {},
     onConfirm = () => {},
+    showConfirmationModal,
 }: Props) {
     const closeDialog = useStoreActions((actions) => actions.userDialog.closeDialog);
 
@@ -35,7 +44,7 @@ function Dialog({
         closeDialog();
     };
 
-    return (
+    return showConfirmationModal ? (
         <StyledConfirmationModal
             title={title}
             onClose={_onClose}
@@ -45,6 +54,10 @@ function Dialog({
         >
             <VStack gap={12}>{message}</VStack>
         </StyledConfirmationModal>
+    ) : (
+        <StyledModal title={title} onClose={_onClose} footer={<Button onClick={_onClose}>{confirmActionText}</Button>}>
+            {message}
+        </StyledModal>
     );
 }
 

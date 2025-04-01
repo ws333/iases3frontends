@@ -169,6 +169,7 @@ export const model: Model = {
             actions.setUserDialog({ ...model.userDialog });
         }),
         setUserDialog: action((state, payload) => ({ ...state, isOpen: true, ...payload })),
+        showConfirmationModal: true,
     },
     contactList: {
         contacts: [],

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useStoreActions } from "../hooks/storeHooks";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
+import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
 import { MenuOption } from "./customRadzionkit/MenuOption";
 
@@ -19,6 +20,7 @@ function SettingsMenu() {
     const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
 
     const importSendingHistory = "Import sending history";
+    const viewFullSendingLog = "View full sending log";
 
     return (
         <Menu
@@ -26,6 +28,11 @@ function SettingsMenu() {
             renderOpener={({ props: { ref, ...props } }) => <OpenMenuButton ref={ref} {...props} />}
             renderContent={({ view, onClose }) => {
                 const options: MenuOptionProps[] = [
+                    {
+                        // Dummy to position menu option in MenuList below
+                        text: viewFullSendingLog,
+                        onSelect: () => {},
+                    },
                     {
                         text: "Export sending history",
                         onSelect: () => {
@@ -51,7 +58,9 @@ function SettingsMenu() {
                 ];
 
                 const MenuList = options.map((props, index) =>
-                    props.text === importSendingHistory ? (
+                    props.text === viewFullSendingLog ? (
+                        <MenuOptionFullSendingLog key={index} view={view} onClose={onClose} />
+                    ) : props.text === importSendingHistory ? (
                         <MenuOptionImport key={index} view={view} onClose={onClose} />
                     ) : (
                         <MenuOption key={index} view={view} {...props} />

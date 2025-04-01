@@ -103,6 +103,7 @@ export interface UserDialog {
     onConfirm?: () => void;
     closeDialog: Thunk<UserDialog>;
     setUserDialog: Action<UserDialog, Partial<UserDialog>>;
+    showConfirmationModal?: boolean;
 }
 
 // Type based on defaultTemplate in packages/thunderbird-iframe-service/src/thunderbird-iframe-service.js
