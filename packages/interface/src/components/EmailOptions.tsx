@@ -1,3 +1,4 @@
+import { Tooltip } from "radzionkit/ui/tooltips/Tooltip";
 import { FocusEvent, useEffect, useRef, useState } from "react";
 import { KeyOfEmailComponents } from "../types/typesI3C";
 import { minSendingDelay } from "../constants/constants";
@@ -43,36 +44,39 @@ function EmailOptions({ useCL, emailOptions, isSending, singleContactMode }: Ema
         <div className="email-options">
             {!singleContactMode && (
                 <div className="delay-input">
-                    <label>
-                        Delay in seconds between emails sent
-                        <br />
-                        <div className="container-delay">
-                            <div className="column-delay">
-                                <input
-                                    id="delay_input"
-                                    type="number"
-                                    value={localDelay}
-                                    disabled={isSending}
-                                    min={minSendingDelay.toString()}
-                                    onChange={(e) => setLocalDelay(e.target.value)}
-                                    onBlur={(e) => {
-                                        let value = Number(e.target.value);
-                                        if (value < minSendingDelay) value = minSendingDelay;
-                                        setLocalDelay(value.toString());
-                                        emailOptions.setDelay(value);
-                                    }}
-                                />
-                            </div>
-                            <div className="column-delay">
-                                <span className="small-print">
-                                    {minSendingDelay} is the minimum to avoid rate limits
-                                </span>
-                                <span className="small-print">
-                                    Increase if hitting the rate limit for your email provider
-                                </span>
-                            </div>
-                        </div>
-                    </label>
+                    <Tooltip
+                        placement="top"
+                        renderOpener={(props) => (
+                            <label {...props}>
+                                Delay in seconds between emails sent
+                                <br />
+                                <div className="container-delay">
+                                    <div>
+                                        <input
+                                            id="delay_input"
+                                            type="number"
+                                            value={localDelay}
+                                            disabled={isSending}
+                                            min={minSendingDelay.toString()}
+                                            onChange={(e) => setLocalDelay(e.target.value)}
+                                            onBlur={(e) => {
+                                                let value = Number(e.target.value);
+                                                if (value < minSendingDelay) value = minSendingDelay;
+                                                setLocalDelay(value.toString());
+                                                emailOptions.setDelay(value);
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            </label>
+                        )}
+                        content={
+                            <span className="tooltip-min-sending-delay">
+                                {minSendingDelay} is the minimum to avoid rate limits, increase if hitting the rate
+                                limit for your email provider.
+                            </span>
+                        }
+                    />
                 </div>
             )}
 

@@ -2,7 +2,7 @@
     padding: 20px;
     border: 1px solid #fff1;
     border-radius: 5px;
-    background-color: #333;
+    background-color: #111;
     color: #fff;
     display: flex;
     flex-direction: column;
@@ -26,38 +26,9 @@
     color: #fff;
 }
 .email-options select,
-.email-options input {
+#delay_input {
     margin: 10px;
     width: 100px;
-}
-
-.email-options input[type="number"] {
-    width: 3rem;
-}
-
-.email-options .custom-subject {
-    display: inline-block;
-}
-
-.custom-subject {
-    width: 100%; /* Ensure the custom subject container takes the full width of its container */
-}
-
-.custom-subject > input {
-    margin: 10px;
-    width: 100%; /* Make the custom subject input take the full width */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-.subject-input select {
-    width: 100%; /* Make the select input take the full width */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-}
-
-.small-print {
-    font-style: italic;
-    font-size: x-small;
-    margin-top: 10px;
 }
 
 .container-delay {
@@ -66,17 +37,21 @@
     justify-content: flex-start;
 }
 
-.column-delay {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+.tooltip-min-sending-delay {
+    font-size: small;
 }
 
-.column-delay span {
-    margin-top: 0px;
+.email-options .custom-subject {
+    display: inline-block;
 }
 
-#delay_input {
-    width: 100px;
+.custom-subject {
+    width: 100%;
+}
+
+.subject-input select,
+.custom-subject > input {
+    margin: 10px;
+    width: 100%;
+    box-sizing: border-box;
 }

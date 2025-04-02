@@ -2,8 +2,8 @@
     padding: 20px;
     border: 1px solid #fff1;
     border-radius: 5px;
-    background-color: #333;
-    text-align: left; /* Align text to the left */
+    background-color: #111;
+    text-align: left;
 }
 
 .single_contact_container label {
