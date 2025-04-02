@@ -14,7 +14,8 @@ export const STORAGE_KEY = {
 
 export type StorageKey = keyof typeof STORAGE_KEY;
 
-export const minDelay = 3; // Minimum delay between emails being sent in seconds
+export const minSendingDelay = 1; // Minimum delay between emails being sent in seconds
+export const defaultSendingDelay = 3;
 export const defaultRandomWindow = 1;
 export const fullProgressBarDelay = 2;
 

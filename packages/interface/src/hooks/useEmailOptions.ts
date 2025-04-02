@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { TEmailComponent } from "../types/types";
 import { KeyOfEmailComponents } from "../types/typesI3C";
-import { minDelay } from "../constants/constants";
+import { defaultSendingDelay } from "../constants/constants";
 import { emailComponents, subjects } from "../constants/emailTemplates";
 import LetterEnglish from "../components/letters/LetterEnglish";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
 function useEmailOptions() {
-    const [delay, setDelay] = useState<number>(minDelay);
+    const [delay, setDelay] = useState<number>(defaultSendingDelay);
     const [language, _setLanguage] = useState<KeyOfEmailComponents>("English");
     const [subjectOption, setSubjectOption] = useState<string>(subjects[language][0]);
     const [customSubject, setCustomSubject] = useState<string>("");

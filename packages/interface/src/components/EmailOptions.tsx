@@ -1,10 +1,10 @@
 import { FocusEvent, useEffect, useRef, useState } from "react";
-import { minDelay } from "../constants/constants";
+import { KeyOfEmailComponents } from "../types/typesI3C";
+import { minSendingDelay } from "../constants/constants";
 import { emailComponents, subjects } from "../constants/emailTemplates";
-import { objectKeys } from "../helpers/objectHelpers";
 import { UseContactListReturnType } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
-import { KeyOfEmailComponents } from "../types/typesI3C";
+import { objectKeys } from "../helpers/objectHelpers";
 import "./EmailOptions.css";
 
 export type EmailOptionsProps = {
@@ -53,18 +53,20 @@ function EmailOptions({ useCL, emailOptions, isSending, singleContactMode }: Ema
                                     type="number"
                                     value={localDelay}
                                     disabled={isSending}
-                                    min={minDelay.toString()}
+                                    min={minSendingDelay.toString()}
                                     onChange={(e) => setLocalDelay(e.target.value)}
                                     onBlur={(e) => {
                                         let value = Number(e.target.value);
-                                        if (value < minDelay) value = minDelay;
+                                        if (value < minSendingDelay) value = minSendingDelay;
                                         setLocalDelay(value.toString());
                                         emailOptions.setDelay(value);
                                     }}
                                 />
                             </div>
                             <div className="column-delay">
-                                <span className="small-print">{minDelay} is the minimum to avoid rate limits</span>
+                                <span className="small-print">
+                                    {minSendingDelay} is the minimum to avoid rate limits
+                                </span>
                                 <span className="small-print">
                                     Increase if hitting the rate limit for your email provider
                                 </span>
