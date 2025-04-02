@@ -1,13 +1,13 @@
 /* Make the panel width dynamic and fill its container */
 .sent-counts-panel {
     width: 100%;
-    border: 1px solid #333;
+    border: 1px solid #fff1;
     border-radius: 5px !important;
 }
 
 /* Override styles in the ExpandablePanel component */
 .sent-counts-panel > div {
-    padding: 16px !important;
+    padding: 5px 16px !important;
     background-color: #222 !important;
 }
 

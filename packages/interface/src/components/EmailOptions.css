@@ -12,13 +12,12 @@
 
 .email-options label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 }
 
 .email-options input,
 .email-options select {
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin: 5px;
     padding: 5px;
     border: 1px solid #fff1;
     border-radius: 3px;
@@ -52,6 +51,6 @@
 .subject-input select,
 .custom-subject > input {
     margin: 10px;
-    width: 100%;
+    width: calc(100% - 20px);
     box-sizing: border-box;
 }
