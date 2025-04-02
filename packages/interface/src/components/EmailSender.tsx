@@ -1,14 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Email } from "../types/modelTypes";
 import { ContactI3C, LogMessageOptions } from "../types/typesI3C";
-import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
+import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay, zeroWidtSpace } from "../constants/constants";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
 import { getSessionFinishedText } from "../helpers/getSessionFinishedText";
 import { storeActiveContacts } from "../helpers/indexedDB";
-import { isExtension } from "../helpers/isExtension";
 import { renderEmail } from "../helpers/renderEmail";
 import { getLogsToDisplay, logSendingMessage } from "../helpers/sendingLog";
 import { checkForDangelingSession, clearSessionState, updateSessionState } from "../helpers/sessionState";
@@ -28,9 +27,7 @@ import SingleContact from "./SingleContact";
 import "./EmailSender.css";
 
 const EmailSender = () => {
-    const [message, setMessage] = useState<string>(
-        isExtension() ? "Send disabled in extension while developing" : "To begin select contact lists to process above"
-    );
+    const [message, setMessage] = useState<string>(zeroWidtSpace); // zeroWidtSpace used to keep styling consistent
     const [isSending, setIsSending] = useState(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
@@ -168,7 +165,6 @@ const EmailSender = () => {
     };
 
     const sendButtonDisabled =
-        isExtension() || // To avoid sending emails from the extension while developing
         isSending ||
         useCL.endSession === true ||
         controller.current.signal.aborted ||
