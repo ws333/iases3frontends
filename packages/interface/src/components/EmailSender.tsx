@@ -6,6 +6,7 @@ import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useSingleContact } from "../hooks/useSingleContact";
+import { useUpdateSendingStats } from "../hooks/useUpdateSendingStats";
 import { getSessionFinishedText } from "../helpers/getSessionFinishedText";
 import { storeActiveContacts } from "../helpers/indexedDB";
 import { renderEmail } from "../helpers/renderEmail";
@@ -41,6 +42,7 @@ const EmailSender = () => {
         logSendingMessage(message, { setFn: setSendingLog, ...options });
     };
 
+    useUpdateSendingStats(isSending);
     const useCL = useContactList();
     const emailOptions = useEmailOptions();
     const singleContactState = useSingleContact({
