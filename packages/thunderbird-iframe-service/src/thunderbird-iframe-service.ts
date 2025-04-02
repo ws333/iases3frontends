@@ -1,9 +1,8 @@
 /*
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
-
-import { iframeService } from "../../iframe-service/src/iframe-service";
 import { Email, Prefs } from "../../interface/src/types/modelTypes";
+import { iframeService } from "../../iframe-service/src/iframe-service";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");
@@ -95,7 +94,7 @@ try {
             // Sending messages in the background blocked until https://bugzilla.mozilla.org/show_bug.cgi?id=1545930 is resolved.
 
             // Create the email in a new compose window and then send it.
-            const newWin = await browser.compose.beginNew(0, email);
+            const newWin = await browser.compose.beginNew(1, email);
 
             // There are theoretically more send options, but https://bugzilla.mozilla.org/show_bug.cgi?id=1747456 is the blocker.
             if (newWin.id) {
