@@ -20,9 +20,9 @@ import ButtonSendEmails from "./ButtonSendEmails";
 import Dialog from "./Dialog";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
-import EmailsSentLog from "./EmailsSentLog";
 import Header from "./Header";
 import SelectNations from "./SelectNations";
+import SendingLog from "./SendingLog";
 import SendingProgress from "./SendingProgress";
 import SingleContact from "./SingleContact";
 import "./EmailSender.css";
@@ -262,7 +262,7 @@ const EmailSender = () => {
                 </div>
             </div>
 
-            {!SINGLE_CONTACT_MODE && <EmailsSentLog logMessages={sendingLog} />}
+            {!SINGLE_CONTACT_MODE && <SendingLog logMessages={sendingLog} />}
         </div>
     );
 };

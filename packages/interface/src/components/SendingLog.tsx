@@ -1,11 +1,11 @@
-type EmailsSentLogProps = {
+type Props = {
     logMessages: string[];
 };
 
-function EmailsSentLog({ logMessages }: EmailsSentLogProps) {
+function SendingLog({ logMessages }: Props) {
     return (
         <section className="section_emails_sent_log">
-            <h2>Sending Log</h2>
+            <h2>Recent activity</h2>
             <div className="container_emails_sent_log">
                 {logMessages.map((msg, idx) => (
                     <div key={idx}>{msg}</div>
@@ -15,4 +15,4 @@ function EmailsSentLog({ logMessages }: EmailsSentLogProps) {
     );
 }
 
-export default EmailsSentLog;
+export default SendingLog;

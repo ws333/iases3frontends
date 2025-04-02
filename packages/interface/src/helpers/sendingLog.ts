@@ -1,11 +1,11 @@
 import { LogMessageOptions, SendingLogEntry } from "../types/typesI3C";
-import { zeroWidtSpace } from "../constants/constants";
+import { logsToDisplaySize, zeroWidtSpace } from "../constants/constants";
 import { getDateTime } from "./getDateTime";
 import { getSendingLog, storeSendingLog } from "./indexedDB";
 
 export async function getLogsToDisplay() {
     const storedLog = await readSendingLog();
-    const logsToDisplay = storedLog.reverse().slice(0, 1000);
+    const logsToDisplay = storedLog.reverse().slice(0, logsToDisplaySize);
 
     // Remove last session if not all logs are included
     while (logsToDisplay.length && logsToDisplay[logsToDisplay.length - 1] !== zeroWidtSpace) {
