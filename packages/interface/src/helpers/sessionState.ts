@@ -47,7 +47,7 @@ export async function checkForDangelingSession() {
         const storeValue: SendingLogEntry[] = [
             // The timestamp needes to be unique. Displayed in descending order.
             { message, timestamp },
-            { message: zeroWidtSpace, timestamp: timestamp + 1 },
+            { message: zeroWidtSpace, timestamp: timestamp + 2 },
         ];
         await storeSendingLog(storeValue);
         clearSessionState();
