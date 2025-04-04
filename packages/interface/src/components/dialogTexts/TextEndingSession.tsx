@@ -6,13 +6,11 @@ const styles: CSSProperties = {
 };
 const TextEndingSession = (
     <>
-        <Text color="supporting" style={styles}>
+        <Text style={styles}>
             You are about to set 'Number of emails to send' to the same or a lower value than the number of emails
             already sent, this will end the current session.
         </Text>
-        <Text color="regular" style={styles}>
-            Are you sure you want to continue?
-        </Text>
+        <Text style={styles}>Are you sure you want to continue?</Text>
     </>
 );
 
