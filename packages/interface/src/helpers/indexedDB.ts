@@ -2,14 +2,14 @@ import { ContactI3C, SendingLogEntry } from "../types/typesI3C";
 import { zeroWidtSpace } from "../constants/constants";
 
 const DB_NAME = "ContactsI3CDatabase";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
-// Object store names
 export const STORE = {
     ACTIVE_CONTACTS: "activeContacts",
     DELETED_CONTACTS: "deletedContacts",
     SENDING_LOG: "sendingLog",
     METADATA: "metadata",
+    OPTIONS: "options",
 } as const;
 export type StoreKey = (typeof STORE)[keyof typeof STORE];
 
@@ -18,6 +18,15 @@ export const METADATA_KEY = {
     EXPORT_DATE: "exportDate",
 } as const;
 export type MetadataKey = (typeof METADATA_KEY)[keyof typeof METADATA_KEY];
+
+export const OPTIONS_KEY = {
+    DELAY: "delay",
+    MAX_COUNT: "maxCount",
+    LANGUAGE: "language",
+    SUBJECT: "subject",
+    CUSTOM_SUBJECT: "customSubject",
+} as const;
+export type OptionsKey = (typeof OPTIONS_KEY)[keyof typeof OPTIONS_KEY];
 
 // First run initialization
 export async function initializeStorage(contacts: ContactI3C[]): Promise<void> {
@@ -58,6 +67,9 @@ function openDatabase(): Promise<IDBDatabase> {
             }
             if (!db.objectStoreNames.contains(STORE.METADATA)) {
                 db.createObjectStore(STORE.METADATA);
+            }
+            if (!db.objectStoreNames.contains(STORE.OPTIONS)) {
+                db.createObjectStore(STORE.OPTIONS);
             }
         };
 
@@ -181,6 +193,23 @@ export async function storeMetadataKey(timestamp: number, key: MetadataKey): Pro
     }
 }
 
+export async function storeOptionsKey(value: number | string, key: OptionsKey): Promise<void> {
+    const db = await openDatabase();
+    try {
+        const transaction = db.transaction(STORE.OPTIONS, "readwrite");
+        const store = transaction.objectStore(STORE.OPTIONS);
+        await new Promise<void>((resolve, reject) => {
+            const request = store.put(value, key);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(new Error(`Failed to store key: ${key}`));
+        });
+    } catch (error) {
+        console.error(`Error storing key: ${key}`, error);
+    } finally {
+        db.close();
+    }
+}
+
 export async function getActiveContacts(): Promise<ContactI3C[]> {
     const db = await openDatabase();
     try {
@@ -258,6 +287,35 @@ export async function getMetadata(): Promise<{ key: string; value: number }[]> {
         return keys.map((key, index) => ({ key, value: values[index] }));
     } catch (error) {
         console.error("Error retrieving metadata:", error);
+        return [];
+    } finally {
+        db.close();
+    }
+}
+
+// Gets all key-value pairs from the OPTIONS store
+export async function getOptions(): Promise<{ key: string; value: number | string }[]> {
+    const db = await openDatabase();
+    try {
+        const transaction = db.transaction(STORE.OPTIONS, "readonly");
+        const store = transaction.objectStore(STORE.OPTIONS);
+        const keysRequest: IDBRequest<IDBValidKey[]> = store.getAllKeys();
+        const valuesRequest: IDBRequest<(number | string)[]> = store.getAll();
+
+        const [keys, values] = await Promise.all([
+            new Promise<string[]>((resolve, reject) => {
+                keysRequest.onsuccess = () => resolve(keysRequest.result as string[]);
+                keysRequest.onerror = () => reject(new Error("Failed to retrieve options keys"));
+            }),
+            new Promise<(number | string)[]>((resolve, reject) => {
+                valuesRequest.onsuccess = () => resolve(valuesRequest.result);
+                valuesRequest.onerror = () => reject(new Error("Failed to retrieve options values"));
+            }),
+        ]);
+
+        return keys.map((key, index) => ({ key, value: values[index] }));
+    } catch (error) {
+        console.error("Error retrieving options:", error);
         return [];
     } finally {
         db.close();

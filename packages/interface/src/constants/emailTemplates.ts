@@ -1,6 +1,5 @@
 import LetterEnglish from "../components/letters/LetterEnglish";
 import LetterNorwegian from "../components/letters/LetterNorwegian";
-import { Subjects } from "../types/typesI3C";
 
 export const subjects: Subjects = {
     English: [
@@ -27,3 +26,8 @@ export const emailComponents = {
     English: LetterEnglish,
     Norwegian: LetterNorwegian,
 };
+
+export const defaultLanguage: KeyOfEmailComponents = "English";
+
+export type KeyOfEmailComponents = keyof typeof emailComponents;
+export type Subjects = Record<KeyOfEmailComponents, string[]>;

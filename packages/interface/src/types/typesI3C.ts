@@ -1,5 +1,3 @@
-import { emailComponents } from "../constants/emailTemplates";
-
 // Modified version of type ContactI3C from IASES3 extractor project
 export type ContactI3C = {
     uid: number; // Artificial Unix timestamp in milliseconds
@@ -39,8 +37,6 @@ export interface ImportData {
 
 export type ImportStats = { contactsDeleted: number; contactsProcessed: number; logsProcessed: number };
 
-export type KeyOfEmailComponents = keyof typeof emailComponents;
-
 export type LogMessageOptions = {
     addNewline?: boolean;
 };
@@ -54,5 +50,3 @@ export type SessionState = {
     emailsSent: number;
     timestamp: number;
 };
-
-export type Subjects = Record<KeyOfEmailComponents, string[]>;
