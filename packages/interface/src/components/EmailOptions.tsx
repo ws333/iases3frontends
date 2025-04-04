@@ -1,10 +1,10 @@
 import { Tooltip } from "radzionkit/ui/tooltips/Tooltip";
 import { FocusEvent, useEffect, useRef, useState } from "react";
-import { KeyOfEmailComponents } from "../types/typesI3C";
 import { minSendingDelay } from "../constants/constants";
-import { emailComponents, subjects } from "../constants/emailTemplates";
+import { KeyOfEmailComponents, emailComponents, subjects } from "../constants/emailTemplates";
 import { UseContactListReturnType } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
+import { storeOptionsKey } from "../helpers/indexedDB";
 import { objectKeys } from "../helpers/objectHelpers";
 import "./EmailOptions.css";
 
@@ -38,7 +38,18 @@ function EmailOptions({ useCL, emailOptions, isSending, singleContactMode }: Ema
         }
     }, [customSubjectVisible]);
 
+    // Update local delay after hydration
+    useEffect(() => {
+        setLocalDelay(emailOptions.delay.toString());
+    }, [emailOptions.delay]);
+
+    // Using local state to allow empty input
     const [localDelay, setLocalDelay] = useState(emailOptions.delay.toString());
+
+    function processDelayInput(value: string) {
+        const delay = Number(value);
+        return delay > minSendingDelay ? delay : minSendingDelay;
+    }
 
     return (
         <div className="email-options">
@@ -58,12 +69,15 @@ function EmailOptions({ useCL, emailOptions, isSending, singleContactMode }: Ema
                                             value={localDelay}
                                             disabled={isSending}
                                             min={minSendingDelay.toString()}
-                                            onChange={(e) => setLocalDelay(e.target.value)}
-                                            onBlur={(e) => {
-                                                let value = Number(e.target.value);
-                                                if (value < minSendingDelay) value = minSendingDelay;
+                                            onChange={(e) => {
+                                                const { value } = e.target;
                                                 setLocalDelay(value.toString());
-                                                emailOptions.setDelay(value);
+                                                storeOptionsKey(processDelayInput(value), "delay");
+                                            }}
+                                            onBlur={(e) => {
+                                                const delay = processDelayInput(e.target.value);
+                                                setLocalDelay(delay.toString());
+                                                emailOptions.setDelay(delay);
                                             }}
                                         />
                                     </div>

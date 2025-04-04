@@ -27,6 +27,8 @@ export async function exportFromLocalStorage() {
     // Add each localStorage item to the zip
     for (const property in STORE) {
         const key = STORE[property as keyof typeof STORE];
+        if (key === "options") continue; // Don't export options
+
         const data =
             key === "activeContacts"
                 ? await getActiveContacts()

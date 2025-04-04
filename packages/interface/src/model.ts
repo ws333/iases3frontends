@@ -4,8 +4,9 @@
  */
 import { action, actionOn, computed, thunk } from "easy-peasy";
 import type { Model } from "./types/modelTypes";
-import { maxCountOptions } from "./constants/constants";
+import { defaultMaxCount } from "./constants/constants";
 import TextEndingSession from "./components/dialogTexts/TextEndingSession";
+import { storeOptionsKey } from "./helpers/indexedDB";
 import { messageParent } from "./service";
 import { delay as delayPromise, formatTime, parseSpreadsheet } from "./utils";
 
@@ -196,7 +197,7 @@ export const model: Model = {
         isLoading: true,
         setIsLoading: action((state, payload) => ({ ...state, isLoading: payload })),
 
-        maxCount: maxCountOptions[5],
+        maxCount: defaultMaxCount,
         _setMaxCount: action((state, payload) => ({ ...state, maxCount: payload })), // Internal use only
         setMaxCount: thunk((_, payload, { getStoreState, getStoreActions }) => {
             const storeState = getStoreState();
@@ -213,6 +214,7 @@ export const model: Model = {
                 return;
             }
             storeActions.contactList._setMaxCount(payload);
+            storeOptionsKey(payload, "maxCount");
             return { ...storeState, maxCount: payload };
         }),
 
