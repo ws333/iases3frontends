@@ -66,9 +66,6 @@ interface ContactList {
     endSession: boolean;
     setEndSession: Action<ContactList, boolean>;
 
-    fetchError: string;
-    setFetchError: Action<ContactList, string>;
-
     forcedRender: number;
     initiateForcedRender: Action<ContactList>;
 

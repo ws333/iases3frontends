@@ -1,5 +1,4 @@
 import { UseContactListReturnType } from "../hooks/useContactList";
-import LoadingContacts from "./LoadingContacts";
 import { SentCounts } from "./SentCounts";
 import "./SelectNations.css";
 
@@ -23,49 +22,43 @@ function SelectNations({ useCL, isSending }: Props) {
                 <div className="title-container">
                     <label className="title">Available contacts</label>
                 </div>
-                {useCL.isLoading ? (
-                    <div className={"nation-list"}>
-                        <LoadingContacts fetchError={useCL.fetchError} />
+                <>
+                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
+                        <label className="nation-item">
+                            <input
+                                type="checkbox"
+                                disabled={isSending}
+                                checked={useCL.isSelectedAllNations}
+                                onChange={onChangeSelectAll}
+                            />
+                            Select All
+                        </label>
                     </div>
-                ) : (
-                    <>
-                        <div className={`nation-list ${isSending ? "disabled" : ""}`}>
-                            <label className="nation-item">
+                    <div className={`nation-list ${isSending ? "disabled" : ""}`}>
+                        {useCL.nationOptions.map((nation) => (
+                            <label key={nation} className="nation-item">
                                 <input
                                     type="checkbox"
                                     disabled={isSending}
-                                    checked={useCL.isSelectedAllNations}
-                                    onChange={onChangeSelectAll}
+                                    onChange={(e) => onChangeNation(e.target.checked, nation)}
+                                    checked={useCL.selectedNations.includes(nation)}
                                 />
-                                Select All
+                                {nation}
                             </label>
+                        ))}
+                    </div>
+                    <div className="selected-info">
+                        <div>
+                            <div>Selected contacts</div>
+                            <div>Not sent to last 3 months</div>
                         </div>
-                        <div className={`nation-list ${isSending ? "disabled" : ""}`}>
-                            {useCL.nationOptions.map((nation) => (
-                                <label key={nation} className="nation-item">
-                                    <input
-                                        type="checkbox"
-                                        disabled={isSending}
-                                        onChange={(e) => onChangeNation(e.target.checked, nation)}
-                                        checked={useCL.selectedNations.includes(nation)}
-                                    />
-                                    {nation}
-                                </label>
-                            ))}
+                        <div>
+                            <div>{useCL.selectedContacts.length}</div>
+                            <div>{useCL.selectedContactsNotSent.length}</div>
                         </div>
-                        <div className="selected-info">
-                            <div>
-                                <div>Selected contacts</div>
-                                <div>Not sent to last 3 months</div>
-                            </div>
-                            <div>
-                                <div>{useCL.selectedContacts.length}</div>
-                                <div>{useCL.selectedContactsNotSent.length}</div>
-                            </div>
-                        </div>
-                        <SentCounts useCL={useCL} />
-                    </>
-                )}
+                    </div>
+                    <SentCounts useCL={useCL} />
+                </>
             </div>
         </div>
     );
