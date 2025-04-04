@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ContactI3C } from "../types/typesI3C";
+import { ERROR_EMPTY_CONTACTS_ARRAY } from "../constants/constants";
 
 // Define mocks at the top
 const mockCsvParse = vi.fn();
@@ -37,12 +38,11 @@ vi.mock("./indexedDB", () => ({
 
 describe("fetchAndMergeContacts", () => {
     const mockDateNow = 1677600000000; // Feb 28, 2023, 08:40:00 UTC
-    let abortController: AbortController;
     let fetchAndMergeContacts: typeof import("./fetchAndMergeContacts").fetchAndMergeContacts;
     let checkNoOverlapActiveDeletedContacts: typeof import("./checkNoOverlapActiveDeleted").checkNoOverlapActiveDeletedContacts;
 
-    const mockFetchFn = vi.fn(async (controller: AbortController): Promise<ContactI3C[]> => {
-        const response = await mockFetch("some-url", { controller });
+    const mockFetchFn = vi.fn(async (): Promise<ContactI3C[]> => {
+        const response = await mockFetch("some-url");
         const csvText = await response.text();
         return mockCsvParse(csvText).data;
     });
@@ -57,7 +57,6 @@ describe("fetchAndMergeContacts", () => {
         vi.clearAllMocks();
         console.error = vi.fn(); // Mock console.error
         console.table = vi.fn();
-        abortController = new AbortController();
 
         mockFetch.mockReset();
         mockCsvParse.mockReset();
@@ -81,9 +80,7 @@ describe("fetchAndMergeContacts", () => {
         mockCsvParse.mockReturnValue({ data: [] });
         mockGetActiveContacts.mockResolvedValue([]);
 
-        const result = await fetchAndMergeContacts(abortController, mockFetchFn);
-
-        expect(result).toEqual([]);
+        await expect(fetchAndMergeContacts(mockFetchFn)).rejects.toThrow(ERROR_EMPTY_CONTACTS_ARRAY);
     });
 
     it("handles online contacts with empty local contacts", async () => {
@@ -114,7 +111,7 @@ describe("fetchAndMergeContacts", () => {
         });
         mockGetActiveContacts.mockResolvedValue([]);
 
-        const result = await fetchAndMergeContacts(abortController, mockFetchFn);
+        const result = await fetchAndMergeContacts(mockFetchFn);
 
         expect(result).toEqual([
             {
@@ -200,7 +197,7 @@ describe("fetchAndMergeContacts", () => {
             },
         ]);
 
-        const result = await fetchAndMergeContacts(abortController, mockFetchFn);
+        const result = await fetchAndMergeContacts(mockFetchFn);
 
         expect(result).toEqual([
             {
@@ -286,7 +283,7 @@ describe("fetchAndMergeContacts", () => {
             },
         ]);
 
-        const result = await fetchAndMergeContacts(abortController, mockFetchFn);
+        const result = await fetchAndMergeContacts(mockFetchFn);
 
         expect(result).toEqual([
             {
@@ -333,7 +330,7 @@ describe("fetchAndMergeContacts", () => {
 
         const abortingController = new AbortController();
         abortingController.abort();
-        await expect(fetchAndMergeContacts(abortingController, mockFetchFn)).rejects.toThrow("Aborted");
+        await expect(fetchAndMergeContacts(mockFetchFn)).rejects.toThrow("Aborted");
         expect(mockStoreDeletedContacts).not.toHaveBeenCalled();
     });
 
@@ -406,7 +403,7 @@ describe("fetchAndMergeContacts", () => {
         mockGetActiveContacts.mockResolvedValue(activeContacts);
         mockGetDeletedContacts.mockResolvedValue(deletedContacts);
 
-        await fetchAndMergeContacts(abortController, mockFetchFn);
+        await fetchAndMergeContacts(mockFetchFn);
         expect(console.error).toHaveBeenCalledWith("Overlap between active and deleted contacts in indexedDB!");
     });
 
@@ -455,7 +452,7 @@ describe("fetchAndMergeContacts", () => {
             },
         ]);
 
-        const result = await fetchAndMergeContacts(abortController, mockFetchFn);
+        const result = await fetchAndMergeContacts(mockFetchFn);
 
         expect(result).toEqual([
             {

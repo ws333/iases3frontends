@@ -1,3 +1,4 @@
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { maxCountOptions } from "../constants/constants";
 import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMergeContacts";
@@ -30,9 +31,6 @@ function useContactList() {
     const isLoading = useStoreState((state) => state.contactList.isLoading);
     const setIsLoading = useStoreActions((actions) => actions.contactList.setIsLoading);
 
-    const fetchError = useStoreState((state) => state.contactList.fetchError);
-    const setFetchError = useStoreActions((actions) => actions.contactList.setFetchError);
-
     const maxCount = useStoreState((state) => state.contactList.maxCount);
     const setMaxCount = useStoreActions((actions) => actions.contactList.setMaxCount);
 
@@ -48,42 +46,34 @@ function useContactList() {
     const setIsSelectedAllNations = useStoreActions((actions) => actions.contactList.setIsSelectedAllNations);
     const toggleIsSelectedAllNations = useStoreActions((actions) => actions.contactList.toggleIsSelectedAllNations);
 
-    // Fetch nations and contacts on first render
+    const { data: _nations } = useSuspenseQuery({
+        queryKey: ["nations", forcedRender, { shouldFetch: !nationOptions.length }],
+        queryFn: async () => fetchOnlineNations(),
+    });
+
+    const { data: _contacts } = useSuspenseQuery({
+        queryKey: ["contacts", forcedRender, { shouldFetch: !contacts.length }],
+        queryFn: async () => fetchAndMergeContacts(),
+    });
+
+    const { data: _deletedContacts } = useSuspenseQuery({
+        queryKey: ["deletedContacts", forcedRender],
+        queryFn: async () => await getDeletedContacts(),
+    });
+
     useEffect(() => {
-        console.log(`Fetching contacts and nations on render #${forcedRender}`); // Don't remove, forcedRender is used to force rerender and thus refetch
-        const controller = new AbortController();
-        const loadContacts = async () => {
-            try {
-                const _nations = await fetchOnlineNations(controller);
-                setNationOptionsFetched(_nations);
                 if (!isExtension()) setIsSelectedAllNations(true);
 
-                const contacts = await fetchAndMergeContacts(controller);
-                if (contacts.length === 0) throw Error("Empty contacts array returned by fetchAndMergeContacts");
-                setContacts(contacts);
-
-                const _deletedContacts = await getDeletedContacts();
+        setNationOptionsFetched(_nations);
+        setContacts(_contacts);
                 setDeletedContacts(_deletedContacts);
-
                 setIsLoading(false);
-            } catch (error) {
-                if (error instanceof Error) {
-                    console.warn("EmailSender.tsx -> useEffect fetch error:", error.message);
-                    const message = "Failed to download contact lists! Please make sure you are online and try again.";
-                    setFetchError(message);
-                }
-            }
-        };
-        void loadContacts();
-
-        return () => {
-            controller.abort();
-        };
     }, [
-        forcedRender,
+        _contacts,
+        _deletedContacts,
+        _nations,
         setContacts,
         setDeletedContacts,
-        setFetchError,
         setIsLoading,
         setIsSelectedAllNations,
         setNationOptionsFetched,
@@ -134,8 +124,6 @@ function useContactList() {
         setEndSession,
         emailsSent,
         isLoading,
-        fetchError,
-        setFetchError,
         setEmailsSent,
         maxCount,
         maxCountOptions,

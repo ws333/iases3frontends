@@ -2,7 +2,12 @@ export const __DEV__ = import.meta.env.DEV;
 
 export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C.csv"; // Production
 
-export const DEFAULT_FETCH_TIMEOUT = 5000;
+export const defaultFetchTimeout = 1000;
+
+export const ERROR_FETCHING_CONTACTS = new Error(
+    "Failed to download contact lists, please make sure that you are online..."
+);
+export const ERROR_EMPTY_CONTACTS_ARRAY = new Error("Empty contacts array returned by fetchOnlineContacts");
 
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",

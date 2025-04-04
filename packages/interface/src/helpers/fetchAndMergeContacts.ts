@@ -1,7 +1,14 @@
 import { ContactI3C } from "../types/typesI3C";
-import { CONTACTS_CSV_URL, DEFAULT_FETCH_TIMEOUT, NATIONS_CSV_URL, NATIONS_FALLBACK } from "../constants/constants";
+import {
+    CONTACTS_CSV_URL,
+    ERROR_EMPTY_CONTACTS_ARRAY,
+    ERROR_FETCHING_CONTACTS,
+    NATIONS_CSV_URL,
+    NATIONS_FALLBACK,
+} from "../constants/constants";
 import { checkNoOverlapActiveDeletedContacts } from "./checkNoOverlapActiveDeleted";
 import { csvParse } from "./csvParse";
+import { fetchWithTimeout } from "./fetchWithTimeout";
 import {
     getActiveContacts,
     initializeStorage,
@@ -10,60 +17,32 @@ import {
     storeDeletedContacts,
 } from "./indexedDB";
 
-function createTimeoutPromise(ms: number, controller: AbortController): Promise<never> {
-    return new Promise((_, reject) => {
-        setTimeout(() => {
-            controller.abort();
-            reject(new Error(`Request timed out after ${ms}ms`));
-        }, ms);
-    });
-}
-
-export async function fetchOnlineNations(
-    controller: AbortController,
-    timeout = DEFAULT_FETCH_TIMEOUT
-): Promise<string[]> {
+export async function fetchOnlineNations(): Promise<string[]> {
     try {
-        const response = await Promise.race([
-            fetch(NATIONS_CSV_URL, { signal: controller.signal }),
-            createTimeoutPromise(timeout, controller),
-        ]);
+        const response = await fetchWithTimeout(NATIONS_CSV_URL, ERROR_FETCHING_CONTACTS); // Using the same error as contacts
         const csvText = await response.text();
         const nations = /^[A-Z,]+$/.exec(csvText)?.toString().split(","); // Only allow uppercase letters and commas
         return nations ?? NATIONS_FALLBACK;
     } catch (error) {
-        console.warn("fetchAndMergeContacts.ts -> fetchOnlineNations error:", error);
-        return NATIONS_FALLBACK;
+        console.warn("fetchOnlineNations:", error);
+        throw error;
     }
 }
 
-async function fetchOnlineContacts(
-    controller: AbortController,
-    timeout = DEFAULT_FETCH_TIMEOUT
-): Promise<ContactI3C[]> {
+async function fetchOnlineContacts(): Promise<ContactI3C[]> {
     try {
-        const response = await Promise.race([
-            fetch(CONTACTS_CSV_URL, { signal: controller.signal }),
-            createTimeoutPromise(timeout, controller),
-        ]);
-
+        const response = await fetchWithTimeout(CONTACTS_CSV_URL, ERROR_FETCHING_CONTACTS);
         const csvText = await response.text();
         return csvParse<ContactI3C>(csvText).data;
     } catch (error) {
-        console.warn("fetchAndMergeContacts.ts -> fetchOnlineContacts error:", error);
-        return [];
+        console.warn("fetchOnlineContacts:", error);
+        throw error;
     }
 }
 
-export async function fetchAndMergeContacts(
-    controller: AbortController,
-    fetchFn = fetchOnlineContacts,
-    timeout = DEFAULT_FETCH_TIMEOUT
-): Promise<ContactI3C[]> {
-    const onlineContacts = await fetchFn(controller, timeout);
-
-    // Dont perform any operations if the fetch was aborted or the onlineContacts array is empty
-    if (controller.signal.aborted || !onlineContacts.length) return [];
+export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Promise<ContactI3C[]> {
+    const onlineContacts = await fetchFn();
+    if (!onlineContacts.length) throw ERROR_EMPTY_CONTACTS_ARRAY;
 
     await initializeStorage(onlineContacts); // Initialize indexedDB storage
     const localContacts = await getActiveContacts();
