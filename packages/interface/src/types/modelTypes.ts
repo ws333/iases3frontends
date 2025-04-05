@@ -1,6 +1,7 @@
-import { Action, ActionOn, Computed, Thunk } from "easy-peasy";
+import { Action, ActionOn, Computed, Thunk, ThunkOn } from "easy-peasy";
 import { JSX } from "react";
-import type { SpreadsheetData, Strings } from "./types.ts";
+import { LanguageOption, SubjectPerLanguage } from "../constants/emailTemplates.ts";
+import type { SpreadsheetData, Strings, TEmailComponent } from "./types.ts";
 import { ContactI3C } from "./typesI3C.ts";
 
 export interface Model {
@@ -16,6 +17,7 @@ export interface Model {
     openUrl: Thunk<Model, string>;
     userDialog: UserDialog;
     contactList: ContactList;
+    emailOptions: EmailOptions;
 }
 
 interface Locale {
@@ -86,6 +88,28 @@ interface ContactList {
     isSelectedAllNations: boolean;
     setIsSelectedAllNations: Action<ContactList, boolean>;
     toggleIsSelectedAllNations: Thunk<ContactList>;
+}
+
+interface EmailOptions {
+    delay: number;
+    setDelay: Action<EmailOptions, number>;
+    storeDelay: ThunkOn<EmailOptions, number>;
+
+    language: LanguageOption;
+    setLanguage: Action<EmailOptions, { language: LanguageOption; subjectPerLanguage?: SubjectPerLanguage }>;
+    storeLanguage: ThunkOn<EmailOptions, LanguageOption, Model>;
+
+    subject: Computed<EmailOptions, string>;
+    subjectPerLanguage: SubjectPerLanguage;
+    setSubjectPerLanguage: Action<EmailOptions, SubjectPerLanguage>;
+    storeSubjectPerLanguage: ThunkOn<EmailOptions, SubjectPerLanguage>;
+
+    customSubject: string;
+    setCustomSubject: Action<EmailOptions, string>;
+    storeCustomSubject: ThunkOn<EmailOptions, string>;
+    customSubjectVisible: Computed<EmailOptions, boolean>;
+
+    EmailComponent: Computed<EmailOptions, TEmailComponent>;
 }
 
 export interface UserDialog {

@@ -24,7 +24,9 @@ export const emailComponents = {
     Norwegian: LetterNorwegian,
 };
 
-export const defaultLanguage: KeyOfEmailComponents = "English";
+export type LanguageOption = keyof typeof emailComponents;
+export type Subjects = Record<LanguageOption, string[]>;
+export type SubjectPerLanguage = { [K in LanguageOption]?: string };
 
-export type KeyOfEmailComponents = keyof typeof emailComponents;
-export type Subjects = Record<KeyOfEmailComponents, string[]>;
+export const defaultLanguage: LanguageOption = "English";
+export const defaultLanguageOptions = Object.keys(emailComponents) as LanguageOption[];
