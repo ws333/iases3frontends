@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ContactI3C, ImportData } from "../types/typesI3C";
-import { ContactState, deleteContact, mergeContacts } from "./mergeContacts";
+import { ContactState, deleteContact, mergeImportedContacts } from "./mergeImportedContacts";
 
-describe("mergeContacts", () => {
+describe("mergeImportedContacts", () => {
     const emptyState: ContactState = { active: [], deleted: [], lastImportExportDate: 0 };
 
     const createImport = (
@@ -72,7 +72,7 @@ describe("mergeContacts", () => {
             [],
             1677590000000
         );
-        const [result, stats] = mergeContacts(emptyState, importData);
+        const [result, stats] = mergeImportedContacts(emptyState, importData);
         expect(result.active).toEqual([]);
         expect(result.deleted.length).toBe(1);
         expectContactMatch(result.deleted[0], {
@@ -84,7 +84,7 @@ describe("mergeContacts", () => {
             dd: 1677590000000,
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
-        expect(stats).toEqual({ contactsDeleted: 1, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 1, contactsProcessed: 1 });
     });
 
     it("handles send after export", () => {
@@ -121,9 +121,9 @@ describe("mergeContacts", () => {
                 },
             ],
             [],
-            1677590000000 // Fixed from 167759ilih0000000
+            1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 4,
             sd: 1677686400000,
@@ -171,7 +171,7 @@ describe("mergeContacts", () => {
             [],
             1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 5,
             sd: 1677686400000,
@@ -219,8 +219,8 @@ describe("mergeContacts", () => {
             [],
             1677590000000
         );
-        const [result1, stats1] = mergeContacts(initialState, importData);
-        const [result2, stats2] = mergeContacts(result1, importData);
+        const [result1, stats1] = mergeImportedContacts(initialState, importData);
+        const [result2, stats2] = mergeImportedContacts(result1, importData);
         expectContactMatch(result2.active[0], {
             sc: 3,
             sd: 1677600000000,
@@ -274,7 +274,7 @@ describe("mergeContacts", () => {
             ],
             1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expect(result.active).toEqual([]);
         expectContactMatch(result.deleted[0], {
             sc: 3,
@@ -284,61 +284,7 @@ describe("mergeContacts", () => {
             cf2: "CF2",
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 0 });
-    });
-
-    it("handles new sends for deleted contact", () => {
-        const initialState = deleteContact(
-            {
-                active: [
-                    {
-                        uid: 1672531200000,
-                        na: "US",
-                        i: "TestInst",
-                        s: "TestGroup",
-                        n: "Test",
-                        e: "test@example.com",
-                        sc: 3,
-                        sd: 1677600000000,
-                        ud: "2023-01-01T00:00:00Z",
-                        dd: 0,
-                        cb1: "CB1",
-                        cb2: "CB2",
-                        cf1: "CF1",
-                        cf2: "CF2",
-                    },
-                ],
-                deleted: [],
-                lastImportExportDate: 1677590000000,
-            },
-            1672531200000,
-            1677610000000
-        );
-        const importData = createImport(
-            [],
-            [
-                {
-                    uid: 1672531200000,
-                    sc: 5,
-                    sd: 1677686400000,
-                    dd: 1677610000000,
-                    cf1: "CF1-updated",
-                    cf2: "CF2-updated",
-                },
-            ],
-            1677670000000
-        );
-        const [result, stats] = mergeContacts(initialState, importData);
-        expect(result.active).toEqual([]);
-        expectContactMatch(result.deleted[0], {
-            sc: 5,
-            sd: 1677686400000,
-            dd: 1677610000000,
-            cf1: "CF1-updated",
-            cf2: "CF2-updated",
-        });
-        expect(result.lastImportExportDate).toBe(1677670000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 
     it("handles sends and deletions after export", () => {
@@ -378,7 +324,7 @@ describe("mergeContacts", () => {
             ],
             1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expect(result.active).toEqual([]);
         expectContactMatch(result.deleted[0], {
             sc: 4,
@@ -388,7 +334,7 @@ describe("mergeContacts", () => {
             cf2: "CF2",
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 
     it("handles older import for active contact (no change)", () => {
@@ -427,7 +373,7 @@ describe("mergeContacts", () => {
             [],
             1677580000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 4,
             sd: 1677686400000,
@@ -476,7 +422,7 @@ describe("mergeContacts", () => {
             ],
             1677580000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.deleted[0], {
             sc: 4,
             sd: 1677686400000,
@@ -485,56 +431,7 @@ describe("mergeContacts", () => {
             cf2: "CF2",
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 0 });
-    });
-
-    it("handles import with sentDate after deletion (no increment)", () => {
-        const initialState: ContactState = {
-            active: [],
-            deleted: [
-                {
-                    uid: 1672531200000,
-                    na: "US",
-                    i: "TestInst",
-                    s: "TestGroup",
-                    n: "Test",
-                    e: "test@example.com",
-                    sc: 3,
-                    sd: 1677600000000,
-                    dd: 1677610000000,
-                    ud: "2023-01-01T00:00:00Z",
-                    cb1: "CB1",
-                    cb2: "CB2",
-                    cf1: "CF1",
-                    cf2: "CF2",
-                },
-            ],
-            lastImportExportDate: 1677590000000,
-        };
-        const importData = createImport(
-            [],
-            [
-                {
-                    uid: 1672531200000,
-                    sc: 2,
-                    sd: 1677620000000,
-                    dd: 1677610000000,
-                    cf1: "CF1-updated",
-                    cf2: "CF2-updated",
-                },
-            ],
-            1677670000000
-        );
-        const [result, stats] = mergeContacts(initialState, importData);
-        expectContactMatch(result.deleted[0], {
-            sc: 2,
-            sd: 1677620000000,
-            dd: 1677610000000,
-            cf1: "CF1-updated",
-            cf2: "CF2-updated",
-        });
-        expect(result.lastImportExportDate).toBe(1677670000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 
     it("handles multiple contacts in single import", () => {
@@ -591,7 +488,7 @@ describe("mergeContacts", () => {
                 {
                     uid: 1672531200001,
                     sc: 5,
-                    sd: 1677686400000,
+                    sd: 1677606400000,
                     dd: 1677610000000,
                     cf1: "CF1-new",
                     cf2: "CF2-new",
@@ -599,7 +496,7 @@ describe("mergeContacts", () => {
             ],
             1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             uid: 1672531200000,
             sc: 5,
@@ -611,13 +508,13 @@ describe("mergeContacts", () => {
         expectContactMatch(result.deleted[0], {
             uid: 1672531200001,
             sc: 5,
-            sd: 1677686400000,
+            sd: 1677606400000,
             cf1: "CF1-new",
             cf2: "CF2-new",
             dd: 1677610000000,
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 2 });
     });
 
     it("handles empty import (no change)", () => {
@@ -644,7 +541,7 @@ describe("mergeContacts", () => {
             lastImportExportDate: 1677590000000,
         };
         const importData = createImport([], [], 1677600000000);
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 3,
             sd: 1677600000000,
@@ -693,7 +590,7 @@ describe("mergeContacts", () => {
             [],
             1677600000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             uid: 1672531200000,
             sc: 3,
@@ -711,7 +608,7 @@ describe("mergeContacts", () => {
             dd: 1677600000000,
         });
         expect(result.lastImportExportDate).toBe(1677600000000);
-        expect(stats).toEqual({ contactsDeleted: 1, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 1, contactsProcessed: 1 });
     });
 
     it("handles simultaneous active and deleted updates", () => {
@@ -768,7 +665,7 @@ describe("mergeContacts", () => {
                 {
                     uid: 1672531200001,
                     sc: 5,
-                    sd: 1677620000000,
+                    sd: 1677602000000,
                     dd: 1677610000000,
                     cf1: "CF1-new",
                     cf2: "CF2-new",
@@ -776,7 +673,7 @@ describe("mergeContacts", () => {
             ],
             1677600000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             uid: 1672531200000,
             sc: 4,
@@ -788,13 +685,13 @@ describe("mergeContacts", () => {
         expectContactMatch(result.deleted[0], {
             uid: 1672531200001,
             sc: 5,
-            sd: 1677620000000,
+            sd: 1677602000000,
             cf1: "CF1-new",
             cf2: "CF2-new",
             dd: 1677610000000,
         });
         expect(result.lastImportExportDate).toBe(1677600000000);
-        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 2 });
     });
 
     it("handles import with zero sentCount", () => {
@@ -824,8 +721,8 @@ describe("mergeContacts", () => {
             [
                 {
                     uid: 1672531200000,
-                    sc: 0,
-                    sd: 1677620000000,
+                    sc: undefined,
+                    sd: undefined,
                     cf1: "CF1-updated",
                     cf2: "CF2-updated",
                 },
@@ -833,12 +730,12 @@ describe("mergeContacts", () => {
             [],
             1677600000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
-            sc: 0,
-            sd: 1677620000000,
-            cf1: "CF1-updated",
-            cf2: "CF2-updated",
+            sc: 3,
+            sd: 1677600000000,
+            cf1: "CF1",
+            cf2: "CF2",
             dd: 0,
         });
         expect(result.lastImportExportDate).toBe(1677600000000);
@@ -872,7 +769,7 @@ describe("mergeContacts", () => {
             [
                 {
                     uid: 1672531200000,
-                    sc: 5,
+                    sc: 2,
                     sd: 1677600000000,
                     cf1: "CF1-updated",
                     cf2: "CF2-updated",
@@ -881,7 +778,7 @@ describe("mergeContacts", () => {
             [],
             1677590000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 3,
             sd: 1677600000000,
@@ -890,6 +787,56 @@ describe("mergeContacts", () => {
             dd: 0,
         });
         expect(result.lastImportExportDate).toBe(1677590000000);
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
+    });
+
+    it("handles import with deleted contact with lower sc than local deleted", () => {
+        const initialState: ContactState = {
+            active: [],
+            deleted: [
+                {
+                    uid: 1672531200000,
+                    na: "US",
+                    i: "TestInst",
+                    s: "TestGroup",
+                    n: "Test",
+                    e: "test@example.com",
+                    sc: 3,
+                    sd: 1677600000000,
+                    ud: "2023-01-01T00:00:00Z",
+                    dd: 1677605000000,
+                    cb1: "CB1",
+                    cb2: "CB2",
+                    cf1: "CF1",
+                    cf2: "CF2",
+                },
+            ],
+            lastImportExportDate: 1677590000000,
+        };
+        const importData = createImport(
+            [],
+            [
+                {
+                    uid: 1672531200000,
+                    sc: 2,
+                    sd: 1677620000000,
+                    dd: 1677630000000,
+                    cf1: "CF1-updated",
+                    cf2: "CF2-updated",
+                },
+            ],
+            1677600000000
+        );
+        const [result, stats] = mergeImportedContacts(initialState, importData);
+        expect(result.active).toEqual([]);
+        expectContactMatch(result.deleted[0], {
+            sc: 3,
+            sd: 1677600000000,
+            dd: 1677605000000,
+            cf1: "CF1",
+            cf2: "CF2",
+        });
+        expect(result.lastImportExportDate).toBe(1677600000000);
         expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 
@@ -929,21 +876,23 @@ describe("mergeContacts", () => {
             [],
             1677700000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expectContactMatch(result.active[0], {
             sc: 7,
             sd: 1677686400000,
             cf1: "CF1-updated",
             cf2: "CF2-updated",
-            dd: 0,
         });
         expect(result.lastImportExportDate).toBe(1677700000000);
         expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 
-    it("handles moving active contact to deleted", () => {
+    // Can only happen if the export is from a different device
+    // Multi device is generally not supported, but this logic should not affect intended use.
+    it("handles import with deleted contact with higher sc than local deleted", () => {
         const initialState: ContactState = {
-            active: [
+            active: [],
+            deleted: [
                 {
                     uid: 1672531200000,
                     na: "US",
@@ -954,14 +903,13 @@ describe("mergeContacts", () => {
                     sc: 3,
                     sd: 1677600000000,
                     ud: "2023-01-01T00:00:00Z",
-                    dd: 0,
+                    dd: 1677605000000,
                     cb1: "CB1",
                     cb2: "CB2",
                     cf1: "CF1",
                     cf2: "CF2",
                 },
             ],
-            deleted: [],
             lastImportExportDate: 1677590000000,
         };
         const importData = createImport(
@@ -971,23 +919,79 @@ describe("mergeContacts", () => {
                     uid: 1672531200000,
                     sc: 4,
                     sd: 1677620000000,
-                    dd: 1677610000000,
+                    dd: 1677630000000,
                     cf1: "CF1-updated",
                     cf2: "CF2-updated",
                 },
             ],
             1677600000000
         );
-        const [result, stats] = mergeContacts(initialState, importData);
+        const [result, stats] = mergeImportedContacts(initialState, importData);
         expect(result.active).toEqual([]);
         expectContactMatch(result.deleted[0], {
             sc: 4,
             sd: 1677620000000,
-            dd: 1677610000000,
+            dd: 1677630000000,
             cf1: "CF1-updated",
             cf2: "CF2-updated",
         });
         expect(result.lastImportExportDate).toBe(1677600000000);
-        expect(stats).toEqual({ contactsDeleted: 1, contactsProcessed: 0 });
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
+    });
+
+    // Can only happen if the export is from a different device
+    // Multi device is generally not supported, but this logic should not affect intended use.
+    it("handles new sends for deleted contact", () => {
+        const initialState = deleteContact(
+            {
+                active: [],
+                deleted: [
+                    {
+                        uid: 1672531200000,
+                        na: "US",
+                        i: "TestInst",
+                        s: "TestGroup",
+                        n: "Test",
+                        e: "test@example.com",
+                        sc: 3,
+                        sd: 1677600000000,
+                        ud: "2023-01-01T00:00:00Z",
+                        dd: 1677610000000,
+                        cb1: "CB1",
+                        cb2: "CB2",
+                        cf1: "CF1",
+                        cf2: "CF2",
+                    },
+                ],
+                lastImportExportDate: 1677590000000,
+            },
+            1672531200000,
+            1677610000000
+        );
+        const importData = createImport(
+            [],
+            [
+                {
+                    uid: 1672531200000,
+                    sc: 5,
+                    sd: 1677686400000,
+                    dd: 1677610000000,
+                    cf1: "CF1-updated",
+                    cf2: "CF2-updated",
+                },
+            ],
+            1677670000000
+        );
+        const [result, stats] = mergeImportedContacts(initialState, importData);
+        expect(result.active).toEqual([]);
+        expectContactMatch(result.deleted[0], {
+            sc: 5,
+            sd: 1677686400000,
+            dd: 1677610000000,
+            cf1: "CF1-updated",
+            cf2: "CF2-updated",
+        });
+        expect(result.lastImportExportDate).toBe(1677670000000);
+        expect(stats).toEqual({ contactsDeleted: 0, contactsProcessed: 1 });
     });
 });

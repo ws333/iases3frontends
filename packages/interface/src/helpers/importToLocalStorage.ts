@@ -13,7 +13,7 @@ import {
     storeMetadataKey,
     storeSendingLog,
 } from "./indexedDB";
-import { ContactState, mergeContacts } from "./mergeContacts";
+import { ContactState, mergeImportedContacts } from "./mergeImportedContacts";
 
 export async function importToLocalStorage(file: File): Promise<ImportStats | Error> {
     const importData: ImportData = {
@@ -71,7 +71,7 @@ export async function importToLocalStorage(file: File): Promise<ImportStats | Er
         lastImportExportDate: await getLastImportExportDate(),
     };
 
-    const [newContactState, importContactsStats, error] = mergeContacts(currentContactState, importData);
+    const [newContactState, importContactsStats, error] = mergeImportedContacts(currentContactState, importData);
     if (error) return error;
 
     await storeActiveContacts(newContactState.active);

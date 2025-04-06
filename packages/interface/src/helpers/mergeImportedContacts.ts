@@ -7,14 +7,15 @@ export interface ContactState {
 }
 
 type ImportContactsStats = Pick<ImportStats, "contactsDeleted" | "contactsProcessed">;
-
-// Merges imported contact data into the current state, handling both active and deleted contacts separately
-export function mergeContacts(
+/**
+ * - Merge imported contacts with local contacts, handling active and deleted contacts separately
+ */
+export function mergeImportedContacts(
     current: ContactState,
     importData: ImportData
 ): [ContactState, ImportContactsStats, Error?] {
-    const newActive = [...current.active];
-    const newDeleted = [...current.deleted];
+    const currentActive = [...current.active];
+    const currentDeleted = [...current.deleted];
 
     const importContactsStats: ImportContactsStats = {
         contactsDeleted: 0,
@@ -24,38 +25,48 @@ export function mergeContacts(
     const exportDate = importData.metadata.find((item) => item.key === "exportDate")?.value;
     if (!exportDate) return [current, importContactsStats, new Error("Invalid import\nNo export date found!")];
 
-    // Merge active contacts from the import
     for (const importContact of importData.contacts.active) {
-        const activeIndex = newActive.findIndex((c) => c.uid === importContact.uid);
-        const deletedIndex = newDeleted.findIndex((c) => c.uid === importContact.uid);
+        const stillActiveIndex = currentActive.findIndex((c) => c.uid === importContact.uid);
+        const alreadyDeletedIndex = currentDeleted.findIndex((c) => c.uid === importContact.uid);
 
-        if (activeIndex !== -1) {
-            const currentContact = newActive[activeIndex];
-            importContactsStats.contactsProcessed++;
+        if (stillActiveIndex !== -1) {
+            // Contact still active so merge sc, sd, cf1, cf2 using the following rules
+            const currentContact = currentActive[stillActiveIndex];
 
             if (importContact.sd > currentContact.sd) {
-                newActive[activeIndex] = {
+                currentActive[stillActiveIndex] = {
                     ...currentContact,
                     sd: importContact.sd,
                     sc: importContact.sc,
-                    dd: 0,
                     cf1: importContact.cf1,
                     cf2: importContact.cf2,
                 };
+                importContactsStats.contactsProcessed++;
             } else if (importContact.sd <= currentContact.sd && exportDate > current.lastImportExportDate) {
-                newActive[activeIndex] = {
+                // In case user has sent to the contact after the export was written to file and this file has not yet been imported
+                // we add the sc, but leave the sd as is.
+                currentActive[stillActiveIndex] = {
                     ...currentContact,
                     sc: currentContact.sc + importContact.sc,
                     cf1: importContact.cf1,
                     cf2: importContact.cf2,
                 };
+                importContactsStats.contactsProcessed++;
+            } else {
+                // Contact still active, but not changed
+                importContactsStats.contactsProcessed++;
             }
-        } else if (deletedIndex !== -1) {
-            // Skip if already deleted
+        } else if (alreadyDeletedIndex !== -1) {
+            // Contact already deleted, skipping.
+            // This can only happen if using two different devices around the time when the contact is deleted.
+            // Having two instances of the IndexedDB, and the contact has sc > 0 on both.
+            // Then exporting from one device and importing to the other.
+            // This is not intended use and can cause sent counts to be scewed.
+            importContactsStats.contactsProcessed++;
             continue;
         } else {
-            // Contact from import not in active contacts, add to deleted list
-            newDeleted.push({
+            // Contact from import not in active contacts and not in IndexedDB deleted contacts, add to deleted list
+            currentDeleted.push({
                 uid: importContact.uid,
                 na: "",
                 i: "",
@@ -71,19 +82,20 @@ export function mergeContacts(
                 cf2: importContact.cf2,
                 dd: exportDate,
             });
+            importContactsStats.contactsProcessed++;
             importContactsStats.contactsDeleted++;
         }
     }
 
     // Merge deleted contacts from the import
     for (const importContact of importData.contacts.deleted) {
-        const activeIndex = newActive.findIndex((c) => c.uid === importContact.uid);
-        const deletedIndex = newDeleted.findIndex((c) => c.uid === importContact.uid);
+        const activeIndex = currentActive.findIndex((c) => c.uid === importContact.uid);
+        const deletedIndex = currentDeleted.findIndex((c) => c.uid === importContact.uid);
 
         if (activeIndex !== -1) {
-            const currentContact = newActive[activeIndex];
-            newActive.splice(activeIndex, 1);
-            newDeleted.push({
+            const currentContact = currentActive[activeIndex];
+            currentActive.splice(activeIndex, 1);
+            currentDeleted.push({
                 ...currentContact,
                 sd: importContact.sd,
                 sc: importContact.sc,
@@ -91,11 +103,21 @@ export function mergeContacts(
                 cf1: importContact.cf1,
                 cf2: importContact.cf2,
             });
+            importContactsStats.contactsProcessed++;
             importContactsStats.contactsDeleted++;
         } else if (deletedIndex !== -1) {
-            const deletedContact = newDeleted[deletedIndex];
-            if (importContact.sd > deletedContact.sd && exportDate > current.lastImportExportDate) {
-                newDeleted[deletedIndex] = {
+            const deletedContact = currentDeleted[deletedIndex];
+            if (
+                // Don't merge imported contact if already deleted and lower sc count.
+                // This can only happen if first sending to the contact with two different devices that are then refreshed/synced after the online contact was deleted.
+                // I.e. having two instances of the IndexedDB, and the contact has sc > 0 on both, then exporting from one device and importing on the other.
+                // This is not intended use and can cause sent counts to be scewed.
+                importContact.sc < deletedContact.sc
+            ) {
+                importContactsStats.contactsProcessed++;
+                continue;
+            } else if (importContact.sd > deletedContact.sd && exportDate > current.lastImportExportDate) {
+                currentDeleted[deletedIndex] = {
                     ...deletedContact,
                     sd: importContact.sd,
                     sc: importContact.sc,
@@ -108,15 +130,16 @@ export function mergeContacts(
                 importContact.sd <= deletedContact.dd &&
                 exportDate > current.lastImportExportDate
             ) {
-                newDeleted[deletedIndex] = {
+                currentDeleted[deletedIndex] = {
                     ...deletedContact,
                     sc: deletedContact.sc + importContact.sc,
                     cf1: importContact.cf1,
                     cf2: importContact.cf2,
                 };
             }
+            importContactsStats.contactsProcessed++;
         } else {
-            newDeleted.push({
+            currentDeleted.push({
                 uid: importContact.uid,
                 na: "",
                 i: "",
@@ -132,6 +155,7 @@ export function mergeContacts(
                 cf2: importContact.cf2,
                 dd: importContact.dd,
             });
+            importContactsStats.contactsProcessed++;
             importContactsStats.contactsDeleted++;
         }
     }
@@ -139,8 +163,14 @@ export function mergeContacts(
     const newLastImportExportDate =
         exportDate > current.lastImportExportDate ? exportDate : current.lastImportExportDate;
 
+    // Ensure all imported contacts have been processed by the import logic
+    const contactsToProcessCount = importData.contacts.active.length + importData.contacts.deleted.length;
+    if (contactsToProcessCount !== importContactsStats.contactsProcessed) {
+        console.warn(`Import logic contacts processed count mismatch!`);
+    }
+
     return [
-        { active: newActive, deleted: newDeleted, lastImportExportDate: newLastImportExportDate },
+        { active: currentActive, deleted: currentDeleted, lastImportExportDate: newLastImportExportDate },
         importContactsStats,
     ];
 }
