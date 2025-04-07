@@ -55,13 +55,13 @@ export const model: Model = {
         }),
         emails: [],
     },
-    initialise: thunk(async (_actions, _payload, { dispatch }) => {
-        await dispatch.prefs.fetchPrefs();
+    initialise: thunk(async (actions) => {
+        await actions.prefs.fetchPrefs();
         const data = await messageParent({
             type: "GET_LOCALIZED_STRINGS",
         });
         if (data?.strings) {
-            dispatch.locale.updateStrings(data.strings);
+            actions.locale.updateStrings(data.strings);
         }
     }),
     cancel: thunk(async () => {

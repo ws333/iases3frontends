@@ -8,7 +8,7 @@ export interface Model {
     locale: Locale;
     prefs: Prefs;
     data: Data;
-    initialise: Thunk<Model, undefined, never, Model>;
+    initialise: Thunk<Model>;
     cancel: Thunk<Model>;
     parseSpreadsheet: Thunk<Model, undefined, never, Model>;
     sendEmails: Thunk<Model, undefined, never, Model>;
