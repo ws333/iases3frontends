@@ -1,0 +1,27 @@
+import { COUNTRYCODE_QUERY, COUNTRYCODE_URL, ERROR_FETCHING_COUNTRYCODE, IPINFO_URL } from "../constants/constants";
+import { fetchWithTimeout } from "./fetchWithTimeout";
+
+type CountryCode = {
+    status: "success" | "fail";
+    countryCode: string;
+};
+
+/**
+ * - Get country code by IP address
+ * - Docs at https://ip-api.com/docs/api:json
+ */
+export async function getCountryCodeByIP() {
+    try {
+        const responsePublicIP = await fetchWithTimeout(IPINFO_URL, ERROR_FETCHING_COUNTRYCODE);
+        const publicIP = await responsePublicIP.text();
+        if (!publicIP) return "";
+
+        const countryCodeUrl = `${COUNTRYCODE_URL}${publicIP}${COUNTRYCODE_QUERY}`;
+        const response = await fetchWithTimeout(countryCodeUrl, ERROR_FETCHING_COUNTRYCODE);
+        const respJson = (await response.json()) as CountryCode;
+        return respJson.status === "success" ? respJson.countryCode : "";
+    } catch (error) {
+        console.log("*Debug* -> getCountryCodeByIP error:", error);
+        return "";
+    }
+}

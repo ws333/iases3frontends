@@ -1,17 +1,19 @@
 export const __DEV__ = import.meta.env.DEV;
 
 export const IASE_URL = "https://www.bashar.org/socialexperiment";
+export const IPINFO_URL = "https://ipinfo.io/ip";
 export const NATIONS_CSV_URL = "https://iase.one/contact_lists/nations.csv";
 export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C.csv";
+export const COUNTRYCODE_URL = "http://ip-api.com/json/";
+export const COUNTRYCODE_QUERY = "?fields=status,countryCode";
 
-export const NATIONS_FALLBACK = ["EU", "FR", "GB", "NO"];
+export const NATIONS_FALLBACK = ["EU", "FR", "GB"];
 
-export const defaultFetchTimeout = 1000;
+export const defaultFetchTimeout = 3000;
 
-export const ERROR_FETCHING_CONTACTS = new Error(
-    "Failed to download contact lists, please make sure that you are online..."
-);
-export const ERROR_EMPTY_CONTACTS_ARRAY = new Error("Empty contacts array returned by fetchOnlineContacts");
+export const ERROR_FETCHING_COUNTRYCODE = "Failed to download country code, please make sure that you are online...";
+export const ERROR_FETCHING_CONTACTS = "Failed to download contact lists, please make sure that you are online...";
+export const ERROR_EMPTY_CONTACTS_ARRAY = "Empty contacts array returned by fetchOnlineContacts";
 
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",

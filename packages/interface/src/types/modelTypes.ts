@@ -55,6 +55,10 @@ interface SendDialog {
 }
 
 interface ContactList {
+    countryCode: string;
+    setCountryCode: Action<ContactList, string>;
+    updateNationAndLanguageOptions: ThunkOn<ContactList>;
+
     contacts: ContactI3C[];
     setContacts: Action<ContactList, ContactI3C[]>;
     selectedContacts: Computed<ContactList, ContactI3C[]>;
@@ -77,10 +81,15 @@ interface ContactList {
 
     nationOptions: string[];
     setNationOptions: Action<ContactList, string[]>;
+    updateSelectedNations: ActionOn<ContactList>;
+
     nationOptionsFetched: string[];
     setNationOptionsFetched: Action<ContactList, string[]>;
     updateNationOptions: ActionOn<ContactList>;
-    updateSelectedNations: ActionOn<ContactList>;
+
+    languageOptions: LanguageOption[];
+    setLanguageOptions: Action<ContactList, LanguageOption[]>;
+    updateLanguage: ThunkOn<ContactList, undefined, Model>;
 
     selectedNations: string[];
     setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
@@ -97,7 +106,7 @@ interface EmailOptions {
 
     language: LanguageOption;
     setLanguage: Action<EmailOptions, { language: LanguageOption; subjectPerLanguage?: SubjectPerLanguage }>;
-    storeLanguage: ThunkOn<EmailOptions, LanguageOption, Model>;
+    storeLanguage: ThunkOn<EmailOptions, undefined, Model>;
 
     subject: Computed<EmailOptions, string>;
     subjectPerLanguage: SubjectPerLanguage;

@@ -1,10 +1,9 @@
 import { Tooltip } from "radzionkit/ui/tooltips/Tooltip";
 import { FocusEvent, useEffect, useRef, useState } from "react";
 import { maxCountOptions, minSendingDelay } from "../constants/constants";
-import { LanguageOption, emailComponents, subjects } from "../constants/emailTemplates";
+import { LanguageOption, subjects } from "../constants/emailTemplates";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { storeOptionsKey } from "../helpers/indexedDB";
-import { objectKeys } from "../helpers/objectHelpers";
 import "./EmailOptions.css";
 
 export type EmailOptionsProps = {
@@ -18,6 +17,7 @@ function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
 
     const language = useStoreState((state) => state.emailOptions.language);
     const setLanguage = useStoreActions((actions) => actions.emailOptions.setLanguage);
+    const languageOptions = useStoreState((state) => state.contactList.languageOptions);
 
     const subject = useStoreState((state) => state.emailOptions.subject);
     const setSubjectOption = useStoreActions((actions) => actions.emailOptions.setSubjectPerLanguage);
@@ -132,9 +132,9 @@ function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
                     disabled={isSending}
                     onChange={(e) => setLanguage({ language: e.target.value as LanguageOption })}
                 >
-                    {objectKeys(emailComponents).map((_language) => (
-                        <option key={_language} value={_language}>
-                            {_language}
+                    {languageOptions.map((l) => (
+                        <option key={l} value={l}>
+                            {l}
                         </option>
                     ))}
                 </select>

@@ -174,6 +174,25 @@ export const model: Model = {
         showConfirmationModal: true,
     },
     contactList: {
+        countryCode: "",
+        setCountryCode: action((state, payload) => ({ ...state, countryCode: payload })),
+        updateNationAndLanguageOptions: thunkOn(
+            (actions) => actions.setCountryCode,
+            (actions, target, { getState }) => {
+                const state = getState();
+                actions.setLanguageOptions(
+                    target.payload === "NO"
+                        ? defaultLanguageOptions
+                        : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
+                );
+                actions.setNationOptions(
+                    target.payload === "NO"
+                        ? state.nationOptionsFetched
+                        : state.nationOptionsFetched.filter((nation) => nation !== "NO")
+                );
+            }
+        ),
+
         contacts: [],
         setContacts: action((state, payload) => ({ ...state, contacts: [...payload] })),
         selectedContacts: computed((state) =>
@@ -218,21 +237,29 @@ export const model: Model = {
 
         nationOptions: [],
         setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload] })),
-
-        nationOptionsFetched: [],
-        setNationOptionsFetched: action((state, payload) => ({ ...state, nationOptionsFetched: [...payload] })),
-        // Update nationOptions when nationOptionsFetched change
-        updateNationOptions: actionOn(
-            (actions) => actions.setNationOptionsFetched,
-            (state, target) => ({ ...state, nationOptions: [...target.payload] })
-        ),
-        // Update selectedNations when nationOptions change
         updateSelectedNations: actionOn(
             (actions) => actions.setNationOptions,
             (state, target) => ({
                 ...state,
                 selectedNations: [...state.selectedNations.filter((nation) => target.payload.includes(nation))],
             })
+        ),
+
+        nationOptionsFetched: [],
+        setNationOptionsFetched: action((state, payload) => ({ ...state, nationOptionsFetched: [...payload] })),
+        updateNationOptions: actionOn(
+            (actions) => actions.setNationOptionsFetched,
+            (state, target) => ({ ...state, nationOptions: [...target.payload] })
+        ),
+
+        languageOptions: defaultLanguageOptions,
+        setLanguageOptions: action((state, payload) => ({ ...state, languageOptions: [...payload] })),
+        updateLanguage: thunkOn(
+            (actions) => actions.setLanguageOptions,
+            async (_actions, target, { getStoreActions }) => {
+                const storeActions = getStoreActions();
+                storeActions.emailOptions.setLanguage({ language: target.payload[0] });
+            }
         ),
 
         selectedNations: [],
@@ -279,6 +306,7 @@ export const model: Model = {
                   }
                 : state.subjectPerLanguage,
         })),
+
         storeLanguage: thunkOn(
             (actions) => actions.setLanguage,
             async (_actions, target, { getStoreActions, getStoreState }) => {
@@ -286,13 +314,13 @@ export const model: Model = {
                 const storeActions = getStoreActions();
                 const storeState = getStoreState();
 
-                storeOptionsKey(target.payload.language, "language");
-
                 if (payload.language === "Norwegian") {
                     storeActions.contactList.setNationOptions(["NO"]);
                 } else {
                     storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsFetched);
                 }
+
+                storeOptionsKey(target.payload.language, "language");
             }
         ),
 

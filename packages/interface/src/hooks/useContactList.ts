@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { threeMonths } from "../constants/timeConstants";
 import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMergeContacts";
+import { getCountryCodeByIP } from "../helpers/getCountryCodeByIP";
 import { getDeletedContacts } from "../helpers/indexedDB";
 import { isExtension } from "../helpers/isExtension";
 import { useStoreActions, useStoreState } from "./storeHooks";
@@ -10,8 +11,9 @@ function useContactList() {
     const contacts = useStoreState((state) => state.contactList.contacts);
     const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
     const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
-
     const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
+
+    const setCountryCode = useStoreActions((actions) => actions.contactList.setCountryCode);
 
     const endSession = useStoreState((state) => state.contactList.endSession);
     const setEndSession = useStoreActions((actions) => actions.contactList.setEndSession);
@@ -24,14 +26,11 @@ function useContactList() {
     const maxCount = useStoreState((state) => state.contactList.maxCount);
 
     const nationOptions = useStoreState((state) => state.contactList.nationOptions);
-
     const setNationOptionsFetched = useStoreActions((actions) => actions.contactList.setNationOptionsFetched);
-
     const selectedNations = useStoreState((state) => state.contactList.selectedNations);
-
     const setIsSelectedAllNations = useStoreActions((actions) => actions.contactList.setIsSelectedAllNations);
 
-    const { data: _nations } = useSuspenseQuery({
+    const { data: _nationOptions } = useSuspenseQuery({
         queryKey: ["nations", forcedRender, { shouldFetch: !nationOptions.length }],
         queryFn: async () => fetchOnlineNations(),
     });
@@ -46,17 +45,25 @@ function useContactList() {
         queryFn: async () => await getDeletedContacts(),
     });
 
+    const { data: _countryCode } = useSuspenseQuery({
+        queryKey: ["countryCode", forcedRender],
+        queryFn: async () => await getCountryCodeByIP(),
+    });
+
     useEffect(() => {
         if (!isExtension()) setIsSelectedAllNations(true);
 
-        setNationOptionsFetched(_nations);
+        setNationOptionsFetched(_nationOptions);
         setContacts(_contacts);
         setDeletedContacts(_deletedContacts);
+        setCountryCode(_countryCode); // Needs to be after setNationOptionsFetched
     }, [
         _contacts,
+        _countryCode,
         _deletedContacts,
-        _nations,
+        _nationOptions,
         setContacts,
+        setCountryCode,
         setDeletedContacts,
         setIsSelectedAllNations,
         setNationOptionsFetched,
