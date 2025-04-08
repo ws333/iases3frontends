@@ -79,6 +79,7 @@ interface ContactList {
 
     selectedNations: string[];
     setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
+    updateIsSelectedAllNations: ThunkOn<ContactList>;
 
     isSelectedAllNations: boolean;
     setIsSelectedAllNations: Action<ContactList, boolean>;

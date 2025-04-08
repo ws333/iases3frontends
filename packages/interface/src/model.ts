@@ -220,6 +220,21 @@ export const model: Model = {
                 selectedNations: updatedSN,
             };
         }),
+        updateIsSelectedAllNations: thunkOn(
+            (actions) => actions.setSelectedNations,
+            (actions, _target, { getState }) => {
+                const state = getState();
+
+                const checked =
+                    (state.isSelectedAllNations && state.selectedNations.length !== 0) ||
+                    (!state.isSelectedAllNations && state.selectedNations.length === state.nationOptions.length);
+
+                // Don't update unless there is a change since the action also sets selectedNations
+                if (checked !== state.isSelectedAllNations) {
+                    actions.setIsSelectedAllNations(checked);
+                }
+            }
+        ),
 
         isSelectedAllNations: false,
         setIsSelectedAllNations: action((state, payload) => ({
