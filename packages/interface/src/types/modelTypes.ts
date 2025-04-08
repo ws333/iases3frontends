@@ -71,14 +71,15 @@ interface ContactList {
 
     nationOptions: string[];
     setNationOptions: Action<ContactList, string[]>;
-    updateSelectedNations: ActionOn<ContactList>;
+    updateSelectedNations: ThunkOn<ContactList>;
 
     nationOptionsFetched: string[];
     setNationOptionsFetched: Action<ContactList, string[]>;
     updateNationOptions: ActionOn<ContactList>;
 
     selectedNations: string[];
-    setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
+    setSelectedNations: Action<ContactList, string[]>;
+    setSelectedNation: Action<ContactList, { nation: string; checked: boolean }>;
     updateIsSelectedAllNations: ThunkOn<ContactList>;
 
     isSelectedAllNations: boolean;

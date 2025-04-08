@@ -194,12 +194,13 @@ export const model: Model = {
 
         nationOptions: [],
         setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload] })),
-        updateSelectedNations: actionOn(
+        updateSelectedNations: thunkOn(
             (actions) => actions.setNationOptions,
-            (state, target) => ({
-                ...state,
-                selectedNations: [...state.selectedNations.filter((nation) => target.payload.includes(nation))],
-            })
+            (actions, target, { getState }) => {
+                const state = getState();
+                const selected = state.selectedNations.filter((nation) => target.payload.includes(nation));
+                actions.setSelectedNations(selected);
+            }
         ),
 
         nationOptionsFetched: [],
@@ -210,18 +211,19 @@ export const model: Model = {
         ),
 
         selectedNations: [],
-        setSelectedNations: action((state, payload) => {
+        setSelectedNations: action((state, payload) => ({ ...state, selectedNations: [...payload] })),
+        setSelectedNation: action((state, payload) => {
             const { checked, nation } = payload;
-            const updatedSN = checked
-                ? [...state.selectedNations, nation]
-                : state.selectedNations.filter((n) => n !== nation);
+
             return {
                 ...state,
-                selectedNations: updatedSN,
+                selectedNations: checked
+                    ? [...state.selectedNations, nation]
+                    : state.selectedNations.filter((n) => n !== nation),
             };
         }),
         updateIsSelectedAllNations: thunkOn(
-            (actions) => actions.setSelectedNations,
+            (actions) => [actions.setSelectedNation, actions.setSelectedNations],
             (actions, _target, { getState }) => {
                 const state = getState();
 

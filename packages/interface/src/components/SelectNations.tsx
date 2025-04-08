@@ -12,7 +12,7 @@ function SelectNations({ selectedContactsNotSent, isSending }: Props) {
     const nationOptions = useStoreState((state) => state.contactList.nationOptions);
     const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
     const selectedNations = useStoreState((state) => state.contactList.selectedNations);
-    const setSelectedNations = useStoreActions((actions) => actions.contactList.setSelectedNations);
+    const setSelectedNation = useStoreActions((actions) => actions.contactList.setSelectedNation);
     const toggleIsSelectedAllNations = useStoreActions((actions) => actions.contactList.toggleIsSelectedAllNations);
     const isSelectedAllNations = useStoreState((state) => state.contactList.isSelectedAllNations);
 
@@ -21,7 +21,7 @@ function SelectNations({ selectedContactsNotSent, isSending }: Props) {
     };
 
     const onChangeNation = (checked: boolean, nation: string) => {
-        setSelectedNations({ checked, nation });
+        setSelectedNation({ checked, nation });
     };
 
     return (
