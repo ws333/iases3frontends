@@ -34,7 +34,7 @@ const EmailSender = () => {
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
     const userDialog = useStoreState((state) => state.userDialog);
-    const forcedRender = useStoreState((state) => state.contactList.forcedRender);
+    const forcedRender = useStoreState((state) => state.render.forcedRender);
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());

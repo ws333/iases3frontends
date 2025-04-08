@@ -17,7 +17,7 @@ type Props = {
 const MenuOptionImport = ({ view, onClose }: Props) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
+    const initiateForcedRender = useStoreActions((actions) => actions.render.initiateForcedRender);
 
     const ImportStatsComponent = ({ closeToast, data }: ToastContentProps<ImportStats | Error>) => {
         if (data instanceof Error) {

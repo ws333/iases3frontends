@@ -17,7 +17,7 @@ const StyledTitle = styled.span`
 
 function SettingsMenu() {
     const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
-    const initiateForcedRender = useStoreActions((actions) => actions.contactList.initiateForcedRender);
+    const initiateForcedRender = useStoreActions((actions) => actions.render.initiateForcedRender);
 
     const importSendingHistory = "Import sending history";
     const viewFullSendingLog = "View full sending log";

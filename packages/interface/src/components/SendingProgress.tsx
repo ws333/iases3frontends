@@ -8,7 +8,7 @@ type Props = {
 
 function SendingProgress({ maxSelectedContactsNotSent, selectedContactsNotSent }: Props) {
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
-    const maxCount = useStoreState((state) => state.contactList.maxCount);
+    const maxCount = useStoreState((state) => state.emailOptions.maxCount);
 
     const max =
         maxSelectedContactsNotSent === 0

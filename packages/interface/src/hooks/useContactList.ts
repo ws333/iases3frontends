@@ -13,7 +13,7 @@ function useContactList() {
     const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
     const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
 
-    const setCountryCode = useStoreActions((actions) => actions.contactList.setCountryCode);
+    const setCountryCode = useStoreActions((actions) => actions.emailOptions.setCountryCode);
 
     const endSession = useStoreState((state) => state.contactList.endSession);
     const setEndSession = useStoreActions((actions) => actions.contactList.setEndSession);
@@ -21,9 +21,9 @@ function useContactList() {
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
     const setEmailsSent = useStoreActions((actions) => actions.contactList.setEmailsSent);
 
-    const forcedRender = useStoreState((state) => state.contactList.forcedRender);
+    const forcedRender = useStoreState((state) => state.render.forcedRender);
 
-    const maxCount = useStoreState((state) => state.contactList.maxCount);
+    const maxCount = useStoreState((state) => state.emailOptions.maxCount);
 
     const nationOptions = useStoreState((state) => state.contactList.nationOptions);
     const setNationOptionsFetched = useStoreActions((actions) => actions.contactList.setNationOptionsFetched);

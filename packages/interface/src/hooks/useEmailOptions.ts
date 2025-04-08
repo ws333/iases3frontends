@@ -23,7 +23,7 @@ function useEmailOptions() {
             ? customSubject
             : subjectOption[language];
 
-    const setMaxCount = useStoreActions((actions) => actions.contactList.setMaxCount);
+    const setMaxCount = useStoreActions((actions) => actions.emailOptions.setMaxCount);
 
     useEffect(() => {
         const hydrateOptions = async () => {

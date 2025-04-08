@@ -18,6 +18,7 @@ export interface Model {
     userDialog: UserDialog;
     contactList: ContactList;
     emailOptions: EmailOptions;
+    render: Render;
 }
 
 interface Locale {
@@ -55,13 +56,9 @@ interface SendDialog {
 }
 
 interface ContactList {
-    countryCode: string;
-    setCountryCode: Action<ContactList, string>;
-    updateNationAndLanguageOptions: ThunkOn<ContactList>;
-
     contacts: ContactI3C[];
     setContacts: Action<ContactList, ContactI3C[]>;
-    selectedContacts: Computed<ContactList, ContactI3C[]>;
+    selectedContacts: Computed<ContactList, ContactI3C[], Model>;
 
     deletedContacts: ContactI3C[];
     setDeletedContacts: Action<ContactList, ContactI3C[]>;
@@ -72,13 +69,6 @@ interface ContactList {
     endSession: boolean;
     setEndSession: Action<ContactList, boolean>;
 
-    forcedRender: number;
-    initiateForcedRender: Action<ContactList>;
-
-    maxCount: number;
-    _setMaxCount: Action<ContactList, number>; // Internal use only
-    setMaxCount: Thunk<ContactList, number, undefined, Model>;
-
     nationOptions: string[];
     setNationOptions: Action<ContactList, string[]>;
     updateSelectedNations: ActionOn<ContactList>;
@@ -86,10 +76,6 @@ interface ContactList {
     nationOptionsFetched: string[];
     setNationOptionsFetched: Action<ContactList, string[]>;
     updateNationOptions: ActionOn<ContactList>;
-
-    languageOptions: LanguageOption[];
-    setLanguageOptions: Action<ContactList, LanguageOption[]>;
-    updateLanguage: ThunkOn<ContactList, undefined, Model>;
 
     selectedNations: string[];
     setSelectedNations: Action<ContactList, { nation: string; checked: boolean }>;
@@ -100,6 +86,10 @@ interface ContactList {
 }
 
 interface EmailOptions {
+    countryCode: string;
+    setCountryCode: Action<EmailOptions, string>;
+    updateNationAndLanguageOptions: ThunkOn<EmailOptions, undefined, Model>;
+
     delay: number;
     setDelay: Action<EmailOptions, number>;
     storeDelay: ThunkOn<EmailOptions, number>;
@@ -107,6 +97,10 @@ interface EmailOptions {
     language: LanguageOption;
     setLanguage: Action<EmailOptions, { language: LanguageOption; subjectPerLanguage?: SubjectPerLanguage }>;
     storeLanguage: ThunkOn<EmailOptions, undefined, Model>;
+
+    languageOptions: LanguageOption[];
+    setLanguageOptions: Action<EmailOptions, LanguageOption[]>;
+    updateLanguage: ThunkOn<EmailOptions, undefined, Model>;
 
     subject: Computed<EmailOptions, string>;
     subjectPerLanguage: SubjectPerLanguage;
@@ -119,6 +113,15 @@ interface EmailOptions {
     customSubjectVisible: Computed<EmailOptions, boolean>;
 
     EmailComponent: Computed<EmailOptions, TEmailComponent>;
+
+    maxCount: number;
+    _setMaxCount: Action<EmailOptions, number>; // Internal use only, use setMaxCount to update state.
+    setMaxCount: Thunk<EmailOptions, number, undefined, Model>;
+}
+
+interface Render {
+    forcedRender: number;
+    initiateForcedRender: Action<Render>;
 }
 
 export interface UserDialog {

@@ -174,36 +174,14 @@ export const model: Model = {
         showConfirmationModal: true,
     },
     contactList: {
-        countryCode: "",
-        setCountryCode: action((state, payload) => ({ ...state, countryCode: payload })),
-        updateNationAndLanguageOptions: thunkOn(
-            (actions) => actions.setCountryCode,
-            (actions, target, { getState }) => {
-                const state = getState();
-                actions.setLanguageOptions(
-                    target.payload === "NO"
-                        ? defaultLanguageOptions
-                        : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
-                );
-                actions.setNationOptions(
-                    target.payload === "NO"
-                        ? state.nationOptionsFetched
-                        : state.nationOptionsFetched.filter((nation) => nation !== "NO")
-                );
-            }
-        ),
-
         contacts: [],
         setContacts: action((state, payload) => ({ ...state, contacts: [...payload] })),
-        selectedContacts: computed((state) =>
-            state.contacts.filter((contact) => state.selectedNations.includes(contact.na))
+        selectedContacts: computed([(state) => state, (_state, storeState) => storeState], (state, storeState) =>
+            state.contacts.filter((contact) => storeState.contactList.selectedNations.includes(contact.na))
         ),
 
         deletedContacts: [],
         setDeletedContacts: action((state, payload) => ({ ...state, deletedContacts: [...payload] })),
-
-        endSession: false,
-        setEndSession: action((state, payload) => ({ ...state, endSession: payload })),
 
         emailsSent: 0,
         setEmailsSent: action((state, payload) => ({
@@ -211,29 +189,8 @@ export const model: Model = {
             emailsSent: typeof payload === "number" ? payload : payload(state.emailsSent),
         })),
 
-        forcedRender: 1,
-        initiateForcedRender: action((state) => ({ ...state, forcedRender: state.forcedRender + 1 })),
-
-        maxCount: defaultMaxCount,
-        _setMaxCount: action((state, payload) => ({ ...state, maxCount: payload })), // Internal use only
-        setMaxCount: thunk((_, payload, { getStoreState, getStoreActions }) => {
-            const storeState = getStoreState();
-            const storeActions = getStoreActions();
-            if (payload <= storeState.contactList.emailsSent) {
-                storeActions.userDialog.setUserDialog({
-                    title: "Ending session!",
-                    message: TextEndingSession,
-                    onConfirm: () => {
-                        storeActions.contactList._setMaxCount(payload);
-                        storeActions.contactList.setEndSession(true);
-                    },
-                });
-                return;
-            }
-            storeActions.contactList._setMaxCount(payload);
-            storeOptionsKey(payload, "maxCount");
-            return { ...storeState, maxCount: payload };
-        }),
+        endSession: false,
+        setEndSession: action((state, payload) => ({ ...state, endSession: payload })),
 
         nationOptions: [],
         setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload] })),
@@ -250,16 +207,6 @@ export const model: Model = {
         updateNationOptions: actionOn(
             (actions) => actions.setNationOptionsFetched,
             (state, target) => ({ ...state, nationOptions: [...target.payload] })
-        ),
-
-        languageOptions: defaultLanguageOptions,
-        setLanguageOptions: action((state, payload) => ({ ...state, languageOptions: [...payload] })),
-        updateLanguage: thunkOn(
-            (actions) => actions.setLanguageOptions,
-            async (_actions, target, { getStoreActions }) => {
-                const storeActions = getStoreActions();
-                storeActions.emailOptions.setLanguage({ language: target.payload[0] });
-            }
         ),
 
         selectedNations: [],
@@ -286,6 +233,26 @@ export const model: Model = {
         }),
     },
     emailOptions: {
+        countryCode: "",
+        setCountryCode: action((state, payload) => ({ ...state, countryCode: payload })),
+        updateNationAndLanguageOptions: thunkOn(
+            (actions) => actions.setCountryCode,
+            (actions, target, { getStoreState, getStoreActions }) => {
+                const storeState = getStoreState();
+                const storeActions = getStoreActions();
+                actions.setLanguageOptions(
+                    target.payload === "NO"
+                        ? defaultLanguageOptions
+                        : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
+                );
+                storeActions.contactList.setNationOptions(
+                    target.payload === "NO"
+                        ? storeState.contactList.nationOptionsFetched
+                        : storeState.contactList.nationOptionsFetched.filter((nation) => nation !== "NO")
+                );
+            }
+        ),
+
         delay: defaultSendingDelay,
         setDelay: action((state, payload) => ({ ...state, delay: payload })),
         storeDelay: thunkOn(
@@ -294,6 +261,27 @@ export const model: Model = {
                 storeOptionsKey(target.payload, "delay");
             }
         ),
+
+        maxCount: defaultMaxCount,
+        _setMaxCount: action((state, payload) => ({ ...state, maxCount: payload })), // Internal use only, use setMaxCount to update state.
+        setMaxCount: thunk((actions, payload, { getStoreState, getStoreActions }) => {
+            const storeState = getStoreState();
+            const storeActions = getStoreActions();
+            if (payload <= storeState.contactList.emailsSent) {
+                storeActions.userDialog.setUserDialog({
+                    title: "Ending session!",
+                    message: TextEndingSession,
+                    onConfirm: () => {
+                        actions._setMaxCount(payload);
+                        storeActions.contactList.setEndSession(true);
+                    },
+                });
+                return;
+            }
+            actions._setMaxCount(payload);
+            storeOptionsKey(payload, "maxCount");
+            return { ...storeState, maxCount: payload };
+        }),
 
         language: defaultLanguage,
         setLanguage: action((state, payload) => ({
@@ -306,13 +294,12 @@ export const model: Model = {
                   }
                 : state.subjectPerLanguage,
         })),
-
         storeLanguage: thunkOn(
             (actions) => actions.setLanguage,
-            async (_actions, target, { getStoreActions, getStoreState }) => {
+            async (_actions, target, { getStoreState, getStoreActions }) => {
                 const { payload } = target;
-                const storeActions = getStoreActions();
                 const storeState = getStoreState();
+                const storeActions = getStoreActions();
 
                 if (payload.language === "Norwegian") {
                     storeActions.contactList.setNationOptions(["NO"]);
@@ -321,6 +308,15 @@ export const model: Model = {
                 }
 
                 storeOptionsKey(target.payload.language, "language");
+            }
+        ),
+
+        languageOptions: defaultLanguageOptions,
+        setLanguageOptions: action((state, payload) => ({ ...state, languageOptions: [...payload] })),
+        updateLanguage: thunkOn(
+            (actions) => actions.setLanguageOptions,
+            async (actions, target) => {
+                actions.setLanguage({ language: target.payload[0] });
             }
         ),
 
@@ -354,5 +350,9 @@ export const model: Model = {
         ),
 
         EmailComponent: computed((state) => emailComponents[state.language]),
+    },
+    render: {
+        forcedRender: 1,
+        initiateForcedRender: action((state) => ({ ...state, forcedRender: state.forcedRender + 1 })),
     },
 };

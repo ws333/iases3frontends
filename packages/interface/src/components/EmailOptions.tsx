@@ -17,7 +17,7 @@ function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
 
     const language = useStoreState((state) => state.emailOptions.language);
     const setLanguage = useStoreActions((actions) => actions.emailOptions.setLanguage);
-    const languageOptions = useStoreState((state) => state.contactList.languageOptions);
+    const languageOptions = useStoreState((state) => state.emailOptions.languageOptions);
 
     const subject = useStoreState((state) => state.emailOptions.subject);
     const setSubjectOption = useStoreActions((actions) => actions.emailOptions.setSubjectPerLanguage);
@@ -25,8 +25,8 @@ function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
     const customSubject = useStoreState((state) => state.emailOptions.customSubject);
     const setCustomSubject = useStoreActions((actions) => actions.emailOptions.setCustomSubject);
 
-    const maxCount = useStoreState((state) => state.contactList.maxCount);
-    const setMaxCount = useStoreActions((actions) => actions.contactList.setMaxCount);
+    const maxCount = useStoreState((state) => state.emailOptions.maxCount);
+    const setMaxCount = useStoreActions((actions) => actions.emailOptions.setMaxCount);
 
     const customSubjectRef = useRef<HTMLInputElement>(null);
     if (customSubjectRef.current) {
