@@ -1,4 +1,4 @@
-import { Menu, MenuOptionProps, OpenMenuButton } from "radzionkit";
+import { Menu, MenuOption, MenuOptionProps, OpenMenuButton } from "radzionkit";
 import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
-import { MenuOption } from "./customRadzionkit/MenuOption";
 
 const StyledTitle = styled.span`
     font-weight: 600;

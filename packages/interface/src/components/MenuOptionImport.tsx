@@ -1,4 +1,4 @@
-import { MenuView, Text } from "radzionkit";
+import { MenuOption, MenuView, Text } from "radzionkit";
 import { RefreshIcon } from "radzionkit/ui/icons/RefreshIcon";
 import { ChangeEvent, useRef } from "react";
 import { ToastContentProps, toast } from "react-toastify";
@@ -7,7 +7,6 @@ import { ImportStats } from "../types/typesI3C";
 import { useStoreActions } from "../hooks/storeHooks";
 import { importToLocalStorage } from "../helpers/importToLocalStorage";
 import { toastOptions } from "../styles/styles";
-import { MenuOption } from "./customRadzionkit/MenuOption";
 
 type Props = {
     view: MenuView;

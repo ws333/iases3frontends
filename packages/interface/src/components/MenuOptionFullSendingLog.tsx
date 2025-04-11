@@ -1,10 +1,9 @@
-import { MenuView } from "radzionkit";
+import { MenuOption, MenuView } from "radzionkit";
 import { ListIcon } from "radzionkit/ui/icons/ListIcon";
 import { useEffect, useState } from "react";
 import { useStoreActions } from "../hooks/storeHooks";
 import { readSendingLog } from "../helpers/sendingLog";
 import { showFullSendingLogDialog } from "../helpers/showFullSendingLogDialog";
-import { MenuOption } from "./customRadzionkit/MenuOption";
 
 type Props = {
     view: MenuView;
