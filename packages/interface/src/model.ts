@@ -275,6 +275,7 @@ export const model: Model = {
                         : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
                 );
 
+                storeOptionsKey(target.payload, "countryCode");
                 storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsByCountryCode);
             }
         ),

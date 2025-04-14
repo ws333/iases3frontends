@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { threeMonths } from "../constants/timeConstants";
 import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMergeContacts";
 import { getCountryCodeByIP } from "../helpers/getCountryCodeByIP";
-import { getDeletedContacts } from "../helpers/indexedDB";
+import { getCountryCode, getDeletedContacts } from "../helpers/indexedDB";
 import { isExtension } from "../helpers/isExtension";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
@@ -47,7 +47,12 @@ function useContactList() {
 
     const { data: _countryCode } = useSuspenseQuery({
         queryKey: ["countryCode", forcedRender],
-        queryFn: async () => await getCountryCodeByIP(),
+        queryFn: async () => {
+            const countryCode = await getCountryCodeByIP();
+            if (countryCode) return countryCode;
+            // Fall back to stored country code if IP lookup fails
+            return await getCountryCode();
+        },
     });
 
     useEffect(() => {

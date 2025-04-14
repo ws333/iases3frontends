@@ -26,6 +26,7 @@ export const OPTIONS_KEY = {
     LANGUAGE: "language",
     SUBJECT: "subject",
     CUSTOM_SUBJECT: "customSubject",
+    COUNTRY_CODE: "countryCode",
 } as const;
 export type OptionsKey = (typeof OPTIONS_KEY)[keyof typeof OPTIONS_KEY];
 
@@ -319,6 +320,25 @@ export async function getOptions(): Promise<{ key: string; value: number | strin
     } catch (error) {
         console.error("Error retrieving options:", error);
         return [];
+    } finally {
+        db.close();
+    }
+}
+
+// Get country code from the OPTIONS store
+export async function getCountryCode(): Promise<string> {
+    const db = await openDatabase();
+    try {
+        const transaction = db.transaction(STORE.OPTIONS, "readonly");
+        const store = transaction.objectStore(STORE.OPTIONS);
+        const request: IDBRequest<string | undefined> = store.get(OPTIONS_KEY.COUNTRY_CODE);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result || "");
+            request.onerror = () => reject(new Error("Failed to retrieve country code"));
+        });
+    } catch (error) {
+        console.error(error);
+        return "";
     } finally {
         db.close();
     }
