@@ -56,7 +56,7 @@ function useContactList() {
         setNationOptionsFetched(_nationOptions);
         setContacts(_contacts);
         setDeletedContacts(_deletedContacts);
-        setCountryCode(_countryCode); // Needs to be after setNationOptionsFetched
+        setCountryCode(_countryCode === "GB" ? "UK" : _countryCode); // Needs to be after setNationOptionsFetched
     }, [
         _contacts,
         _countryCode,

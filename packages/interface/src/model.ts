@@ -5,6 +5,7 @@
 import { action, actionOn, computed, thunk, thunkOn } from "easy-peasy";
 import type { Model } from "./types/modelTypes";
 import { defaultMaxCount, defaultSendingDelay } from "./constants/constants";
+import { countryCodes_EU } from "./constants/countryCodes";
 import { defaultLanguage, defaultLanguageOptions, emailComponents, subjects } from "./constants/emailTemplates";
 import TextEndingSession from "./components/dialogTexts/TextEndingSession";
 import { storeOptionsKey } from "./helpers/indexedDB";
@@ -202,6 +203,17 @@ export const model: Model = {
                 actions.setSelectedNations(selected);
             }
         ),
+        nationOptionsByCountryCode: computed(
+            [(state) => state, (_state, storeState) => storeState],
+            (_state, storeState) => {
+                const nobcc: string[] = [];
+                const { countryCode } = storeState.emailOptions;
+                const { nationOptionsFetched } = storeState.contactList;
+                if (nationOptionsFetched.includes(countryCode)) nobcc.push(countryCode);
+                if (countryCodes_EU.includes(countryCode)) nobcc.push("EU");
+                return nobcc;
+            }
+        ),
 
         nationOptionsFetched: [],
         setNationOptionsFetched: action((state, payload) => ({ ...state, nationOptionsFetched: [...payload] })),
@@ -262,11 +274,8 @@ export const model: Model = {
                         ? defaultLanguageOptions
                         : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
                 );
-                storeActions.contactList.setNationOptions(
-                    target.payload === "NO"
-                        ? storeState.contactList.nationOptionsFetched
-                        : storeState.contactList.nationOptionsFetched.filter((nation) => nation !== "NO")
-                );
+
+                storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsByCountryCode);
             }
         ),
 
@@ -321,7 +330,7 @@ export const model: Model = {
                 if (payload.language === "Norwegian") {
                     storeActions.contactList.setNationOptions(["NO"]);
                 } else {
-                    storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsFetched);
+                    storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsByCountryCode);
                 }
 
                 storeOptionsKey(target.payload.language, "language");

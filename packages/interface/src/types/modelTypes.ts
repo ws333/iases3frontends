@@ -72,6 +72,7 @@ interface ContactList {
     nationOptions: string[];
     setNationOptions: Action<ContactList, string[]>;
     updateSelectedNations: ThunkOn<ContactList>;
+    nationOptionsByCountryCode: Computed<ContactList, string[], Model>;
 
     nationOptionsFetched: string[];
     setNationOptionsFetched: Action<ContactList, string[]>;

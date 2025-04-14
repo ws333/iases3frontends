@@ -7,9 +7,9 @@ export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C.csv"
 export const COUNTRYCODE_URL = "http://ip-api.com/json/";
 export const COUNTRYCODE_QUERY = "?fields=status,countryCode";
 
-export const NATIONS_FALLBACK = ["EU", "FR", "GB"];
+export const NATION_OPTIONS_FALLBACK = ["BR", "EU", "FR", "NO", "UK"];
 
-export const defaultFetchTimeout = 3000;
+export const defaultFetchTimeout = 10000;
 
 export const ERROR_FETCHING_COUNTRYCODE = "Failed to download country code, please make sure that you are online...";
 export const ERROR_FETCHING_CONTACTS = "Failed to download contact lists, please make sure that you are online...";

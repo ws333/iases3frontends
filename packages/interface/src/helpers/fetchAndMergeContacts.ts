@@ -4,7 +4,7 @@ import {
     ERROR_EMPTY_CONTACTS_ARRAY,
     ERROR_FETCHING_CONTACTS,
     NATIONS_CSV_URL,
-    NATIONS_FALLBACK,
+    NATION_OPTIONS_FALLBACK,
 } from "../constants/constants";
 import { checkNoOverlapActiveDeletedContacts } from "./checkNoOverlapActiveDeleted";
 import { csvParse } from "./csvParse";
@@ -22,7 +22,7 @@ export async function fetchOnlineNations(): Promise<string[]> {
         const response = await fetchWithTimeout(NATIONS_CSV_URL, ERROR_FETCHING_CONTACTS); // Using the same error as contacts
         const csvText = await response.text();
         const nations = /^[A-Z,]+$/.exec(csvText)?.toString().split(","); // Only allow uppercase letters and commas
-        return nations ?? NATIONS_FALLBACK;
+        return nations ?? NATION_OPTIONS_FALLBACK;
     } catch (error) {
         console.warn("fetchOnlineNations:", error);
         throw error;
