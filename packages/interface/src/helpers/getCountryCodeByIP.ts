@@ -11,13 +11,14 @@ type CountryCode = {
  * - Docs at https://ip-api.com/docs/api:json
  */
 export async function getCountryCodeByIP() {
+    const errorMessage = ERROR_FETCHING_COUNTRYCODE;
     try {
-        const responsePublicIP = await fetchWithTimeout(IPINFO_URL, ERROR_FETCHING_COUNTRYCODE);
+        const responsePublicIP = await fetchWithTimeout({ url: IPINFO_URL, errorMessage });
         const publicIP = await responsePublicIP.text();
         if (!publicIP) return "";
 
         const countryCodeUrl = `${COUNTRYCODE_URL}${publicIP}${COUNTRYCODE_QUERY}`;
-        const response = await fetchWithTimeout(countryCodeUrl, ERROR_FETCHING_COUNTRYCODE);
+        const response = await fetchWithTimeout({ url: countryCodeUrl, errorMessage });
         const respJson = (await response.json()) as CountryCode;
         return respJson.status === "success" ? respJson.countryCode : "";
     } catch (error) {

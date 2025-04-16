@@ -4,13 +4,15 @@ export const IASE_URL = "https://www.bashar.org/socialexperiment";
 export const IPINFO_URL = "https://ipinfo.io/ip";
 export const NATIONS_CSV_URL = "https://iase.one/contact_lists/nations.csv";
 export const CONTACTS_CSV_URL = "https://iase.one/contact_lists/contactsI3C.csv";
+export const CHECK_IF_ONLINE_URLS = [CONTACTS_CSV_URL, IPINFO_URL]; // If both fails we are offline, if only one fail the host is down and any cached data can be used.
 export const COUNTRYCODE_URL = "http://ip-api.com/json/";
 export const COUNTRYCODE_QUERY = "?fields=status,countryCode";
 
 export const NATION_OPTIONS_FALLBACK = ["BR", "EU", "FR", "NO", "UK"];
 
-export const defaultFetchTimeout = 10000;
+export const defaultFetchTimeout = 5000;
 
+export const ERROR_NETWORK_OFFLINE = "You seem to be offline, please make sure you are connected to the Internet!";
 export const ERROR_FETCHING_COUNTRYCODE = "Failed to download country code, please make sure that you are online...";
 export const ERROR_FETCHING_CONTACTS = "Failed to download contact lists, please make sure that you are online...";
 export const ERROR_EMPTY_CONTACTS_ARRAY = "Empty contacts array returned by fetchOnlineContacts";

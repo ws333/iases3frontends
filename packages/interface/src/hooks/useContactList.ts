@@ -5,6 +5,7 @@ import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMe
 import { getCountryCodeByIP } from "../helpers/getCountryCodeByIP";
 import { getCountryCode, getDeletedContacts } from "../helpers/indexedDB";
 import { isExtension } from "../helpers/isExtension";
+import { isOnline } from "../helpers/isOnline";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
 function useContactList() {
@@ -29,6 +30,14 @@ function useContactList() {
     const setNationOptionsFetched = useStoreActions((actions) => actions.contactList.setNationOptionsFetched);
     const selectedNations = useStoreState((state) => state.contactList.selectedNations);
     const setIsSelectedAllNations = useStoreActions((actions) => actions.contactList.setIsSelectedAllNations);
+
+    useSuspenseQuery({
+        queryKey: ["isOnline", forcedRender],
+        queryFn: async () => await isOnline(),
+        retry: 1,
+        staleTime: 0,
+        gcTime: 0,
+    });
 
     const { data: _nationOptions } = useSuspenseQuery({
         queryKey: ["nations", forcedRender, { shouldFetch: !nationOptions.length }],

@@ -19,7 +19,7 @@ import {
 
 export async function fetchOnlineNations(): Promise<string[]> {
     try {
-        const response = await fetchWithTimeout(NATIONS_CSV_URL, ERROR_FETCHING_CONTACTS); // Using the same error as contacts
+        const response = await fetchWithTimeout({ url: NATIONS_CSV_URL, errorMessage: ERROR_FETCHING_CONTACTS }); // Display the same error as for contacts in the ErrorBoundary
         const csvText = await response.text();
         const nations = /^[A-Z,]+$/.exec(csvText)?.toString().split(","); // Only allow uppercase letters and commas
         return nations ?? NATION_OPTIONS_FALLBACK;
@@ -31,7 +31,7 @@ export async function fetchOnlineNations(): Promise<string[]> {
 
 async function fetchOnlineContacts(): Promise<ContactI3C[]> {
     try {
-        const response = await fetchWithTimeout(CONTACTS_CSV_URL, ERROR_FETCHING_CONTACTS);
+        const response = await fetchWithTimeout({ url: CONTACTS_CSV_URL, errorMessage: ERROR_FETCHING_CONTACTS });
         const csvText = await response.text();
         return csvParse<ContactI3C>(csvText).data;
     } catch (error) {
