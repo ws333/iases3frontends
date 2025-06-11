@@ -601,7 +601,7 @@ async function main() {
     });
 
     // Debug specific components that were previously showing as unused
-    debugComponentUsage(["ButtonCancel", "ButtonEndSession", "ButtonSendEmails"], componentNameToFile, graph);
+    debugComponentUsage(["ButtonStopSending", "ButtonEndSession", "ButtonSendEmails"], componentNameToFile, graph);
 
     // Additional analysis
     analyzeCommentedImports();

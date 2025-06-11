@@ -15,9 +15,9 @@ import { getLogsToDisplay, logSendingMessage } from "../helpers/sendingLog";
 import { checkForDangelingSession, clearSessionState, updateSessionState } from "../helpers/sessionState";
 import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
-import ButtonCancel from "./ButtonCancel";
 import ButtonEndSession from "./ButtonEndSession";
 import ButtonSendEmails from "./ButtonSendEmails";
+import ButtonStopSending from "./ButtonStopSending";
 import Dialog from "./Dialog";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
@@ -194,7 +194,7 @@ const EmailSender = () => {
         setMessage("Session ended by user...");
     };
 
-    const onClickCancel = () => {
+    const onClickStop = () => {
         controller.current.abort();
         setMessage("Sending stopped by user...");
     };
@@ -208,7 +208,7 @@ const EmailSender = () => {
             ? !validateEmail(singleContactState.email) || !singleContactState.name
             : !selectedContactsNotSent.length);
 
-    const cancelButtonDisabled =
+    const stopButtonDisabled =
         leftToSendCount.current === 0 ||
         emailsSent === 0 ||
         controller.current.signal.aborted ||
@@ -267,11 +267,11 @@ const EmailSender = () => {
                     )}
 
                     {isSending && (
-                        <ButtonCancel
+                        <ButtonStopSending
                             aborted={controller.current.signal.aborted}
                             checkInProgress={checkInProgress.current}
-                            disabled={cancelButtonDisabled}
-                            onClick={onClickCancel}
+                            disabled={stopButtonDisabled}
+                            onClick={onClickStop}
                             toSendCount={leftToSendCount.current}
                         />
                     )}
