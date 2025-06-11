@@ -80,8 +80,11 @@ The UI is developed using React and Redux with the helper EasyPeasy.
 
 ### Packaging
 
-Note that a version bump must take place in `packages/thunderbird-extension/public/manifest.json`. After that, run `npm run build-and-package`.
-The resulting `iases3@iase.one.xpi` is a bundle of the extension.
+To publish a new version bump the version in `packages/thunderbird-extension/public/manifest.json` and `package.json`.
+Then run `npm i` to update `package-lock.json`
+Then run `npm run build-and-package` to build the add-on file. (Stored in the root of the project folder, but excluded from the repo.)
+The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be uploaded to a developer account at https://addons.thunderbird.net/EN-US/developers/
+(To edit the output filename see the `package-addon` script in `package.json`)
 
 ### Contact list sync and merge logic:
 
@@ -115,3 +118,11 @@ The resulting `iases3@iase.one.xpi` is a bundle of the extension.
         - Export files in between sending sessions
         - Import any previous export multiple times in between sending sessions
         - Do these actions in any order on one device, but only send emails/export/import in sequence when using multiple devices.
+
+### Other notes
+
+- Much of code from the add-on Mail Merge P which this add-on is built on is now obsolete, but it is kept in case it will be needed later. Examples are code to read and parse a spreadsheet file and related preferences, and the original SendDialog.
+
+- The state manager used is [easy-peasy](https://easy-peasy.vercel.app/) which is based on Redux. See `packages/interface/src/model.ts`.
+
+- SINGLE_CONTACT_MODE is not in use.
