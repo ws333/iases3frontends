@@ -2,18 +2,16 @@ import { MessagePayload } from "@iases3/iframe-service/src/iframe-service";
 import React, { useEffect, useRef, useState } from "react";
 import { Email } from "../types/modelTypes";
 import { ContactI3C, LogMessageOptions } from "../types/typesI3C";
-import { SINGLE_CONTACT_MODE, defaultRandomWindow, fullProgressBarDelay, zeroWidtSpace } from "../constants/constants";
+import { defaultRandomWindow, fullProgressBarDelay, zeroWidtSpace } from "../constants/constants";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
-import { useSingleContact } from "../hooks/useSingleContact";
 import { useUpdateSendingStats } from "../hooks/useUpdateSendingStats";
 import { getSessionFinishedText } from "../helpers/getSessionFinishedText";
 import { storeActiveContacts } from "../helpers/indexedDB";
 import { renderEmail } from "../helpers/renderEmail";
 import { getLogsToDisplay, logSendingMessage } from "../helpers/sendingLog";
 import { checkForDangelingSession, clearSessionState, updateSessionState } from "../helpers/sessionState";
-import { validateEmail } from "../helpers/validateEmail";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
 import ButtonEndSession from "./ButtonEndSession";
 import ButtonSendEmails from "./ButtonSendEmails";
@@ -25,7 +23,6 @@ import Header from "./Header";
 import SelectNations from "./SelectNations";
 import SendingLog from "./SendingLog";
 import SendingProgress from "./SendingProgress";
-import SingleContact from "./SingleContact";
 import "./EmailSender.css";
 
 const EmailSender = () => {
@@ -54,10 +51,6 @@ const EmailSender = () => {
     } = useContactList();
 
     const { delay, EmailComponent, selectedSubject } = useEmailOptions();
-
-    const singleContactState = useSingleContact({
-        Component: EmailComponent,
-    });
 
     const logMessage = (message: string, options?: LogMessageOptions) => {
         logSendingMessage(message, { setFn: setSendingLog, ...options });
@@ -135,9 +128,7 @@ const EmailSender = () => {
         setIsSending(true);
         setMessage("Sending emails...");
 
-        const toSendCount = SINGLE_CONTACT_MODE
-            ? [singleContactState.contact]
-            : selectedContactsNotSent.slice(0, maxCount - emailsSent);
+        const toSendCount = selectedContactsNotSent.slice(0, maxCount - emailsSent);
 
         selectedNationsAtSendTime.current = selectedNations;
 
@@ -204,9 +195,7 @@ const EmailSender = () => {
         endSession === true ||
         controller.current.signal.aborted ||
         checkInProgress.current ||
-        (SINGLE_CONTACT_MODE
-            ? !validateEmail(singleContactState.email) || !singleContactState.name
-            : !selectedContactsNotSent.length);
+        !selectedContactsNotSent.length;
 
     const stopButtonDisabled =
         leftToSendCount.current === 0 ||
@@ -234,16 +223,12 @@ const EmailSender = () => {
             <div className="container_options_and_preview">
                 <div className="container_options">
                     <div className="column_options_left">
-                        {SINGLE_CONTACT_MODE ? (
-                            <SingleContact state={singleContactState} />
-                        ) : (
-                            <SelectNations selectedContactsNotSent={selectedContactsNotSent} isSending={isSending} />
-                        )}
+                        <SelectNations selectedContactsNotSent={selectedContactsNotSent} isSending={isSending} />
                     </div>
                     <br />
 
                     <div className="column_options_right">
-                        <EmailOptions isSending={isSending} singleContactMode={SINGLE_CONTACT_MODE} />
+                        <EmailOptions isSending={isSending} />
                     </div>
                     <br />
                 </div>
@@ -277,22 +262,17 @@ const EmailSender = () => {
                     )}
                 </div>
 
-                {!SINGLE_CONTACT_MODE && (
-                    <SendingProgress
-                        maxSelectedContactsNotSent={maxSelectedContactsNotSent}
-                        selectedContactsNotSent={selectedContactsNotSent}
-                    />
-                )}
+                <SendingProgress
+                    maxSelectedContactsNotSent={maxSelectedContactsNotSent}
+                    selectedContactsNotSent={selectedContactsNotSent}
+                />
 
                 <div className="container_email_preview">
-                    <EmailPreview
-                        Component={EmailComponent}
-                        name={SINGLE_CONTACT_MODE ? singleContactState.name : nextContactNotSent.n}
-                    />
+                    <EmailPreview Component={EmailComponent} name={nextContactNotSent.n} />
                 </div>
             </div>
 
-            {!SINGLE_CONTACT_MODE && <SendingLog logMessages={sendingLog} />}
+            <SendingLog logMessages={sendingLog} />
         </div>
     );
 };

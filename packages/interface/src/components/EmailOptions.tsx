@@ -8,10 +8,9 @@ import "./EmailOptions.css";
 
 export type EmailOptionsProps = {
     isSending: boolean;
-    singleContactMode: boolean;
 };
 
-function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
+function EmailOptions({ isSending }: EmailOptionsProps) {
     const delay = useStoreState((state) => state.emailOptions.delay);
     const setDelay = useStoreActions((actions) => actions.emailOptions.setDelay);
 
@@ -63,66 +62,58 @@ function EmailOptions({ isSending, singleContactMode }: EmailOptionsProps) {
 
     return (
         <div className="email-options">
-            {!singleContactMode && (
-                <div className="delay-input">
-                    <Tooltip
-                        placement="top"
-                        renderOpener={(props) => (
-                            <label {...props}>
-                                Delay in seconds between emails sent
-                                <br />
-                                <div className="container-delay">
-                                    <div>
-                                        <input
-                                            id="delay_input"
-                                            type="number"
-                                            value={localDelay}
-                                            disabled={isSending}
-                                            min={minSendingDelay.toString()}
-                                            onChange={(e) => {
-                                                const { value } = e.target;
-                                                setLocalDelay(value.toString());
-                                                storeOptionsKey(processDelayInput(value), "delay");
-                                            }}
-                                            onBlur={(e) => {
-                                                const delay = processDelayInput(e.target.value);
-                                                setLocalDelay(delay.toString());
-                                                setDelay(delay);
-                                            }}
-                                        />
-                                    </div>
+            <div className="delay-input">
+                <Tooltip
+                    placement="top"
+                    renderOpener={(props) => (
+                        <label {...props}>
+                            Delay in seconds between emails sent
+                            <br />
+                            <div className="container-delay">
+                                <div>
+                                    <input
+                                        id="delay_input"
+                                        type="number"
+                                        value={localDelay}
+                                        disabled={isSending}
+                                        min={minSendingDelay.toString()}
+                                        onChange={(e) => {
+                                            const { value } = e.target;
+                                            setLocalDelay(value.toString());
+                                            storeOptionsKey(processDelayInput(value), "delay");
+                                        }}
+                                        onBlur={(e) => {
+                                            const delay = processDelayInput(e.target.value);
+                                            setLocalDelay(delay.toString());
+                                            setDelay(delay);
+                                        }}
+                                    />
                                 </div>
-                            </label>
-                        )}
-                        content={
-                            <span className="tooltip-min-sending-delay">
-                                {minSendingDelay} is the minimum to avoid rate limits, increase if hitting the rate
-                                limit for your email provider.
-                            </span>
-                        }
-                    />
-                </div>
-            )}
+                            </div>
+                        </label>
+                    )}
+                    content={
+                        <span className="tooltip-min-sending-delay">
+                            {minSendingDelay} is the minimum to avoid rate limits, increase if hitting the rate limit
+                            for your email provider.
+                        </span>
+                    }
+                />
+            </div>
 
-            {!singleContactMode && (
-                <div className="number-of-emails">
-                    <label>
-                        Number of emails to send in this session
-                        <br />
-                        <select
-                            value={maxCount}
-                            disabled={isSending}
-                            onChange={(e) => setMaxCount(Number(e.target.value))}
-                        >
-                            {maxCountOptions.map((count) => (
-                                <option key={count} value={count}>
-                                    {count}
-                                </option>
-                            ))}
-                        </select>
-                    </label>
-                </div>
-            )}
+            <div className="number-of-emails">
+                <label>
+                    Number of emails to send in this session
+                    <br />
+                    <select value={maxCount} disabled={isSending} onChange={(e) => setMaxCount(Number(e.target.value))}>
+                        {maxCountOptions.map((count) => (
+                            <option key={count} value={count}>
+                                {count}
+                            </option>
+                        ))}
+                    </select>
+                </label>
+            </div>
 
             <label>
                 Email language

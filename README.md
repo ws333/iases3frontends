@@ -124,5 +124,3 @@ The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be upl
 - Much of code from the add-on Mail Merge P which this add-on is built on is now obsolete, but it is kept in case it will be needed later. Examples are code to read and parse a spreadsheet file and related preferences, and the original SendDialog.
 
 - The state manager used is [easy-peasy](https://easy-peasy.vercel.app/) which is based on Redux. See `packages/interface/src/model.ts`.
-
-- SINGLE_CONTACT_MODE is not in use.
