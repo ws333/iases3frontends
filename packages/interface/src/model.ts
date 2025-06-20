@@ -167,6 +167,7 @@ export const model: Model = {
     userDialog: {
         title: "",
         message: "",
+        confirmActionText: "Confirm",
         isOpen: false,
         closeDialog: thunk((actions) => {
             actions.setUserDialog({ ...model.userDialog });
