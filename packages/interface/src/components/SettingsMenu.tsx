@@ -1,8 +1,9 @@
 import { Menu, MenuOption, MenuOptionProps, OpenMenuButton } from "radzionkit";
 import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
+import { InfoIcon } from "radzionkit/ui/icons/InfoIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
 import styled from "styled-components";
-import { useStoreActions } from "../hooks/storeHooks";
+import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
@@ -15,6 +16,7 @@ const StyledTitle = styled.span`
 `;
 
 function SettingsMenu() {
+    const emailsSent = useStoreState((state) => state.contactList.emailsSent);
     const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
     const initiateForcedRender = useStoreActions((actions) => actions.render.initiateForcedRender);
 
@@ -56,6 +58,15 @@ function SettingsMenu() {
                     },
                 ];
 
+                const optionEndActiveSession: MenuOptionProps = {
+                    text: "Sending session in progress! Click the 'Stop and/or End session' button to enable settings",
+                    kind: "alert",
+                    onSelect: () => {
+                        onClose();
+                    },
+                    icon: <InfoIcon />,
+                };
+
                 const MenuList = options.map((props, index) =>
                     props.text === viewFullSendingLog ? (
                         <MenuOptionFullSendingLog key={index} view={view} onClose={onClose} />
@@ -65,7 +76,11 @@ function SettingsMenu() {
                         <MenuOption key={index} view={view} {...props} />
                     )
                 );
-                return <div style={{ display: "flex", flexDirection: "column" }}>{MenuList}</div>;
+                return (
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                        {emailsSent ? <MenuOption key={1} view={view} {...optionEndActiveSession} /> : MenuList}
+                    </div>
+                );
             }}
         />
     );
