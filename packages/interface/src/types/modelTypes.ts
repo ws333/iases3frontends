@@ -57,6 +57,7 @@ interface SendDialog {
 
 interface ContactList {
     contacts: ContactI3C[];
+    setContact: Action<ContactList, ContactI3C>;
     setContacts: Action<ContactList, ContactI3C[]>;
     selectedContacts: Computed<ContactList, ContactI3C[], Model>;
 

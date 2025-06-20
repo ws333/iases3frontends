@@ -176,6 +176,10 @@ export const model: Model = {
     },
     contactList: {
         contacts: [],
+        setContact: action((state, payload) => ({
+            ...state,
+            contacts: state.contacts.map((contact) => (contact.uid === payload.uid ? payload : contact)),
+        })),
         setContacts: action((state, payload) => ({ ...state, contacts: [...payload] })),
         selectedContacts: computed([(state) => state, (_state, storeState) => storeState], (state, storeState) =>
             state.contacts.filter((contact) => storeState.contactList.selectedNations.includes(contact.na))

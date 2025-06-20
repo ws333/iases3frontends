@@ -10,6 +10,7 @@ import { useStoreActions, useStoreState } from "./storeHooks";
 
 function useContactList() {
     const contacts = useStoreState((state) => state.contactList.contacts);
+    const setContact = useStoreActions((actions) => actions.contactList.setContact);
     const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
     const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
     const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
@@ -101,6 +102,7 @@ function useContactList() {
         selectedContactsNotSent,
         nextContactNotSent,
         selectedNations,
+        setContact,
     };
 }
 

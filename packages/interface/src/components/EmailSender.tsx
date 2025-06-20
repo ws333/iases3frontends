@@ -48,6 +48,7 @@ const EmailSender = () => {
         selectedNations,
         setEmailsSent,
         setEndSession,
+        setContact,
     } = useContactList();
 
     const { delay, EmailComponent, selectedSubject } = useEmailOptions();
@@ -146,6 +147,7 @@ const EmailSender = () => {
 
                 contact.sd = Date.now();
                 contact.sc++;
+                setContact(contact); // Update the contact in state
                 await storeActiveContacts(contact); // Update the contact in indexedDB
                 logMessage(`Email sent to ${logContact}`);
 
