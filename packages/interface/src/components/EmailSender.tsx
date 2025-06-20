@@ -128,11 +128,11 @@ const EmailSender = () => {
         setIsSending(true);
         setMessage("Sending emails...");
 
-        const toSendCount = selectedContactsNotSent.slice(0, maxCount - emailsSent);
+        const contactsToSendTo = selectedContactsNotSent.slice(0, maxCount - emailsSent);
 
         selectedNationsAtSendTime.current = selectedNations;
 
-        for await (const contact of toSendCount) {
+        for await (const contact of contactsToSendTo) {
             const logContact = `${contact.n} - ${contact.e}`;
 
             try {
