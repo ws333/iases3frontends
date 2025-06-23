@@ -154,12 +154,18 @@ const EmailSender = () => {
                 const _delay = leftToSendCount.current > 1 ? delay : fullProgressBarDelay;
                 const randomWindow = leftToSendCount.current > 1 ? defaultRandomWindow : 0;
 
-                // Important to update session state before the the wait
+                // State emailsSent needs to be updated before setContact (to awoid flickering of progressbar max) and waitRandomSeconds
                 setEmailsSent((count) => {
                     const newCount = ++count;
                     updateSessionState(newCount, _delay);
                     return newCount;
                 });
+
+                contact.sd = Date.now();
+                contact.sc++;
+                setContact(contact); // Update the contact in state
+                await storeActiveContacts(contact); // Update the contact in indexedDB
+                logMessage(`Email sent to ${logContact}`);
 
                 await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
             } catch (error) {
