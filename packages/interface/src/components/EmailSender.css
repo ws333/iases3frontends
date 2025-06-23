@@ -6,9 +6,15 @@ p {
     margin: 8px 0px 9px;
 }
 
+/* Root level CSS variables for consistent sizing */
+:root {
+    --container-add-on-max-width: 50rem;
+}
+
+/* Main container for email sender component */
 .container_email_sender {
     margin: auto;
-    max-width: 50rem;
+    max-width: var(--container-add-on-max-width);
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -19,6 +19,7 @@ import ButtonStopSending from "./ButtonStopSending";
 import Dialog from "./Dialog";
 import EmailOptions from "./EmailOptions";
 import EmailPreview from "./EmailPreview";
+import ErrorMessage from "./ErrorMessage";
 import Header from "./Header";
 import SelectNations from "./SelectNations";
 import SendingLog from "./SendingLog";
@@ -27,11 +28,14 @@ import "./EmailSender.css";
 
 const EmailSender = () => {
     const [message, setMessage] = useState<string>(zeroWidtSpace); // zeroWidtSpace used to keep styling consistent
+    const [errorMessage, setErrorMessage] = useState<string>();
     const [isSending, setIsSending] = useState(false);
     const [sendingLog, setSendingLog] = useState<string[]>([]);
 
     const userDialog = useStoreState((state) => state.userDialog);
     const forcedRender = useStoreState((state) => state.render.forcedRender);
+    const countryCodeRef = useRef("");
+    countryCodeRef.current = useStoreState((state) => state.emailOptions.countryCode);
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
     const controller = useRef(new AbortController());
@@ -128,28 +132,34 @@ const EmailSender = () => {
 
         setIsSending(true);
         setMessage("Sending emails...");
+        setErrorMessage("");
 
         const contactsToSendTo = selectedContactsNotSent.slice(0, maxCount - emailsSent);
 
         selectedNationsAtSendTime.current = selectedNations;
 
+        const countryCodeAtSessionStart = countryCodeRef.current;
+
         for await (const contact of contactsToSendTo) {
             const logContact = `${contact.n} - ${contact.e}`;
 
             try {
-                if (controller.current.signal.aborted) {
+                if (controller.current.signal.aborted || countryCodeAtSessionStart !== countryCodeRef.current) {
+                    // Public IP changed during sending session, usually after connecting to a different VPN server.
+                    if (countryCodeAtSessionStart !== countryCodeRef.current) {
+                        setEndSession(true);
+                        setErrorMessage(
+                            "Session was ended because the public IP address and therefore the country code changed. Please check that you are connected to a VPN server in the country you want listed."
+                        );
+                        break;
+                    }
+                    // User stopped the session or sending of email to current contact failed, so breaking out of loop
                     controller.current = new AbortController();
                     await waitRandomSeconds(fullProgressBarDelay / 2, 0);
                     break;
                 }
 
                 await prepareAndSendEmail(contact);
-
-                contact.sd = Date.now();
-                contact.sc++;
-                setContact(contact); // Update the contact in state
-                await storeActiveContacts(contact); // Update the contact in indexedDB
-                logMessage(`Email sent to ${logContact}`);
 
                 const _delay = leftToSendCount.current > 1 ? delay : fullProgressBarDelay;
                 const randomWindow = leftToSendCount.current > 1 ? defaultRandomWindow : 0;
@@ -198,12 +208,11 @@ const EmailSender = () => {
         setMessage("Sending stopped by user...");
     };
 
-    const sendButtonDisabled =
-        isSending ||
-        endSession === true ||
-        controller.current.signal.aborted ||
-        checkInProgress.current ||
-        !selectedContactsNotSent.length;
+    const isBusy = isSending || endSession || controller.current.signal.aborted || checkInProgress.current;
+
+    const showErrorMessage = errorMessage && !isBusy;
+
+    const sendButtonDisabled = isBusy || !selectedContactsNotSent.length;
 
     const stopButtonDisabled =
         leftToSendCount.current === 0 ||
@@ -241,6 +250,7 @@ const EmailSender = () => {
                     <br />
                 </div>
 
+                {showErrorMessage && <ErrorMessage errorMessage={errorMessage} />}
                 {message && <p>{message}</p>}
 
                 <div className="container_buttons">
