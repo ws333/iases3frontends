@@ -475,12 +475,3 @@ export async function deleteDatabase(): Promise<void> {
         };
     });
 }
-
-// Estimates storage usage // Todo: Check if this works in add-on, requires https://
-export async function getStorageSize(): Promise<StorageEstimate> {
-    if (navigator.storage?.estimate) {
-        return await navigator.storage.estimate();
-    }
-    console.warn("Storage estimation not supported in this environment");
-    return { quota: 0, usage: 0 };
-}
