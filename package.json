@@ -59,7 +59,9 @@
         "bump": "./scripts/bump-version.sh",
         "pack": "npm run build && npm run build-addon && echo \"\" && echo BUNDLING $(cat addon/manifest.json |grep '\"version\"') && npm run package-addon && npm run package-sourcefiles",
         "lint": "cd packages && npx eslint . && cd ..",
-        "ca": "npx tsc && npm run lint",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "ca": "npx tsc && npm run lint && npm run format:check",
         "find-unused-files": "npx tsx scripts/run-analyze.ts",
         "watch": "tsx watch-build.ts",
         "test": "vitest packages/*"

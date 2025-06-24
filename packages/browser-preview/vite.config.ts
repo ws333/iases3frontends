@@ -1,10 +1,11 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import viteTsconfigPaths from "vite-tsconfig-paths";
-import { viteStaticCopy } from "vite-plugin-static-copy";
 import { createRequire } from "module";
-const require = createRequire(import.meta.url);
 import path from "node:path";
+import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
+import viteTsconfigPaths from "vite-tsconfig-paths";
+
+const require = createRequire(import.meta.url);
 
 const INTERFACE_PATH = path.join(require.resolve("@iases3/interface/index.html"), "../*");
 

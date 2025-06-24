@@ -7,7 +7,11 @@ function log(...args: unknown[]) {
 log("Extension loaded...");
 
 class IASES3Window {
-    constructor(private openWindowId: number = 0, private isReady = false, private _messageQueue: Message[] = []) {
+    constructor(
+        private openWindowId: number = 0,
+        private isReady = false,
+        private _messageQueue: Message[] = []
+    ) {
         // If we get a message, it means that the window has finished loading.
         // In that case, we are free to send messages to the window
         browser.runtime.onMessage.addListener(async (message) => {
