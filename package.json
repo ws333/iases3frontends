@@ -54,8 +54,9 @@
     "scripts": {
         "build": "npm run build -ws",
         "build-addon": "rm -rf addon && cp -rL packages/thunderbird-extension/dist addon && cd addon && bestzip ../addon.zip *",
-        "package-addon": "mv addon.zip iases3@iase.one.xpi",
-        "pack": "npm run build && npm run build-addon && echo \"\" && echo BUNDLING $(cat addon/manifest.json |grep '\"version\"') && npm run package-addon",
+        "package-addon": "mv addon.zip ../iases3@iase.one.xpi",
+        "package-sourcefiles": "./scripts/pack_source_code.sh",
+        "pack": "npm run build && npm run build-addon && echo \"\" && echo BUNDLING $(cat addon/manifest.json |grep '\"version\"') && npm run package-addon && npm run package-sourcefiles",
         "lint": "cd packages && npx eslint . && cd ..",
         "ca": "npx tsc && npm run lint",
         "find-unused-files": "npx tsx scripts/run-analyze.ts",
