@@ -17,7 +17,7 @@ npm install
 then either
 
 ```sh
-npm run build-and-package
+npm run pack
 ```
 
 or
@@ -28,7 +28,14 @@ npm run build-addon
 npm run package-addon
 ```
 
-The extension will be located in the current directory with filename `iases3@iase.one.xpi`.
+To bump the version run (before running `npm run pack`)
+
+```sh
+npm run bump
+```
+
+The extension will be located in the parent folder of the project with filename `iases3@iase.one.xpi`.
+A cleaned and zipped version of the project will also be created in the parent folder of the project when running `npm run pack`, this file is required when updating the add-on on https://addons.thunderbird.net
 
 ## Development
 
@@ -66,14 +73,14 @@ Then you can launch a dev server and open it in the browser.
 
 ```sh
 cd packages/browser-preview
-npx vite
+npm run dev
 ```
 
-If you want the interface code to automatically rebuild when you make a change, you can do
+If you want the interface code to automatically rebuild when you make a change run...
 
 ```sh
 cd packages/interface
-npx vite build --watch
+npm run watch
 ```
 
 The UI is developed using React and the Redux based state manager EasyPeasy.
@@ -82,9 +89,8 @@ The UI is developed using React and the Redux based state manager EasyPeasy.
 
 To publish a new version bump the version in `packages/thunderbird-extension/public/manifest.json` and `package.json`.
 Then run `npm i` to update `package-lock.json`
-Then run `npm run build-and-package` to build the add-on file. (Stored in the root of the project folder, but excluded from the repo.)
+Then run `npm run build-and-package` to build the add-on file.
 The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be uploaded to a developer account at https://addons.thunderbird.net/EN-US/developers/
-(To edit the output filename see the `package-addon` script in `package.json`)
 
 ### Contact list sync and merge logic:
 
