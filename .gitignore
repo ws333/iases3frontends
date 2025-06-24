@@ -3,7 +3,5 @@ addon
 dist
 launch.json
 
-*.xpi
-
 backup
 TODO.md
