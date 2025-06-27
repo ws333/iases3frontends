@@ -24,6 +24,7 @@ function SelectNations({ selectedContactsNotSent, isSending }: Props) {
         setSelectedNation({ checked, nation });
     };
 
+    // Todo:The css margins, paddings etc are quite messy, also considering switching to another UI lib (https://base-ui.com/?)
     return (
         <div className="select-nations">
             <div>
@@ -54,6 +55,12 @@ function SelectNations({ selectedContactsNotSent, isSending }: Props) {
                                 {nation}
                             </label>
                         ))}
+                        {!nationOptions.length && (
+                            <div className="nation-list-empty">
+                                <p>No contacts are yet available for the country you are currently connected to</p>
+                                <p>If using a VPN service connect to a server in the appropriate country</p>
+                            </div>
+                        )}
                     </div>
                     <div className="selected-info">
                         <div>

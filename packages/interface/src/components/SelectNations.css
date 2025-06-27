@@ -40,6 +40,11 @@
     margin-bottom: 3px;
 }
 
+.nation-list-empty {
+    margin: 6px;
+    color: orange;
+}
+
 .nation-item {
     display: flex;
     align-items: center;
