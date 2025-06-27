@@ -2,11 +2,20 @@ import { spawn } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-// Path to watch
-const packagesDir = path.join(__dirname, "packages");
+// Get folder from command line arguments or use default
+const defaultFolder = "packages/interface";
+const targetFolder = process.argv[2] || defaultFolder;
+const watchPath = path.join(__dirname, targetFolder);
+
+// Validate that the path exists
+if (!fs.existsSync(watchPath)) {
+    console.error(`❌ Directory not found: ${watchPath}`);
+    console.error(`Available options: packages or one of the subfolders, e.g. packages/browser-preview`);
+    process.exit(1);
+}
 
 // Directories to ignore during watching
-const ignoredDirs = ["dist", "node_modules"];
+const ignoredFolders = ["dist", "node_modules"];
 
 type FnWithArgs = (...args: unknown[]) => void;
 
@@ -36,19 +45,26 @@ function runBuild() {
         npm_config_color: "always",
     };
 
-    // Run npm build with real-time output and forced colors
+    // Run npm build from watchPath with real-time output and forced colors
     const buildProcess = spawn("npm", ["run", "build"], {
         stdio: "pipe",
         shell: true,
         env: colorEnv,
+        cwd: watchPath,
+    });
+
+    // Handle spawn errors
+    buildProcess.on("error", (error) => {
+        console.error(`❌ Failed to start build process: ${error.message}`);
+        console.error("Make sure npm is installed and available in your PATH");
     });
 
     // Pipe the output streams to console in real-time
-    buildProcess.stdout.on("data", (data) => {
+    buildProcess.stdout?.on("data", (data) => {
         process.stdout.write(data.toString());
     });
 
-    buildProcess.stderr.on("data", (data) => {
+    buildProcess.stderr?.on("data", (data) => {
         process.stderr.write(data.toString());
     });
 
@@ -68,7 +84,7 @@ function runBuild() {
 // Check if directory should be ignored
 function shouldIgnoreDir(dirPath: string): boolean {
     const dirName = path.basename(dirPath);
-    return ignoredDirs.includes(dirName);
+    return ignoredFolders.includes(dirName);
 }
 
 // Debounced build function (wait 500ms after last change)
@@ -114,7 +130,7 @@ function watchDir(dir: string) {
 }
 
 // Start watching
-console.log("👀 Watching for changes in packages/ directory...");
-console.log(`🚫 Ignoring directories: ${ignoredDirs.join(", ")}`);
+console.log(`👀 Watching for changes in ${watchPath}/ directory...`);
+console.log(`🚫 Ignoring directories: ${ignoredFolders.join(", ")}`);
 console.log("Press Ctrl+C to stop watching");
-watchDir(packagesDir);
+watchDir(watchPath);
