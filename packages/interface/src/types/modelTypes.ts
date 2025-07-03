@@ -100,7 +100,7 @@ interface EmailOptions {
 
     language: LanguageOption;
     setLanguage: Action<EmailOptions, { language: LanguageOption; subjectPerLanguage?: SubjectPerLanguage }>;
-    storeLanguage: ThunkOn<EmailOptions, undefined, Model>;
+    storeLanguageAndUpdateNationOptions: ThunkOn<EmailOptions, undefined, Model>;
 
     languageOptions: LanguageOption[];
     setLanguageOptions: Action<EmailOptions, LanguageOption[]>;

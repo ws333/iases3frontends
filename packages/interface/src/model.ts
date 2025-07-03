@@ -274,11 +274,11 @@ export const model: Model = {
             (actions, target, { getStoreState, getStoreActions }) => {
                 const storeState = getStoreState();
                 const storeActions = getStoreActions();
-                actions.setLanguageOptions(
-                    target.payload === "NO"
-                        ? defaultLanguageOptions
-                        : defaultLanguageOptions.filter((lang) => lang !== "Norwegian")
-                );
+
+                const newLanguageOptions = [...defaultLanguageOptions];
+                if (target.payload === "NO") newLanguageOptions.push("Norwegian");
+                if (target.payload === "IT") newLanguageOptions.push("Italian");
+                actions.setLanguageOptions(newLanguageOptions);
 
                 storeOptionsKey(target.payload, "countryCode");
                 storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsByCountryCode);
@@ -326,7 +326,7 @@ export const model: Model = {
                   }
                 : state.subjectPerLanguage,
         })),
-        storeLanguage: thunkOn(
+        storeLanguageAndUpdateNationOptions: thunkOn(
             (actions) => actions.setLanguage,
             async (_actions, target, { getStoreState, getStoreActions }) => {
                 const { payload } = target;
@@ -335,6 +335,8 @@ export const model: Model = {
 
                 if (payload.language === "Norwegian") {
                     storeActions.contactList.setNationOptions(["NO"]);
+                } else if (payload.language === "Italian") {
+                    storeActions.contactList.setNationOptions(["IT"]);
                 } else {
                     storeActions.contactList.setNationOptions(storeState.contactList.nationOptionsByCountryCode);
                 }
@@ -378,7 +380,10 @@ export const model: Model = {
             }
         ),
         customSubjectVisible: computed(
-            (state) => state.subject === "Custom Subject" || state.subject === "Tilpasset Emne"
+            (state) =>
+                state.subject === "Custom Subject" ||
+                state.subject === "Tilpasset Emne" ||
+                state.subject === "Oggetto Personalizzato"
         ),
 
         EmailComponent: computed((state) => emailComponents[state.language]),

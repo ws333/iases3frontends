@@ -19,7 +19,9 @@ function useEmailOptions() {
     const EmailComponent = useStoreState((state) => state.emailOptions.EmailComponent);
 
     const selectedSubject =
-        subjectOption[language] === "Custom Subject" || subjectOption[language] === "Tilpasset Emne"
+        subjectOption[language] === "Custom Subject" ||
+        subjectOption[language] === "Tilpasset Emne" ||
+        subjectOption[language] === "Oggetto Personalizzato"
             ? customSubject
             : subjectOption[language];
 
