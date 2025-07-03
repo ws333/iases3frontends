@@ -64,7 +64,7 @@
         "format:check": "prettier --check .",
         "ca": "npx tsc && npm run lint && npm run format:check",
         "find-unused-files": "npx tsx scripts/run-analyze.ts",
-        "watch": "tsx watch-build.ts",
+        "watch": "cd packages/interface && npm run watch && cd ../..",
         "watch:all": "tsx watch-build.ts packages",
         "test": "vitest packages/*",
         "prepare": "husky"
