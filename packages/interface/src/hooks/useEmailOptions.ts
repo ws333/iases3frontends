@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { defaultMaxCount, defaultSendingDelay } from "../constants/constants";
-import { LanguageOption, defaultLanguage, subjects } from "../constants/emailTemplates";
+import { LanguageOption, customSubjectTitlesArray, defaultLanguage, subjects } from "../constants/emailTemplates";
 import { OPTIONS_KEY, getOptions } from "../helpers/indexedDB";
 import { useStoreActions, useStoreState } from "./storeHooks";
 
@@ -11,19 +11,16 @@ function useEmailOptions() {
     const language = useStoreState((state) => state.emailOptions.language);
     const setLanguage = useStoreActions((actions) => actions.emailOptions.setLanguage);
 
-    const subjectOption = useStoreState((state) => state.emailOptions.subjectPerLanguage);
+    const subjectPerLanguage = useStoreState((state) => state.emailOptions.subjectPerLanguage);
 
     const customSubject = useStoreState((state) => state.emailOptions.customSubject);
     const setCustomSubject = useStoreActions((actions) => actions.emailOptions.setCustomSubject);
 
     const EmailComponent = useStoreState((state) => state.emailOptions.EmailComponent);
 
-    const selectedSubject =
-        subjectOption[language] === "Custom Subject" ||
-        subjectOption[language] === "Tilpasset Emne" ||
-        subjectOption[language] === "Oggetto Personalizzato"
-            ? customSubject
-            : subjectOption[language];
+    const selectedSubject = customSubjectTitlesArray.includes(subjectPerLanguage[language] || "in case of undefined")
+        ? customSubject
+        : subjectPerLanguage[language];
 
     const setMaxCount = useStoreActions((actions) => actions.emailOptions.setMaxCount);
 

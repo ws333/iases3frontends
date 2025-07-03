@@ -6,7 +6,13 @@ import { action, actionOn, computed, thunk, thunkOn } from "easy-peasy";
 import type { Model } from "./types/modelTypes";
 import { defaultMaxCount, defaultSendingDelay } from "./constants/constants";
 import { countryCodes_EU } from "./constants/countryCodes";
-import { defaultLanguage, defaultLanguageOptions, emailComponents, subjects } from "./constants/emailTemplates";
+import {
+    customSubjectTitlesArray,
+    defaultLanguage,
+    defaultLanguageOptions,
+    emailComponents,
+    subjects,
+} from "./constants/emailTemplates";
 import TextEndingSession from "./components/dialogTexts/TextEndingSession";
 import { storeOptionsKey } from "./helpers/indexedDB";
 import { messageParent } from "./service";
@@ -379,12 +385,7 @@ export const model: Model = {
                 storeOptionsKey(target.payload, "customSubject");
             }
         ),
-        customSubjectVisible: computed(
-            (state) =>
-                state.subject === "Custom Subject" ||
-                state.subject === "Tilpasset Emne" ||
-                state.subject === "Oggetto Personalizzato"
-        ),
+        customSubjectVisible: computed((state) => customSubjectTitlesArray.includes(state.subject)),
 
         EmailComponent: computed((state) => emailComponents[state.language]),
     },
