@@ -2,7 +2,7 @@
 export type ContactI3C = {
     uid: number; // Artificial Unix timestamp in milliseconds
     na: string; // Contact's nation, not exported
-    i: string; // Contact's institution, not exported
+    i: string; // Contact's institution (or house if specified), not exported
     s: string; // Contact's subgroup, not exported
     n: string; // Contact's name, not exported
     e: string; // Contact's email, not exported
