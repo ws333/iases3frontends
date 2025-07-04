@@ -3,6 +3,7 @@ import { DownloadIcon } from "radzionkit/ui/icons/DownloadIcon";
 import { InfoIcon } from "radzionkit/ui/icons/InfoIcon";
 import { TrashBinIcon } from "radzionkit/ui/icons/TrashBinIcon";
 import styled from "styled-components";
+import { DOCS_URL } from "../constants/constants";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
@@ -30,8 +31,21 @@ function SettingsMenu() {
             renderContent={({ view, onClose }) => {
                 const options: MenuOptionProps[] = [
                     {
+                        text: "View online documentation",
+                        onSelect: () => {
+                            window.open(DOCS_URL, "_blank");
+                            onClose();
+                        },
+                        icon: <InfoIcon />,
+                    },
+                    {
                         // Dummy to position menu option in MenuList below
                         text: viewFullSendingLog,
+                        onSelect: () => {},
+                    },
+                    {
+                        // Dummy to position menu option in MenuList below
+                        text: importSendingHistory,
                         onSelect: () => {},
                     },
                     {
@@ -41,11 +55,6 @@ function SettingsMenu() {
                             onClose();
                         },
                         icon: <DownloadIcon />,
-                    },
-                    {
-                        // Dummy to position menu option in MenuList below
-                        text: importSendingHistory,
-                        onSelect: () => {},
                     },
                     {
                         text: "Reset sending history",

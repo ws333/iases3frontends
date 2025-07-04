@@ -1,5 +1,6 @@
 export const __DEV__ = import.meta.env.DEV;
 
+export const DOCS_URL = "https://iase.one";
 export const IASE_URL = "https://www.bashar.org/socialexperiment";
 export const IPINFO_URL = "https://ipinfo.io/ip";
 export const NATIONS_CSV_URL = "https://iase.one/contact_lists/nations.csv";
