@@ -1,10 +1,10 @@
-.ifo {
+.icon_ifo {
     width: 70px;
     height: 70px;
 }
 
 /* Glow effect on hover */
-.ifo:hover {
+.icon_ifo:hover {
     /* Enhanced glow effect when user hovers */
     filter: drop-shadow(0 0 10px rgba(157, 187, 255, 0.9));
     /* Animation with subtle rotation when user hovers over the IFO */
@@ -14,7 +14,7 @@
 }
 
 /* Combined hover and glow effect */
-.hovering-ifo {
+.hovering_ifo {
     /* Using multiple animations to create a more organic movement */
     animation:
         randomHover 8s ease-in-out infinite,

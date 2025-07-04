@@ -1,10 +1,10 @@
 import Header from "./Header";
-import IFO from "./IFO";
+import IconIFO from "./IconIFO";
 
 function HeaderWithIFO() {
     return (
         <>
-            <IFO />
+            <IconIFO />
             <Header />
         </>
     );

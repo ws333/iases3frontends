@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import EmailSender from "./EmailSender";
-import IFO from "./IFO";
+import IconIFO from "./IconIFO";
 import SettingsMenu from "./SettingsMenu";
 import "./App.css";
 
@@ -23,7 +23,7 @@ export default function App() {
         <div className="scrollable">
             <header className="header">
                 <div className="IFO-and-settings">
-                    <IFO isHovering={false} />
+                    <IconIFO isHovering={false} />
                     <SettingsMenu />
                 </div>
             </header>
