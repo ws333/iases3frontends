@@ -2,15 +2,16 @@ import { ContactI3C } from "../types/typesI3C";
 import {
     CONTACTS_CSV_URL,
     ERROR_EMPTY_CONTACTS_ARRAY,
+    ERROR_EMPTY_COUNTRY_CODES_ARRAY,
     ERROR_FETCHING_CONTACTS,
     NATIONS_CSV_URL,
-    NATION_OPTIONS_FALLBACK,
 } from "../constants/constants";
 import { checkNoOverlapActiveDeletedContacts } from "./checkNoOverlapActiveDeleted";
 import { csvParse } from "./csvParse";
 import { fetchWithTimeout } from "./fetchWithTimeout";
 import {
     getActiveContacts,
+    getCountryCodesFetched,
     initializeStorage,
     removeActiveContactByUid,
     storeActiveContacts,
@@ -22,7 +23,9 @@ export async function fetchOnlineNations(): Promise<string[]> {
         const response = await fetchWithTimeout({ url: NATIONS_CSV_URL, errorMessage: ERROR_FETCHING_CONTACTS }); // Display the same error as for contacts in the ErrorBoundary
         const csvText = await response.text();
         const nations = /^[A-Z,]+$/.exec(csvText)?.toString().split(","); // Only allow uppercase letters and commas
-        return nations ?? NATION_OPTIONS_FALLBACK;
+        const countrycodes = nations ?? (await getCountryCodesFetched());
+        if (!countrycodes.length) throw new Error(ERROR_EMPTY_COUNTRY_CODES_ARRAY);
+        return countrycodes;
     } catch (error) {
         console.warn("fetchOnlineNations:", error);
         throw error;
@@ -42,7 +45,7 @@ async function fetchOnlineContacts(): Promise<ContactI3C[]> {
 
 export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Promise<ContactI3C[]> {
     const onlineContacts = await fetchFn();
-    if (!onlineContacts.length) throw ERROR_EMPTY_CONTACTS_ARRAY;
+    if (!onlineContacts.length) throw new Error(ERROR_EMPTY_CONTACTS_ARRAY);
 
     await initializeStorage(onlineContacts); // Initialize indexedDB storage
     const localContacts = await getActiveContacts();

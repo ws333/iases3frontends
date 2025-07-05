@@ -2,7 +2,7 @@
  * A model for a Redux store (using easy-peasy) for all mailmerge code.
  * All persistent state is stored via this model.
  */
-import { action, actionOn, computed, thunk, thunkOn } from "easy-peasy";
+import { action, computed, thunk, thunkOn } from "easy-peasy";
 import type { Model } from "./types/modelTypes";
 import { defaultMaxCount, defaultSendingDelay } from "./constants/constants";
 import { countryCodes_EU } from "./constants/countryCodes";
@@ -228,9 +228,12 @@ export const model: Model = {
 
         nationOptionsFetched: [],
         setNationOptionsFetched: action((state, payload) => ({ ...state, nationOptionsFetched: [...payload] })),
-        updateNationOptions: actionOn(
+        updateNationOptions: thunkOn(
             (actions) => actions.setNationOptionsFetched,
-            (state, target) => ({ ...state, nationOptions: [...target.payload] })
+            (actions, target) => {
+                actions.setNationOptions([...target.payload]);
+                storeOptionsKey(target.payload, "countryCodesFetched");
+            }
         ),
 
         selectedNations: [],

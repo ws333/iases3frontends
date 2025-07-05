@@ -27,6 +27,7 @@ export const OPTIONS_KEY = {
     SUBJECT: "subject",
     CUSTOM_SUBJECT: "customSubject",
     COUNTRY_CODE: "countryCode",
+    COUNTRY_CODES_FETCHED: "countryCodesFetched",
 } as const;
 export type OptionsKey = (typeof OPTIONS_KEY)[keyof typeof OPTIONS_KEY];
 
@@ -195,7 +196,10 @@ export async function storeMetadataKey(timestamp: number, key: MetadataKey): Pro
     }
 }
 
-export async function storeOptionsKey(value: number | string | SubjectPerLanguage, key: OptionsKey): Promise<void> {
+export async function storeOptionsKey(
+    value: number | string | string[] | SubjectPerLanguage,
+    key: OptionsKey
+): Promise<void> {
     const db = await openDatabase();
     try {
         const transaction = db.transaction(STORE.OPTIONS, "readwrite");
@@ -297,20 +301,20 @@ export async function getMetadata(): Promise<{ key: string; value: number }[]> {
 }
 
 // Gets all key-value pairs from the OPTIONS store
-export async function getOptions(): Promise<{ key: string; value: number | string }[]> {
+export async function getOptions(): Promise<{ key: string; value: number | string | string[] }[]> {
     const db = await openDatabase();
     try {
         const transaction = db.transaction(STORE.OPTIONS, "readonly");
         const store = transaction.objectStore(STORE.OPTIONS);
         const keysRequest: IDBRequest<IDBValidKey[]> = store.getAllKeys();
-        const valuesRequest: IDBRequest<(number | string)[]> = store.getAll();
+        const valuesRequest: IDBRequest<(number | string | string[])[]> = store.getAll();
 
         const [keys, values] = await Promise.all([
             new Promise<string[]>((resolve, reject) => {
                 keysRequest.onsuccess = () => resolve(keysRequest.result as string[]);
                 keysRequest.onerror = () => reject(new Error("Failed to retrieve options keys"));
             }),
-            new Promise<(number | string)[]>((resolve, reject) => {
+            new Promise<(number | string | string[])[]>((resolve, reject) => {
                 valuesRequest.onsuccess = () => resolve(valuesRequest.result);
                 valuesRequest.onerror = () => reject(new Error("Failed to retrieve options values"));
             }),
@@ -339,6 +343,25 @@ export async function getCountryCode(): Promise<string> {
     } catch (error) {
         console.error(error);
         return "";
+    } finally {
+        db.close();
+    }
+}
+
+// Get countryCodeFetched from the OPTIONS store
+export async function getCountryCodesFetched(): Promise<string[]> {
+    const db = await openDatabase();
+    try {
+        const transaction = db.transaction(STORE.OPTIONS, "readonly");
+        const store = transaction.objectStore(STORE.OPTIONS);
+        const request: IDBRequest<string[] | undefined> = store.get(OPTIONS_KEY.COUNTRY_CODES_FETCHED);
+        return new Promise((resolve, reject) => {
+            request.onsuccess = () => resolve(request.result || []);
+            request.onerror = () => reject(new Error("Failed to retrieve stored country codes"));
+        });
+    } catch (error) {
+        console.error(error);
+        return [];
     } finally {
         db.close();
     }

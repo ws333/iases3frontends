@@ -1,4 +1,4 @@
-import { Action, ActionOn, Computed, Thunk, ThunkOn } from "easy-peasy";
+import { Action, Computed, Thunk, ThunkOn } from "easy-peasy";
 import { JSX } from "react";
 import { LanguageOption, SubjectPerLanguage } from "../constants/emailTemplates.ts";
 import type { SpreadsheetData, Strings, TEmailComponent } from "./types.ts";
@@ -77,7 +77,7 @@ interface ContactList {
 
     nationOptionsFetched: string[];
     setNationOptionsFetched: Action<ContactList, string[]>;
-    updateNationOptions: ActionOn<ContactList>;
+    updateNationOptions: ThunkOn<ContactList>;
 
     selectedNations: string[];
     setSelectedNations: Action<ContactList, string[]>;

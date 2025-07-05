@@ -9,14 +9,13 @@ export const CHECK_IF_ONLINE_URLS = [CONTACTS_CSV_URL, IPINFO_URL]; // If both f
 export const COUNTRYCODE_URL = "http://ip-api.com/json/";
 export const COUNTRYCODE_QUERY = "?fields=status,countryCode";
 
-export const NATION_OPTIONS_FALLBACK = ["BR", "EU", "FR", "NO", "UK"];
-
 export const defaultFetchTimeout = 5000;
 
 export const ERROR_NETWORK_OFFLINE = "You seem to be offline, please make sure you are connected to the Internet!";
 export const ERROR_FETCHING_COUNTRYCODE = "Failed to download country code, please make sure that you are online...";
 export const ERROR_FETCHING_CONTACTS = "Failed to download contact lists, please make sure that you are online...";
 export const ERROR_EMPTY_CONTACTS_ARRAY = "Empty contacts array returned by fetchOnlineContacts";
+export const ERROR_EMPTY_COUNTRY_CODES_ARRAY = "Not able to retrieve country codes, make sure you are online!";
 
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",
