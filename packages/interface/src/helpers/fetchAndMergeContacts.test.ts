@@ -39,7 +39,7 @@ vi.mock("./indexedDB", () => ({
 describe("fetchAndMergeContacts", () => {
     const mockDateNow = 1677600000000; // Feb 28, 2023, 08:40:00 UTC
     let fetchAndMergeContacts: typeof import("./fetchAndMergeContacts").fetchAndMergeContacts;
-    let checkNoOverlapActiveDeletedContacts: typeof import("./checkNoOverlapActiveDeleted").checkNoOverlapActiveDeletedContacts;
+    let checkOverlapIndexedDBActiveAndDeletedContacts: typeof import("./checkOverlapInData").checkOverlapIndexedDBActiveAndDeletedContacts;
 
     const mockFetchFn = vi.fn(async (): Promise<ContactI3C[]> => {
         const response = await mockFetch("some-url");
@@ -50,7 +50,7 @@ describe("fetchAndMergeContacts", () => {
     beforeEach(async () => {
         // Dynamically import the modules after mocks are set up
         ({ fetchAndMergeContacts } = await import("./fetchAndMergeContacts"));
-        ({ checkNoOverlapActiveDeletedContacts } = await import("./checkNoOverlapActiveDeleted"));
+        ({ checkOverlapIndexedDBActiveAndDeletedContacts } = await import("./checkOverlapInData"));
 
         vi.useFakeTimers();
         vi.setSystemTime(mockDateNow);
@@ -98,8 +98,8 @@ describe("fetchAndMergeContacts", () => {
                     s: "Group",
                     n: "Test",
                     e: "test@example.com",
-                    sd: 1677580000000,
-                    sc: 1,
+                    sd: 0,
+                    sc: 0,
                     ud: "2023-01-01",
                     dd: 0,
                     cb1: "CB1",
@@ -121,8 +121,8 @@ describe("fetchAndMergeContacts", () => {
                 s: "Group",
                 n: "Test",
                 e: "test@example.com",
-                sd: 1677580000000,
-                sc: 1,
+                sd: 0,
+                sc: 0,
                 ud: "2023-01-01",
                 dd: 0,
                 cb1: "CB1",
@@ -131,7 +131,6 @@ describe("fetchAndMergeContacts", () => {
                 cf2: "",
             },
         ]);
-        expect(mockStoreDeletedContacts).toHaveBeenCalledWith([]);
         expect(mockStoreActiveContacts).toHaveBeenCalledWith([
             {
                 uid: 1,
@@ -140,8 +139,8 @@ describe("fetchAndMergeContacts", () => {
                 s: "Group",
                 n: "Test",
                 e: "test@example.com",
-                sd: 1677580000000,
-                sc: 1,
+                sd: 0,
+                sc: 0,
                 ud: "2023-01-01",
                 dd: 0,
                 cb1: "CB1",
@@ -167,8 +166,8 @@ describe("fetchAndMergeContacts", () => {
                     s: "Group",
                     n: "Test",
                     e: "test@example.com",
-                    sd: 1677570000000,
-                    sc: 1,
+                    sd: 0,
+                    sc: 0,
                     ud: "2023-01-01",
                     dd: 0,
                     cb1: "CB1",
@@ -217,7 +216,6 @@ describe("fetchAndMergeContacts", () => {
                 cf2: "CF2",
             },
         ]);
-        expect(mockStoreDeletedContacts).toHaveBeenCalledWith([]);
         expect(mockStoreActiveContacts).toHaveBeenCalledWith([
             {
                 uid: 1,
@@ -253,8 +251,8 @@ describe("fetchAndMergeContacts", () => {
                     s: "Group",
                     n: "Test1",
                     e: "test1@example.com",
-                    sd: 1677580000000,
-                    sc: 1,
+                    sd: 0,
+                    sc: 0,
                     ud: "2023-01-01",
                     dd: 0,
                     cb1: "CB1",
@@ -293,8 +291,8 @@ describe("fetchAndMergeContacts", () => {
                 s: "Group",
                 n: "Test1",
                 e: "test1@example.com",
-                sd: 1677580000000,
-                sc: 1,
+                sd: 0,
+                sc: 0,
                 ud: "2023-01-01",
                 dd: 0,
                 cb1: "CB1",
@@ -303,8 +301,8 @@ describe("fetchAndMergeContacts", () => {
                 cf2: "",
             },
         ]);
-        expect(mockStoreDeletedContacts).toHaveBeenCalledWith([
-            {
+        expect(mockStoreDeletedContacts).toHaveBeenCalledWith(
+            expect.objectContaining({
                 uid: 2,
                 na: "US",
                 i: "Inst",
@@ -319,8 +317,8 @@ describe("fetchAndMergeContacts", () => {
                 cb2: "CB2",
                 cf1: "CF1",
                 cf2: "CF2",
-            },
-        ]);
+            })
+        );
         expect(mockRemoveActiveContactByUid).toHaveBeenCalledWith(2);
     });
 
@@ -349,8 +347,8 @@ describe("fetchAndMergeContacts", () => {
                     s: "Group",
                     n: "Test3",
                     e: "test3@example.com",
-                    sd: 1677580000000,
-                    sc: 1,
+                    sd: 0,
+                    sc: 0,
                     ud: "2023-01-01",
                     dd: 0,
                     cb1: "CB1",
@@ -422,8 +420,8 @@ describe("fetchAndMergeContacts", () => {
                     s: "Group",
                     n: "Test",
                     e: "test@example.com",
-                    sd: 1677570000000,
-                    sc: 1,
+                    sd: 0,
+                    sc: 0,
                     ud: "2023-01-01",
                     dd: 0,
                     cb1: "CB1",
@@ -441,8 +439,8 @@ describe("fetchAndMergeContacts", () => {
                 s: "Group",
                 n: "Test",
                 e: "test@example.com",
-                sd: 0,
-                sc: 0,
+                sd: 1677570000000,
+                sc: 1,
                 ud: "2023-01-01",
                 dd: 0,
                 cb1: "CB1-old",
@@ -472,7 +470,6 @@ describe("fetchAndMergeContacts", () => {
                 cf2: "",
             },
         ]);
-        expect(mockStoreDeletedContacts).toHaveBeenCalledWith([]);
     });
 
     // Test for the checkNoOverlapActiveDeletedContacts function
@@ -491,7 +488,7 @@ describe("fetchAndMergeContacts", () => {
         mockGetActiveContacts.mockResolvedValue(activeContacts);
         mockGetDeletedContacts.mockResolvedValue(deletedContacts);
 
-        const result = await checkNoOverlapActiveDeletedContacts();
+        const result = await checkOverlapIndexedDBActiveAndDeletedContacts();
 
         expect(result).toBe(true); // Should detect overlap
         expect(console.table).toHaveBeenCalled();
@@ -512,7 +509,7 @@ describe("fetchAndMergeContacts", () => {
         mockGetActiveContacts.mockResolvedValue(activeContacts);
         mockGetDeletedContacts.mockResolvedValue(deletedContacts);
 
-        const result = await checkNoOverlapActiveDeletedContacts();
+        const result = await checkOverlapIndexedDBActiveAndDeletedContacts();
 
         expect(result).toBe(false); // Should not detect overlap
         expect(console.table).not.toHaveBeenCalled();

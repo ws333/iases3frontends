@@ -6,7 +6,10 @@ import {
     ERROR_FETCHING_CONTACTS,
     NATIONS_CSV_URL,
 } from "../constants/constants";
-import { checkNoOverlapActiveDeletedContacts } from "./checkNoOverlapActiveDeleted";
+import {
+    checkIfActiveAndOnlineContactsSynced,
+    checkOverlapIndexedDBActiveAndDeletedContacts,
+} from "./checkOverlapInData";
 import { csvParse } from "./csvParse";
 import { fetchWithTimeout } from "./fetchWithTimeout";
 import {
@@ -49,43 +52,36 @@ export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Prom
 
     await initializeStorage(onlineContacts); // Initialize indexedDB storage
     const localContacts = await getActiveContacts();
+    const contactsCountDiff = onlineContacts.length - localContacts.length;
 
     // Create a Set of online UIDs for O(1) lookups
     const onlineContactUids = new Set(onlineContacts.map((contact) => contact.uid));
 
-    // Find local contacts that are not in onlineContacts - O(n) operation
-    const deletedContacts = localContacts.filter(
-        (localContact) => !onlineContactUids.has(localContact.uid) && localContact.sc > 0
-    );
-
-    // Set deletionDate
+    // Find and remove all active local contacts not in onlineContacts from indexedDB store activeContacts - O(n) operation
+    // If the contact has a sent count then first store it in indexedDB store deletedContacts to retain sending history
     const now = Date.now();
-    deletedContacts.forEach((contact) => {
-        contact.dd = now;
-    });
-    if (deletedContacts.length) {
-        console.log("Deleted contacts:");
-        console.table(deletedContacts);
-    }
-
-    // Update indexedDB store deletedContacts
-    await storeDeletedContacts(deletedContacts);
-
-    // Remove deleted contacts from indexedDB store activeContacts
+    const deletedContacts = localContacts.filter((localContact) => !onlineContactUids.has(localContact.uid));
     for await (const contact of deletedContacts) {
+        if (contact.sc > 0) {
+            contact.dd = now;
+            await storeDeletedContacts(contact);
+        }
         await removeActiveContactByUid(contact.uid);
     }
 
-    // Check for no overlap between active and deleted contacts in indexedDB
-    const isOverlap = await checkNoOverlapActiveDeletedContacts();
-    if (isOverlap) console.error("Overlap between active and deleted contacts in indexedDB!");
+    // Verify that there is no overlap between active and deleted contacts in indexedDB
+    await checkOverlapIndexedDBActiveAndDeletedContacts();
+
+    // Verify that active local contacts are synced with online contacts
+    await checkIfActiveAndOnlineContactsSynced(onlineContactUids);
 
     // Create a Map for local contacts using UID as key for O(1) lookups
+    // Then merge the online contacts with the local contacts - O(n) operation
     const localContactsMap = new Map(localContacts.map((contact) => [contact.uid, contact]));
-
-    // Merge the online contacts with the local contacts - O(n) operation
+    let updatedContactsCount = 0;
     const mergedContacts = onlineContacts.map((oc): ContactI3C => {
         const local = localContactsMap.get(oc.uid);
+        if (local && new Date(oc.ud) > new Date(local.ud)) updatedContactsCount++;
         return local?.sd
             ? {
                   ...oc,
@@ -96,6 +92,14 @@ export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Prom
               }
             : oc;
     });
+
+    // Log any changes made
+    if (deletedContacts.length) {
+        console.log(`Deleted ${deletedContacts.length} contacts:`);
+        console.table(deletedContacts);
+    }
+    if (updatedContactsCount) console.log(`Updated ${updatedContactsCount} contacts!`);
+    if (contactsCountDiff > 0) console.log(`Added ${contactsCountDiff} new contacts!`);
 
     await storeActiveContacts(mergedContacts);
 

@@ -45,7 +45,7 @@ export async function importToLocalStorage(file: File): Promise<ImportStats | Er
             continue;
         }
 
-        if (fileName === `${STORE.DELETED_CONTACTS}.json`) {
+        if (fileName === `${STORE.DELETED_CONTACTS_WITH_SENTCOUNT}.json`) {
             importData.contacts.deleted = JSON.parse(content);
             continue;
         }

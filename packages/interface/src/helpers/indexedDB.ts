@@ -7,7 +7,7 @@ const DB_VERSION = 2;
 
 export const STORE = {
     ACTIVE_CONTACTS: "activeContacts",
-    DELETED_CONTACTS: "deletedContacts",
+    DELETED_CONTACTS_WITH_SENTCOUNT: "deletedContacts",
     SENDING_LOG: "sendingLog",
     METADATA: "metadata",
     OPTIONS: "options",
@@ -62,8 +62,8 @@ function openDatabase(): Promise<IDBDatabase> {
             if (!db.objectStoreNames.contains(STORE.ACTIVE_CONTACTS)) {
                 db.createObjectStore(STORE.ACTIVE_CONTACTS, { keyPath: "uid" });
             }
-            if (!db.objectStoreNames.contains(STORE.DELETED_CONTACTS)) {
-                db.createObjectStore(STORE.DELETED_CONTACTS, { keyPath: "uid" });
+            if (!db.objectStoreNames.contains(STORE.DELETED_CONTACTS_WITH_SENTCOUNT)) {
+                db.createObjectStore(STORE.DELETED_CONTACTS_WITH_SENTCOUNT, { keyPath: "uid" });
             }
             if (!db.objectStoreNames.contains(STORE.SENDING_LOG)) {
                 db.createObjectStore(STORE.SENDING_LOG, { keyPath: "timestamp" });
@@ -134,8 +134,8 @@ export async function storeDeletedContacts(contacts: ContactI3C | ContactI3C[]):
     const contactsArray = Array.isArray(contacts) ? contacts : [contacts];
     const db = await openDatabase();
     try {
-        const transaction = db.transaction(STORE.DELETED_CONTACTS, "readwrite");
-        const store = transaction.objectStore(STORE.DELETED_CONTACTS);
+        const transaction = db.transaction(STORE.DELETED_CONTACTS_WITH_SENTCOUNT, "readwrite");
+        const store = transaction.objectStore(STORE.DELETED_CONTACTS_WITH_SENTCOUNT);
         await Promise.all(
             contactsArray.map(
                 (contact) =>
@@ -238,8 +238,8 @@ export async function getActiveContacts(): Promise<ContactI3C[]> {
 export async function getDeletedContacts(): Promise<ContactI3C[]> {
     const db = await openDatabase();
     try {
-        const transaction = db.transaction(STORE.DELETED_CONTACTS, "readonly");
-        const store = transaction.objectStore(STORE.DELETED_CONTACTS);
+        const transaction = db.transaction(STORE.DELETED_CONTACTS_WITH_SENTCOUNT, "readonly");
+        const store = transaction.objectStore(STORE.DELETED_CONTACTS_WITH_SENTCOUNT);
         const request: IDBRequest<ContactI3C[]> = store.getAll();
         return new Promise((resolve, reject) => {
             request.onsuccess = () => resolve(request.result);
@@ -389,7 +389,7 @@ export async function getLastImportExportDate(): Promise<number> {
 export async function removeStorageItem(
     key:
         | typeof STORE.ACTIVE_CONTACTS
-        | typeof STORE.DELETED_CONTACTS
+        | typeof STORE.DELETED_CONTACTS_WITH_SENTCOUNT
         | typeof STORE.SENDING_LOG
         | typeof METADATA_KEY.EXPORT_DATE
         | typeof METADATA_KEY.LAST_IMPORT_EXPORT_DATE
@@ -403,8 +403,8 @@ export async function removeStorageItem(
             case STORE.ACTIVE_CONTACTS:
                 storeName = STORE.ACTIVE_CONTACTS;
                 break;
-            case STORE.DELETED_CONTACTS:
-                storeName = STORE.DELETED_CONTACTS;
+            case STORE.DELETED_CONTACTS_WITH_SENTCOUNT:
+                storeName = STORE.DELETED_CONTACTS_WITH_SENTCOUNT;
                 break;
             case STORE.SENDING_LOG:
                 storeName = STORE.SENDING_LOG;
@@ -439,7 +439,12 @@ export async function removeStorageItem(
 export async function resetStorage(): Promise<boolean> {
     const db = await openDatabase();
     try {
-        const stores = [STORE.ACTIVE_CONTACTS, STORE.DELETED_CONTACTS, STORE.SENDING_LOG, STORE.METADATA];
+        const stores = [
+            STORE.ACTIVE_CONTACTS,
+            STORE.DELETED_CONTACTS_WITH_SENTCOUNT,
+            STORE.SENDING_LOG,
+            STORE.METADATA,
+        ];
         await Promise.all(
             stores.map(
                 (storeName) =>
