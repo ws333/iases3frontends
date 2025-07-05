@@ -514,4 +514,75 @@ describe("fetchAndMergeContacts", () => {
         expect(result).toBe(false); // Should not detect overlap
         expect(console.table).not.toHaveBeenCalled();
     });
+
+    // Test for the checkIfActiveAndOnlineContactsSynced function
+    describe("checkIfActiveAndOnlineContactsSynced", () => {
+        let checkIfActiveAndOnlineContactsSynced: typeof import("./checkOverlapInData").checkIfActiveAndOnlineContactsSynced;
+
+        beforeEach(async () => {
+            ({ checkIfActiveAndOnlineContactsSynced } = await import("./checkOverlapInData"));
+            console.warn = vi.fn();
+            console.table = vi.fn();
+        });
+
+        it("returns 0 and does not warn when all local contacts are present online", async () => {
+            const activeContacts = [
+                { uid: 1, na: "US", e: "test1@example.com" },
+                { uid: 2, na: "UK", e: "test2@example.com" },
+            ] as ContactI3C[];
+            mockGetActiveContacts.mockResolvedValue(activeContacts);
+
+            const onlineContactUids = new Set([1, 2]);
+            const result = await checkIfActiveAndOnlineContactsSynced(onlineContactUids);
+
+            expect(result).toBe(0);
+            expect(console.warn).not.toHaveBeenCalled();
+            expect(console.table).not.toHaveBeenCalled();
+        });
+
+        it("returns correct count and warns when some local contacts are missing online", async () => {
+            const activeContacts = [
+                { uid: 1, na: "US", e: "test1@example.com" },
+                { uid: 2, na: "UK", e: "test2@example.com" },
+                { uid: 3, na: "CA", e: "test3@example.com" },
+            ] as ContactI3C[];
+            mockGetActiveContacts.mockResolvedValue(activeContacts);
+
+            const onlineContactUids = new Set([1, 2]);
+            const result = await checkIfActiveAndOnlineContactsSynced(onlineContactUids);
+
+            expect(result).toBe(1);
+            expect(console.warn).toHaveBeenCalledWith("Active local contacts not found online (1):");
+            expect(console.table).toHaveBeenCalledWith([{ uid: 3, na: "CA", e: "test3@example.com" }]);
+        });
+
+        it("returns correct count and warns when all local contacts are missing online", async () => {
+            const activeContacts = [
+                { uid: 10, na: "FR", e: "test10@example.com" },
+                { uid: 20, na: "DE", e: "test20@example.com" },
+            ] as ContactI3C[];
+            mockGetActiveContacts.mockResolvedValue(activeContacts);
+
+            const onlineContactUids = new Set<number>();
+            const result = await checkIfActiveAndOnlineContactsSynced(onlineContactUids);
+
+            expect(result).toBe(2);
+            expect(console.warn).toHaveBeenCalledWith("Active local contacts not found online (2):");
+            expect(console.table).toHaveBeenCalledWith([
+                { uid: 10, na: "FR", e: "test10@example.com" },
+                { uid: 20, na: "DE", e: "test20@example.com" },
+            ]);
+        });
+
+        it("returns 0 and does not warn when there are no local contacts", async () => {
+            mockGetActiveContacts.mockResolvedValue([]);
+
+            const onlineContactUids = new Set([1, 2, 3]);
+            const result = await checkIfActiveAndOnlineContactsSynced(onlineContactUids);
+
+            expect(result).toBe(0);
+            expect(console.warn).not.toHaveBeenCalled();
+            expect(console.table).not.toHaveBeenCalled();
+        });
+    });
 });
