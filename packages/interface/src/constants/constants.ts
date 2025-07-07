@@ -16,6 +16,7 @@ export const ERROR_FETCHING_COUNTRYCODE = "Failed to download country code, plea
 export const ERROR_FETCHING_CONTACTS = "Failed to download contact lists, please make sure that you are online...";
 export const ERROR_EMPTY_CONTACTS_ARRAY = "Empty contacts array returned by fetchOnlineContacts";
 export const ERROR_EMPTY_COUNTRY_CODES_ARRAY = "Not able to retrieve country codes, make sure you are online!";
+export const ERROR_OVERLAP_ACTIVE_DELETED = "Overlap between active and deleted contacts in indexedDB!";
 
 export const STORAGE_KEY = {
     CONTACTS: "contactsI3C",

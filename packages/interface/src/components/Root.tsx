@@ -3,6 +3,7 @@ import { StoreProvider, createStore } from "easy-peasy";
 import { DarkLightThemeProvider, GlobalStyle, ThemePreference } from "radzionkit";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { setDevModeIfLocalhost } from "../helpers/getSetDevMode";
 import { model } from "../model";
 import { PersistentStateKey, usePersistentState } from "../state/persistentState";
 import App from "./App";
@@ -14,6 +15,8 @@ const store = createStore(model, { disableImmer: true });
 const queryClient = new QueryClient();
 
 export function Root() {
+    setDevModeIfLocalhost();
+
     const [theme, setTheme] = usePersistentState<ThemePreference>(PersistentStateKey.ThemePreference, "system");
     return (
         <StoreProvider store={store}>

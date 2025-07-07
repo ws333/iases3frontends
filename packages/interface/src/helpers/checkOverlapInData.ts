@@ -1,3 +1,5 @@
+import { ERROR_OVERLAP_ACTIVE_DELETED } from "../constants/constants";
+import { getDevMode } from "./getSetDevMode";
 import { getActiveContacts, getDeletedContacts } from "./indexedDB";
 
 export async function checkOverlapIndexedDBActiveAndDeletedContacts() {
@@ -8,8 +10,13 @@ export async function checkOverlapIndexedDBActiveAndDeletedContacts() {
     const intersectionActiveDeleted = new Set([...activeContactUids].filter((uid) => deletedContactUids.has(uid)));
     const isOverlap = intersectionActiveDeleted.size > 0;
     if (isOverlap) {
-        console.error("Overlap between active and deleted contacts in indexedDB!");
-        console.table(intersectionActiveDeleted);
+        if (getDevMode() === "enabled") {
+            console.log(ERROR_OVERLAP_ACTIVE_DELETED); // This is for output when running tests
+        } else {
+            console.warn(ERROR_OVERLAP_ACTIVE_DELETED);
+        }
+        const overlappingContacts = activeContacts.filter((contact) => intersectionActiveDeleted.has(contact.uid));
+        console.table(overlappingContacts);
     }
     return isOverlap;
 }
@@ -21,9 +28,10 @@ export async function checkOverlapIndexedDBActiveAndDeletedContacts() {
 export async function checkIfActiveAndOnlineContactsSynced(onlineContactUids: Set<number>) {
     const localContacts = await getActiveContacts();
     const localContactsNotOnline = localContacts.filter((lc) => !onlineContactUids.has(lc.uid));
-    if (localContactsNotOnline.length) {
-        console.warn(`Active local contacts not found online (${localContactsNotOnline.length}):`);
+    const { length } = localContactsNotOnline;
+    if (length) {
+        console.log(`Found ${length} active local contact${length > 1 ? "s" : ""} not found online (not synced):`);
         console.table(localContactsNotOnline);
     }
-    return localContactsNotOnline.length;
+    return length;
 }

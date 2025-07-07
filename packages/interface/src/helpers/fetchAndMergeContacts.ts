@@ -12,6 +12,7 @@ import {
 } from "./checkOverlapInData";
 import { csvParse } from "./csvParse";
 import { fetchWithTimeout } from "./fetchWithTimeout";
+import { getDevMode } from "./getSetDevMode";
 import {
     getActiveContacts,
     getCountryCodesFetched,
@@ -52,7 +53,6 @@ export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Prom
 
     await initializeStorage(onlineContacts); // Initialize indexedDB storage
     const localContacts = await getActiveContacts();
-    const contactsCountDiff = onlineContacts.length - localContacts.length;
 
     // Create a Set of online UIDs for O(1) lookups
     const onlineContactUids = new Set(onlineContacts.map((contact) => contact.uid));
@@ -78,28 +78,37 @@ export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Prom
     // Create a Map for local contacts using UID as key for O(1) lookups
     // Then merge the online contacts with the local contacts - O(n) operation
     const localContactsMap = new Map(localContacts.map((contact) => [contact.uid, contact]));
-    let updatedContactsCount = 0;
+    const updatedContacts: ContactI3C[] = [];
     const mergedContacts = onlineContacts.map((oc): ContactI3C => {
-        const local = localContactsMap.get(oc.uid);
-        if (local && new Date(oc.ud) > new Date(local.ud)) updatedContactsCount++;
-        return local?.sd
+        const lc = localContactsMap.get(oc.uid);
+        const mergedContact: ContactI3C = lc?.uid
             ? {
                   ...oc,
-                  sd: local.sd,
-                  sc: local.sc,
-                  cf1: local.cf1,
-                  cf2: local.cf2,
+                  sd: lc.sd,
+                  sc: lc.sc,
+                  cf1: lc.cf1,
+                  cf2: lc.cf2,
               }
             : oc;
+        if (lc && new Date(oc.ud) > new Date(lc.ud)) updatedContacts.push(mergedContact);
+        return mergedContact;
     });
 
     // Log any changes made
-    if (deletedContacts.length) {
-        console.log(`Deleted ${deletedContacts.length} contacts:`);
-        console.table(deletedContacts);
+    const isDev = getDevMode();
+    const addedContacts = onlineContacts.filter((onlineContact) => !localContactsMap.has(onlineContact.uid));
+    if (addedContacts.length) {
+        console.log(`Added ${addedContacts.length} contact${addedContacts.length > 1 ? "s" : ""}:`);
+        if (isDev) console.table(addedContacts);
     }
-    if (updatedContactsCount) console.log(`Updated ${updatedContactsCount} contacts!`);
-    if (contactsCountDiff > 0) console.log(`Added ${contactsCountDiff} new contacts!`);
+    if (deletedContacts.length) {
+        console.log(`Deleted ${deletedContacts.length} contact${deletedContacts.length > 1 ? "s" : ""}:`);
+        if (isDev) console.table(deletedContacts);
+    }
+    if (updatedContacts.length) {
+        console.log(`Updated ${updatedContacts.length} contact${updatedContacts.length > 1 ? "s" : ""}:`);
+        if (isDev) console.table(updatedContacts);
+    }
 
     await storeActiveContacts(mergedContacts);
 
