@@ -76,9 +76,9 @@ export async function importToLocalStorage(file: File): Promise<ImportStats | Er
 
     await storeActiveContacts(newContactState.active);
     await storeDeletedContacts(newContactState.deleted);
-    const newlIED = importData.metadata.find((item) => item.key === "exportDate")?.value || -1;
-    if (newlIED === -1) console.warn("importToLocalStorage -> exportDate not found in importData.metadata");
-    await storeMetadataKey(newlIED, METADATA_KEY.LAST_IMPORT_EXPORT_DATE);
+    const lastImpExpDate = importData.metadata.find((item) => item.key === "exportDate")?.value || -1;
+    if (lastImpExpDate === -1) console.warn("importToLocalStorage -> exportDate not found in importData.metadata");
+    await storeMetadataKey(lastImpExpDate, METADATA_KEY.LAST_IMPORT_EXPORT_DATE);
 
     return { ...importContactsStats, logsProcessed };
 }
