@@ -31,5 +31,5 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
                   cache: "npm"
-            - run: npm ci
-            - run: npm run build-and-package
+            - run: cd addon && npm ci
+            - run: cd addon && npm run build-addon

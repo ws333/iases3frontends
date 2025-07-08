@@ -1,4 +1,4 @@
-const countries_EU = [
+const mainEU = [
     ["Belgium", "BE"],
     ["Greece", "EL"],
     ["Lithuania", "LT"],
@@ -26,12 +26,16 @@ const countries_EU = [
     ["Ireland", "IE"],
     ["Latvia", "LV"],
     ["Poland", "PL"],
-    // EFTA members
+];
+
+const eftaMembers = [
     ["Iceland", "IS"],
     ["Norway", "NO"],
     ["Liechtenstein", "LI"],
     ["Switzerland", "CH"],
-    // EU candidates
+];
+
+const euCandidates = [
     ["Bosnia and Herzegovina", "BA"],
     ["Montenegro", "ME"],
     ["Moldova", "MD"],
@@ -42,5 +46,17 @@ const countries_EU = [
     ["Türkiye", "TR"],
     ["Ukraine", "UA"],
 ];
+
+const includeEFTA = import.meta.env.VITE_FEATURE_EU_INCLUDES_EFTA === "true";
+const includeCandidates = import.meta.env.VITE_FEATURE_EU_INCLUDES_CANDIDATES === "true";
+
+const countries_EU = [...mainEU];
+
+if (includeEFTA) {
+    countries_EU.push(...eftaMembers);
+}
+if (includeCandidates) {
+    countries_EU.push(...euCandidates);
+}
 
 export const countryCodes_EU = countries_EU.map((country) => country[1]);

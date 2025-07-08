@@ -2,97 +2,27 @@
 
 <br/>
 
-Interstellar Alliance Social Experiment Step 3 is a Thunderbird add-on to send the Step 3 letter by email to a predefined online contact list.
+Frontends for a Interstellar Alliance Social Experiment Step 3 project aimed at making sending of the Step 3 letter by email more conventient.
+They use a predefined online contact list that is updated on a regular basis.
 
-Based on Thunderbird add-on [Mail Merge P](https://github.com/siefkenj/MailMergeP)
+More on the overall experiment 
+https://www.bashar.org/socialexperiment
 
-## Building
+<br>
 
-To build the entire extension, first run
+## This repo includes...
 
-```sh
-npm install
-```
 
-then either
+- A Thunderbird addon which supports using any email account for sending the Step 3 letter. \
+  [See README in folder addon](addon/)
 
-```sh
-npm run pack
-```
+- A standalone webapp using the same user interface as the Thunderbird addon,
+  but simplifies the setup if using a Google Gmail or Microsoft Outlook account. \
+  [See README in folder webapp](webapp/)
 
-or
+<br>
 
-```sh
-npm run build
-npm run build-addon
-npm run package-addon
-```
-
-To bump the version run (before running `npm run pack`)
-
-```sh
-npm run bump
-```
-
-The extension will be located in the parent folder of the project with filename `iases3@iase.one.xpi`.
-A cleaned and zipped version of the project will also be created in the parent folder of the project when running `npm run pack`, this file is required when updating the add-on on https://addons.thunderbird.net
-
-## Development
-
-The project is divided into _npm workspaces_ located in the `packages/` directory.
-
-- `packages/interface` the bulk of the UI code. This code runs in an iframe.
-- `packages/iframe-service` an abstraction layer so that the interface can be run in the browser or in thunderbird.
-- `packages/browser-preview` a browser-based implementation of the thunderbird API, so that the UI can be developed more quickly (with technology like hot-reloading)
-- `packages/thunderbird-iframe-service` the connection between the real thunderbird API and `iframe-service`.
-- `packages/thunderbird-extension` the actual extension's `background.js` script.
-
-Most UI and backend work is handled by the html components. The `thunderbird-extension` runs the html
-component in an iframe and uses message passing to communicate with the iframe.
-
-This split means that the bulk of the add-on can be developed in the browser without
-Thunderbird.
-
-To run thunderbird and force a reload of all extension content, launch thunderbird with
-
-```
-thunderbird -purgecaches
-```
-
-### Developing the HTML UI
-
-A browser-based simulation of the add-on's Thunderbird API is provided by `packages/browser-preview`.
-To develop in the browser first install and build
-
-```sh
-npm install
-npm run build
-```
-
-Then you can launch a dev server and open it in the browser.
-
-```sh
-cd packages/browser-preview
-npm run dev
-```
-
-If you want the interface code to automatically rebuild when you make a change run...
-
-```sh
-cd packages/interface
-npm run watch
-```
-
-The UI is developed using React and the Redux based state manager EasyPeasy.
-
-### Packaging
-
-To publish a new version bump the version in `packages/thunderbird-extension/public/manifest.json` and `package.json`.
-Then run `npm i` to update `package-lock.json`
-Then run `npm run build-and-package` to build the add-on file.
-The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be uploaded to a developer account at https://addons.thunderbird.net/EN-US/developers/
-
-### Contact list sync and merge logic:
+## Contact list sync and merge logic
 
 - There is a central online contacts list where each contact has a stable unique id (the uid field).
 
@@ -125,10 +55,6 @@ The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be upl
         - Import any previous export multiple times in between sending sessions
         - Do these actions in any order on one device, but only send emails/export/import in sequence when using multiple devices.
 
-### Other notes
-
-- Much of code from the add-on Mail Merge P which this add-on is built on is now obsolete, but it is kept in case it will be needed later. Examples are code to read and parse a spreadsheet file and related preferences, and the original SendDialog.
-
-- The state manager used is [easy-peasy](https://easy-peasy.vercel.app/) which is based on Redux. See `packages/interface/src/model.ts`.
+## Other notes
 
 - To view more detailed logging create key "devmode" with value "1" in localStorage

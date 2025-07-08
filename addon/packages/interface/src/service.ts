@@ -1,7 +1,7 @@
 /**
  * This is the interface between the iframe mailMerge UI and the outside world (which has permission to send mail)
  */
-import type { MessagePayload } from "@iases3/iframe-service/src/iframe-service";
+import type { MessagePayload } from "./types/types";
 import { getUniqueMessageId } from "./helpers/getUniqueMessageId";
 
 // We need to avoid sending messages until the parent has initialized,

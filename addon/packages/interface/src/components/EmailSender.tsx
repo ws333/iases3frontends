@@ -1,7 +1,7 @@
-import { MessagePayload } from "@iases3/iframe-service/src/iframe-service";
 import React, { useEffect, useRef, useState } from "react";
-import { Email } from "../types/modelTypes";
-import { ContactI3C, LogMessageOptions } from "../types/typesI3C";
+import type { Email } from "../types/modelTypes";
+import type { MessagePayload } from "../types/types";
+import type { ContactI3C, LogMessageOptions } from "../types/typesI3C";
 import { defaultRandomWindow, fullProgressBarDelay, zeroWidtSpace } from "../constants/constants";
 import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
