@@ -1,2 +1,0 @@
-echo "- Cleaning folder $(pwd)"
-rm -rf addon node_modules **/**/node_modules **/**/dist

@@ -1,7 +1,7 @@
 node_modules
-addon
+.vscode
 dist
-launch.json
-
-backup
+_backup
 TODO.md
+addon_build
+iases3addon_source_code_for_upload

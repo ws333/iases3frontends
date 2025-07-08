@@ -1,1 +1,1 @@
-npm run ca
+cd addon && npm run check && npm run lint && cd ..

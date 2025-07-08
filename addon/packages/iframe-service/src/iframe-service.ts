@@ -2,36 +2,9 @@
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
 import type { Email, Prefs } from "../../interface/src/types/modelTypes";
-import type { Strings } from "../../interface/src/types/types";
+import type { MessagePayload, Strings } from "../../interface/src/types/types";
 
 export type Message = MessagePayload & { direction: "tochild" | "fromchild" };
-
-export type MessagePayload = {
-    type:
-        | "ECHO"
-        | "GET_DEFAULT_PREFERENCES"
-        | "GET_PREFERENCES"
-        | "SET_PREFERENCES"
-        | "GET_LOCALIZED_STRINGS"
-        | "SEND_EMAILS"
-        | "SEND_EMAIL"
-        | "SEND_EMAIL_STATUS" // Used to keep EmailSender updated in case of failure or cancellation
-        | "OPEN_URL"
-        | "CANCEL"
-        | "INITIALIZE_PARENT";
-    id?: string | number;
-    source?: "CHILD" | "PARENT";
-    reply_id?: string | number;
-    data?: {
-        prefs?: Partial<Prefs>;
-        strings?: Strings;
-        emails?: Email[];
-        email?: Email;
-        sendEmailStatus?: browser.compose._SendMessageReturnReturn;
-        sendmode?: Prefs["sendmode"];
-        url?: string;
-    };
-};
 
 type MessageChildPayload = Pick<MessagePayload, "type" | "id" | "data">;
 
