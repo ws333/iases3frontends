@@ -1,0 +1,8 @@
+packages:
+  - frontend
+
+ignoredBuiltDependencies:
+  - radzionkit
+
+onlyBuiltDependencies:
+  - esbuild
