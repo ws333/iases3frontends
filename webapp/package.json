@@ -1,0 +1,32 @@
+{
+  "name": "iases3",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "cd frontend && pnpm run dev",
+    "build": "pnpm -r build",
+    "check": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "ca": "pnpm run check && pnpm run lint && pnpm run format:check"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.21.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@vitejs/plugin-react": "^4.6.0",
+    "eslint": "^9.21.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "prettier": "^3.5.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.24.1",
+    "vite": "^6.3.5",
+    "vitest": "^3.0.6"
+  }
+}

@@ -1,7 +1,15 @@
 node_modules
-.vscode
 dist
-_backup
 TODO.md
 addon_build
 iases3addon_source_code_for_upload
+
+.env
+*.local
+pnpm-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+_backup
