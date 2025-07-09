@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as fs from "fs";
 import * as path from "path";
 
@@ -194,7 +195,7 @@ function extractNamedImports(fileContent: string): Record<string, string> {
     let match;
 
     while ((match = namedImportPattern.exec(fileContent)) !== null) {
-        const names = match[1].split(",").map((name) => {
+        const names = match[1].split(",").map((name: string) => {
             // Handle 'Component as Alias' syntax
             const asMatch = /(\w+)(?:\s+as\s+(\w+))?/.exec(name.trim());
             if (asMatch) {
@@ -600,7 +601,7 @@ async function main() {
         console.log(`- ${path.relative(rootDir, file)}`);
     });
 
-    // Debug specific components that were previously showing as unused
+    // Components that were previously showing as unused
     debugComponentUsage(["ButtonStopSending", "ButtonEndSession", "ButtonSendEmails"], componentNameToFile, graph);
 
     // Additional analysis

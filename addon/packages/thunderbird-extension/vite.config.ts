@@ -1,17 +1,11 @@
 import react from "@vitejs/plugin-react";
-import { createRequire } from "module";
 import path from "node:path";
 import { defineConfig } from "vite";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import viteTsconfigPaths from "vite-tsconfig-paths";
 
-const require = createRequire(import.meta.url);
-
-const IFRAME_PATH = path.join(
-    require.resolve("@iases3/thunderbird-iframe-service/thunderbird-iframe-server.html"),
-    "../*"
-);
-const INTERFACE_PATH = path.join(require.resolve("@iases3/interface/index.html"), "../*");
+const IFRAME_PATH = path.join(__dirname, "../thunderbird-iframe-service/dist/*");
+const INTERFACE_PATH = path.join(__dirname, "../interface/dist/*");
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,6 +20,11 @@ export default defineConfig({
             ],
         }),
     ],
+
+    define: {
+        // Define project type at build time
+        __PROJECT_TYPE__: JSON.stringify("addon"),
+    },
 
     build: {
         sourcemap: false,

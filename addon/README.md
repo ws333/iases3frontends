@@ -11,31 +11,31 @@ Based on Thunderbird add-on [Mail Merge P](https://github.com/siefkenj/MailMerge
 To build the entire extension, first run
 
 ```sh
-npm install
+pnpm install
 ```
 
 then either
 
 ```sh
-npm run pack
+pnpm run pack
 ```
 
 or
 
 ```sh
-npm run build
-npm run build-addon
-npm run package-addon
+pnpm run build
+pnpm run build-addon
+pnpm run package-addon
 ```
 
-To bump the version run (before running `npm run pack`)
+To bump the version run (before running `pnpm run pack`)
 
 ```sh
-npm run bump
+pnpm run bump
 ```
 
 The extension will be located in the parent folder of the project with filename `iases3@iase.one.xpi`.
-A cleaned and zipped version of the project will also be created in the parent folder of the project when running `npm run pack`, this file is required when updating the add-on on https://addons.thunderbird.net
+A cleaned and zipped version of the project will also be created in the parent folder of the project when running `pnpm run pack`, this file is required when updating the add-on on https://addons.thunderbird.net
 
 ## Development
 
@@ -65,22 +65,22 @@ A browser-based simulation of the add-on's Thunderbird API is provided by `packa
 To develop in the browser first install and build
 
 ```sh
-npm install
-npm run build
+pnpm install
+pnpm run build
 ```
 
 Then you can launch a dev server and open it in the browser.
 
 ```sh
 cd packages/browser-preview
-npm run dev
+pnpm run dev
 ```
 
 If you want the interface code to automatically rebuild when you make a change run...
 
 ```sh
 cd packages/interface
-npm run watch
+pnpm run watch
 ```
 
 The UI is developed using React and the Redux based state manager EasyPeasy.
@@ -88,8 +88,8 @@ The UI is developed using React and the Redux based state manager EasyPeasy.
 ### Packaging
 
 To publish a new version bump the version in `packages/thunderbird-extension/public/manifest.json` and `package.json`.
-Then run `npm i` to update `package-lock.json`
-Then run `npm run build-and-package` to build the add-on file.
+Then run `pnpm i` to update `package-lock.json`
+Then run `pnpm run build-and-package` to build the add-on file.
 The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be uploaded to a developer account at https://addons.thunderbird.net/EN-US/developers/
 
 ### Contact list sync and merge logic:
@@ -107,7 +107,6 @@ The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be upl
 - The sc field is incremented and the sd field updated for a contact when the user sends an email to that contact.
 
 - The goal is to keep the local contacts list in sync with the online contacts list while retaining the local stats. I.e. sc should always reflect the true sent count to the respective contact, no matter if the contact is active or deleted. This is accomplished by...
-
     - Updating all local ContactsI3C fields on app start/refresh expect for sd, sc, dd, cf1 and cf2 to retain the local stats.
     - If IndexedDB active contacts contains contacts not in fetched online contacts AND the contact has sc > 0, those contacts are moved from IndexedDB active contacts to IndexedDB deleted contacts, setting field dd to Date.now(), while retaining the other fields.
 
@@ -116,10 +115,8 @@ The resulting `iases3@iase.one.xpi` is a bundle of the extension that can be upl
 - Exported files contain the date of the export. At import this export date is stored in lastImportExportDate in IndexedDB, this date is then used at the next import to determine how the import is to be applied.
 
 - To sum up the requirements of the logic:
-
     - The sc stats are to be kept accurate in all possible scenarios, i.e. always reflect the true sent count. _The exception is if there has been sending from multiple devices without exporting and importing sequentially between sending sessions, which would create overlapping stats and scew the sent counts_.
     - Users can:
-
         - Send emails (i.e. increment sc) in multiple sessions
         - Export files in between sending sessions
         - Import any previous export multiple times in between sending sessions
