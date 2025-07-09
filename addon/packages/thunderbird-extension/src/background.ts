@@ -1,4 +1,4 @@
-import { Message } from "@iases3/iframe-service/src/iframe-service";
+import { Message } from "../../iframe-service/src/iframe-service";
 
 function log(...args: unknown[]) {
     console.log("[IASES3]:", ...args);

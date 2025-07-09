@@ -5,7 +5,7 @@ import * as path from "path";
 // Get folder from command line arguments or use default
 const defaultFolder = "packages/interface";
 const targetFolder = process.argv[2] || defaultFolder;
-const watchPath = path.join(__dirname, targetFolder);
+const watchPath = path.join(__dirname + "/../", targetFolder);
 
 // Validate that the path exists
 if (!fs.existsSync(watchPath)) {
