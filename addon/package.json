@@ -8,7 +8,7 @@
         "dev": "cd packages/browser-preview && pnpm run dev && cd ../..",
         "build": "pnpm build:deps && pnpm build:main",
         "build:deps": "pnpm --filter iframe-service --filter interface --filter thunderbird-iframe-service build",
-        "build:main": "pnpm --filter browser-preview --filter shared-ui --filter thunderbird-extension build",
+        "build:main": "pnpm --filter browser-preview --filter thunderbird-extension build",
         "build-addon": "pnpm run build && rm -rf addon_build && cp -rL packages/thunderbird-extension/dist addon_build && cd addon_build && bestzip ../../../iases3@iase.one.xpi *",
         "package-sourcefiles": "./scripts/pack_source_code.sh",
         "bump": "./scripts/bump-version.sh",
@@ -26,14 +26,13 @@
         "test": "vitest packages/*"
     },
     "dependencies": {
-        "@floating-ui/react": "^0.27.5",
+        "@floating-ui/react": "^0.27.13",
         "@tanstack/react-query": "^5.71.5",
         "@zip.js/zip.js": "^2.7.57",
         "classnames": "2.5.1",
         "easy-peasy": "^6.1.0",
         "jschardet": "^3.1.4",
         "papaparse": "^5.5.2",
-        "radzionkit": "file:./vendor/radzionkit-0.0.1.tgz",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
         "react-error-boundary": "^5.0.0",
@@ -41,6 +40,7 @@
         "react-localization": "^2.0.6",
         "react-toastify": "^11.0.5",
         "styled-components": "^6.1.15",
+        "ui-kit": "file:./vendor/ui-kit-0.2.1.tgz",
         "xlsx": "file:./vendor/xlsx-0.20.3.tgz"
     },
     "devDependencies": {
