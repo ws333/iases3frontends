@@ -1,0 +1,10 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "dist",
+        "isolatedModules": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["src", "vite.config.ts"],
+    "exclude": ["dist", "node_modules"]
+}
