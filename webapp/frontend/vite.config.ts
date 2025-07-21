@@ -21,4 +21,7 @@ export default defineConfig({
       'styled-components': path.resolve(__dirname, 'node_modules/styled-components'),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 2048,
+  },
 });
