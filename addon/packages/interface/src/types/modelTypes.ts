@@ -1,20 +1,11 @@
 import { Action, Computed, Thunk, ThunkOn } from "easy-peasy";
 import { JSX } from "react";
 import { LanguageOption, SubjectPerLanguage } from "../constants/emailTemplates.ts";
-import type { CurrentLogin, SpreadsheetData, Strings, TEmailComponent } from "./types.ts";
+import type { CurrentLogin, TEmailComponent } from "./types.ts";
 import { ContactI3C } from "./typesI3C.ts";
 
 export interface Model {
-    locale: Locale;
-    prefs: Prefs;
-    data: Data;
-    initialise: Thunk<Model>;
-    cancel: Thunk<Model>;
-    parseSpreadsheet: Thunk<Model, undefined, never, Model>;
-    sendEmails: Thunk<Model, undefined, never, Model>;
     sendEmail: Thunk<Model, Email>;
-    sendDialog: SendDialog;
-    openUrl: Thunk<Model, string>;
     userDialog: UserDialog;
     contactList: ContactList;
     emailOptions: EmailOptions;
@@ -26,40 +17,6 @@ interface Auth {
     currentLogin: CurrentLogin;
     setCurrentLogin: Action<Auth, CurrentLogin>;
     resetCurrentLogin: Action<Auth>;
-}
-
-interface Locale {
-    strings: Strings;
-    updateStrings: Action<Locale, Strings>;
-}
-
-export interface Prefs {
-    delay: number;
-    sendmode: "now" | "later";
-    range: string;
-    fileName: string;
-    fileContents: number[];
-    fetchPrefs: Thunk<Prefs>;
-    updatePref: Thunk<Prefs, Partial<Prefs>>;
-    updatePrefNosync: Action<Prefs, Partial<Prefs>>;
-}
-
-interface Data {
-    spreadsheetData: SpreadsheetData;
-    updateSpreadsheetData: Action<Data, SpreadsheetData>;
-    emails: Email[];
-}
-
-interface SendDialog {
-    open: boolean;
-    abort: boolean;
-    progress: number;
-    current: number;
-    time: string;
-    total: number;
-    status: string;
-    update: Action<SendDialog, Partial<SendDialog>>;
-    cancel: Thunk<SendDialog>;
 }
 
 interface ContactList {
@@ -95,6 +52,8 @@ interface ContactList {
     setIsSelectedAllNations: Action<ContactList, boolean>;
     toggleIsSelectedAllNations: Thunk<ContactList>;
 }
+
+export type Email = Pick<browser.compose.ComposeDetails, "from" | "to" | "subject" | "body">;
 
 interface EmailOptions {
     countryCode: string;
@@ -146,15 +105,3 @@ export interface UserDialog {
     setUserDialog: Action<UserDialog, Partial<UserDialog>>;
     showConfirmationModal?: boolean;
 }
-
-// Type based on defaultTemplate in packages/thunderbird-iframe-service/src/thunderbird-iframe-service.js
-export type Email = {
-    from?: string;
-    to?: string;
-    cc?: string;
-    bcc?: string;
-    replyTo?: string;
-    attachment?: string;
-    subject?: string;
-    body?: string;
-};
