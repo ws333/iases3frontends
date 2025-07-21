@@ -1,10 +1,6 @@
 import { defineConfig } from "vite";
 
-// import { viteSingleFile } from "vite-plugin-singlefile";
-
-// https://vitejs.dev/config/
 export default defineConfig({
-    //plugins: [viteSingleFile()],
     base: "./",
     build: {
         sourcemap: false,
@@ -19,5 +15,6 @@ export default defineConfig({
             name: "thunderbirdIframeService",
             formats: ["es"],
         },
+        chunkSizeWarningLimit: 2048,
     },
 });
