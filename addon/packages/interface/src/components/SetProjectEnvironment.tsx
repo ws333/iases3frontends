@@ -1,9 +1,9 @@
+import { ProjectEnvironment } from "../types/types";
 import { useStoreActions } from "../hooks/storeHooks";
-import { getProjectEnvironment } from "../helpers/getProjectEnvironment";
 import App from "./App";
 
 export default function SetProjectEnvironment() {
-    const environment = getProjectEnvironment();
+    const environment: ProjectEnvironment = "addon";
 
     const sendEmail = useStoreActions((actions) => actions.sendEmail);
 

@@ -12,10 +12,6 @@ export default defineConfig({
       allow: [path.resolve(__dirname), path.resolve(__dirname, '../../addon/packages/thunderbird-extension/public')],
     },
   },
-  define: {
-    // Define project type at build time
-    __PROJECT_TYPE__: JSON.stringify('webapp'),
-  },
   resolve: {
     alias: {
       '@lib/ui': path.resolve(__dirname, './node_modules/ui-kit/lib/ui'),
