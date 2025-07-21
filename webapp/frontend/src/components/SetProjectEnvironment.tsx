@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
+import { ProjectEnvironment } from '../../../../addon/packages/interface/src/types/types';
 import { PATH_WEBAPP, PATH_WEBAPP_REDIRECT } from '../constants/constants';
 import App from '../../../../addon/packages/interface/src/components/App';
 import { useCurrentLogin } from '../hooks/useCurrentLogin';
-import { getProjectEnvironment } from '../../../../addon/packages/interface/src/helpers/getProjectEnvironment';
 import { pingBackend } from '../helpers/pingBackend';
 import GoogleLoggedInAs from './GoogleLoggedInAs';
 import LogIn from './LogIn';
@@ -11,7 +11,7 @@ import Page404 from './Page404';
 import ProtectedRoute from './ProtectedRoute';
 
 function SetProjectEnvironment() {
-  const environment = getProjectEnvironment();
+  const environment: ProjectEnvironment = 'webapp';
 
   const { accounts, userEmail, provider, sendEmailFn } = useCurrentLogin();
 
