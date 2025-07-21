@@ -1,8 +1,8 @@
 /*
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
-import type { Email, Prefs } from "../../interface/src/types/modelTypes";
-import type { MessagePayload, Strings } from "../../interface/src/types/types";
+import type { Email } from "../../interface/src/types/modelTypes";
+import type { MessagePayload } from "../../interface/src/types/types";
 
 export type Message = MessagePayload & { direction: "tochild" | "fromchild" };
 
@@ -16,14 +16,7 @@ export type IframeService = {
     initChild: () => void;
     messageChild: (payload: MessageChildPayload) => void;
     commands: {
-        getDefaultPreferences: () => Promise<Prefs>;
-        getPreferences: () => Promise<Prefs>;
-        getLocalizedStrings: () => Promise<Strings>;
-        setPreferences: (_prefs?: Partial<Prefs>) => Promise<void>;
-        sendEmails: (_emails: Email[]) => Promise<void>;
-        sendEmail: (_email: Email, _sendmode?: Prefs["sendmode"]) => Promise<void>;
-        cancel: () => void;
-        openUrl: (_url: string) => void;
+        sendEmail: (_email: Email) => Promise<void>;
     };
 };
 
@@ -64,62 +57,11 @@ export const iframeService: IframeService = {
             case "ECHO":
                 iframeService.messageChild(payload);
                 break;
-            case "GET_DEFAULT_PREFERENCES":
-                iframeService.messageChild({
-                    type,
-                    id,
-                    data: {
-                        prefs: await iframeService.commands.getDefaultPreferences(),
-                    },
-                });
-                break;
-            case "GET_PREFERENCES":
-                iframeService.messageChild({
-                    type,
-                    id,
-                    data: {
-                        prefs: await iframeService.commands.getPreferences(),
-                    },
-                });
-                break;
-            case "SET_PREFERENCES":
-                await iframeService.commands.setPreferences(data.prefs);
-                iframeService.messageChild({
-                    type,
-                    id,
-                    data: {
-                        prefs: await iframeService.commands.getPreferences(),
-                    },
-                });
-                break;
-            case "GET_LOCALIZED_STRINGS":
-                iframeService.messageChild({
-                    type,
-                    id,
-                    data: {
-                        strings: await iframeService.commands.getLocalizedStrings(),
-                    },
-                });
-                break;
-            case "SEND_EMAILS":
-                if (data.emails) {
-                    await iframeService.commands.sendEmails(data.emails);
-                }
-                iframeService.messageChild({ type, id });
-                break;
             case "SEND_EMAIL":
                 if (data.email) {
-                    await iframeService.commands.sendEmail(data.email, data.sendmode);
+                    await iframeService.commands.sendEmail(data.email);
                 }
                 iframeService.messageChild({ type, id });
-                break;
-            case "OPEN_URL":
-                if (data.url) {
-                    iframeService.commands.openUrl(data.url);
-                }
-                break;
-            case "CANCEL":
-                iframeService.commands.cancel();
                 break;
             default:
                 console.warn("Unknown message type", type);
@@ -146,31 +88,7 @@ export const iframeService: IframeService = {
         iframeService.log({ ...message, direction: "tochild" });
     },
     commands: {
-        getDefaultPreferences: async () => {
-            console.warn("Function not implemented");
-            return {} as Prefs;
-        },
-        getPreferences: async () => {
-            console.warn("Function not implemented");
-            return {} as Prefs;
-        },
-        getLocalizedStrings: async () => {
-            console.warn("Function not implemented");
-            return {} as Strings;
-        },
-        setPreferences: async (_prefs?: Partial<Prefs>) => {
-            console.warn("Function not implemented");
-        },
-        sendEmails: async (_emails: Email[]) => {
-            console.warn("Function not implemented");
-        },
-        sendEmail: async (_email: Email, _sendmode?: Prefs["sendmode"]) => {
-            console.warn("Function not implemented");
-        },
-        cancel: () => {
-            console.warn("Function not implemented");
-        },
-        openUrl: (_url: string) => {
+        sendEmail: async (_email: Email) => {
             console.warn("Function not implemented");
         },
     },
