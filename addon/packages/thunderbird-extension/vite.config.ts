@@ -20,12 +20,6 @@ export default defineConfig({
             ],
         }),
     ],
-
-    define: {
-        // Define project type at build time
-        __PROJECT_TYPE__: JSON.stringify("addon"),
-    },
-
     build: {
         sourcemap: false,
         minify: false,
