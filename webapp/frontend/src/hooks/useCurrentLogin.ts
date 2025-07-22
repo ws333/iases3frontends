@@ -1,6 +1,5 @@
 import { useMsal } from '@azure/msal-react';
-import { Email } from '../../../../addon/packages/interface/src/types/modelTypes';
-import { ProjectEnvProps } from '../../../../addon/packages/interface/src/types/types';
+import { Email, ProjectEnvProps } from '../../../../addon/packages/interface/src/types/types';
 import { useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { sendEmailGoogle } from '../helpers/sendEmailGoogle';
 import { sendEmailMS } from '../helpers/sendEmailMS';
