@@ -1,2 +1,1 @@
-cd addon && pnpm run check && pnpm run lint && cd ..
-cd webapp && pnpm run check && pnpm run lint && cd ..
+pnpm run ca
