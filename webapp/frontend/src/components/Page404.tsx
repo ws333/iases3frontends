@@ -1,7 +1,18 @@
+import { CSSProperties } from 'react';
+import './Page404.css';
+
+const styles: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  minHeight: '100vh',
+};
+
 function Page404() {
   return (
-    <div>
-      <h2>You are floating in empty space - 404 -</h2>
+    <div style={styles} className="hovering_404">
+      <h2>404 - You are floating peacefully in empty space</h2>
     </div>
   );
 }
