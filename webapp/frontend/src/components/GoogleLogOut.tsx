@@ -1,8 +1,8 @@
 import { googleLogout } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
-import { useStoreActions } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { revokeSessionGoogle } from '../helpers/revokeSessionGoogle';
+import { useStoreActions } from '../store/storeWithHooks';
 
 const GoogleLogOut = () => {
   const resetCurrentLogin = useStoreActions((state) => state.auth.resetCurrentLogin);

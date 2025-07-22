@@ -6,12 +6,12 @@ import { RefreshSessionGoogleResponseBody, VerifySessionGoogleResponseBody } fro
 import { PATH_REDIRECT } from '../constants/constants';
 import { PATH_REFRESH_SESSION_GOOGLE, PATH_VERIFY_SESSION_GOOGLE } from '../constants/constantsEndpointPaths';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
-import { useStoreActions, useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import {
   getLastLoginButtonClicked,
   removeLoginGoogleInProgress,
   setLoginGoogleInProgress,
 } from '../helpers/localstorageHelpers';
+import { useStoreActions, useStoreState } from '../store/storeWithHooks';
 
 interface Args {
   loginGoogleInProgress: LoginGoogleInProgress;
@@ -23,6 +23,7 @@ export function useVerifyAndRefreshSession({ loginGoogleInProgress }: Args) {
   const currentLogin = useStoreState((state) => state.auth.currentLogin);
 
   const [verifyInProgessGoogle, setVerifyInProgressGoogle] = useState(false);
+
   const { inProgress: inProgressMS, accounts: accountsMS } = useMsal();
   const location = useLocation();
   const navigate = useNavigate();

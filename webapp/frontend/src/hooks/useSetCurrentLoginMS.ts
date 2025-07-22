@@ -1,7 +1,7 @@
 import { useMsal } from '@azure/msal-react';
 import { useEffect } from 'react';
-import { useStoreActions } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { getLastLoginButtonClicked } from '../helpers/localstorageHelpers';
+import { useStoreActions } from '../store/storeWithHooks';
 
 export function useSetCurrentLoginMS() {
   const { accounts } = useMsal();
