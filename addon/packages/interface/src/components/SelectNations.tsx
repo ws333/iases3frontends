@@ -1,5 +1,5 @@
 import { ContactI3C } from "../types/typesI3C";
-import { useStoreActions, useStoreState } from "../hooks/storeHooks";
+import { useStoreActions, useStoreState } from "../store/store";
 import { SentCounts } from "./SentCounts";
 import "./SelectNations.css";
 

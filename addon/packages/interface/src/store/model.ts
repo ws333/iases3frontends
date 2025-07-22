@@ -3,23 +3,23 @@
  * All persistent state is stored via this model.
  */
 import { action, computed, thunk, thunkOn } from "easy-peasy";
-import type { Model } from "./types/modelTypes";
-import { defaultMaxCount, defaultSendingDelay } from "./constants/constants";
-import { countryCodes_EU } from "./constants/countryCodes";
+import type { Model } from "../types/modelTypes";
+import { defaultMaxCount, defaultSendingDelay } from "../constants/constants";
+import { countryCodes_EU } from "../constants/countryCodes";
 import {
     customSubjectTitlesArray,
     defaultLanguage,
     defaultLanguageOptions,
     emailComponents,
     subjects,
-} from "./constants/emailTemplates";
-import TextEndingSession from "./components/dialogTexts/TextEndingSession";
-import { storeOptionsKey } from "./helpers/indexedDB";
-import { messageParent } from "./service";
+} from "../constants/emailTemplates";
+import TextEndingSession from "../components/dialogTexts/TextEndingSession";
+import { storeOptionsKey } from "../helpers/indexedDB";
+import { messageParent } from "../service";
 
 export const model: Model = {
-    sendEmail: thunk(async (_actions, payload) => {
-        await messageParent({ type: "SEND_EMAIL", data: { email: payload } });
+    sendEmail: thunk((_actions, payload) => {
+        messageParent({ type: "SEND_EMAIL", data: { email: payload } });
     }),
     userDialog: {
         title: "",

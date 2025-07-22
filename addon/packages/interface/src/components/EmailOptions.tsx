@@ -2,8 +2,8 @@ import { FocusEvent, useEffect, useRef, useState } from "react";
 import { Tooltip } from "ui-kit";
 import { maxCountOptions, minSendingDelay } from "../constants/constants";
 import { LanguageOption, subjects } from "../constants/emailTemplates";
-import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { storeOptionsKey } from "../helpers/indexedDB";
+import { useStoreActions, useStoreState } from "../store/store";
 import "./EmailOptions.css";
 
 export type EmailOptionsProps = {

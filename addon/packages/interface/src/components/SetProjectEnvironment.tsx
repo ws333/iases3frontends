@@ -1,5 +1,5 @@
 import { ProjectEnvironment } from "../types/types";
-import { useStoreActions } from "../hooks/storeHooks";
+import { useStoreActions } from "../store/store";
 import App from "./App";
 
 export default function SetProjectEnvironment() {
