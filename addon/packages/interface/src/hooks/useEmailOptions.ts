@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { defaultMaxCount, defaultSendingDelay } from "../constants/constants";
 import { LanguageOption, customSubjectTitlesArray, defaultLanguage, subjects } from "../constants/emailTemplates";
 import { OPTIONS_KEY, getOptions } from "../helpers/indexedDB";
-import { useStoreActions, useStoreState } from "./storeHooks";
+import { useStoreActions, useStoreState } from "../store/store";
 
 function useEmailOptions() {
     const delay = useStoreState((state) => state.emailOptions.delay);

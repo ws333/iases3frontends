@@ -4,9 +4,9 @@ import { InfoIcon } from "ui-kit";
 import { DownloadIcon } from "ui-kit";
 import { Menu, MenuOption, MenuOptionProps, OpenMenuButton } from "ui-kit";
 import { DOCS_URL } from "../constants/constants";
-import { useStoreActions, useStoreState } from "../hooks/storeHooks";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
+import { useStoreActions, useStoreState } from "../store/store";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
 

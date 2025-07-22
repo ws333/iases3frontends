@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Modal } from "ui-kit";
 import { Button, ConfirmationModal, VStack } from "ui-kit";
 import { UserDialog } from "../types/modelTypes";
-import { useStoreActions } from "../hooks/storeHooks";
+import { useStoreActions } from "../store/store";
 
 type Props = Partial<UserDialog>;
 
