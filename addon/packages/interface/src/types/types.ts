@@ -1,5 +1,4 @@
 import type { ChangeEvent, FocusEvent, JSX } from "react";
-import { Email } from "./modelTypes";
 
 export type Provider = "MS" | "Google";
 
@@ -8,6 +7,8 @@ export type CurrentLogin = {
     userEmail: string;
     accessToken?: string;
 };
+
+export type Email = Pick<browser.compose.ComposeDetails, "from" | "to" | "subject" | "body">;
 
 export type StatusBackend = {
     status: "OK" | "ERROR";

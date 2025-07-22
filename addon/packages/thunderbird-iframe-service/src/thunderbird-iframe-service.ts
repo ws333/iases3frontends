@@ -1,7 +1,7 @@
 /*
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
-import { Email } from "../../interface/src/types/modelTypes";
+import { Email } from "../../interface/src/types/types";
 import { getUniqueMessageId } from "../../interface/src/helpers/getUniqueMessageId";
 import { iframeService } from "../../iframe-service/src/iframe-service";
 
