@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { ProjectEnvironment } from '../../../../addon/packages/interface/src/types/types';
-import { PATH_WEBAPP, PATH_WEBAPP_REDIRECT } from '../constants/constants';
+import { PATH_PROTECTED } from '../constants/constants';
 import App from '../../../../addon/packages/interface/src/components/App';
 import { useCurrentLogin } from '../hooks/useCurrentLogin';
 import { pingBackend } from '../helpers/pingBackend';
@@ -22,10 +22,10 @@ function SetProjectEnvironment() {
 
   return (
     <Routes>
-      <Route path={PATH_WEBAPP} element={<LogIn />} />
+      <Route path="/" element={<LogIn />} />
       <Route element={<ProtectedRoute />}>
         <Route
-          path={PATH_WEBAPP_REDIRECT}
+          path={PATH_PROTECTED}
           element={
             <App
               environment={environment}

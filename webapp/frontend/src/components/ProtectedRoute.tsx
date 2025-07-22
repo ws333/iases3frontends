@@ -1,5 +1,4 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { PATH_WEBAPP } from '../constants/constants';
 import Loading from '../../../../addon/packages/interface/src/components/Loading';
 import { useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { useVerifyAndRefreshSession } from '../hooks/useVerifyAndRefreshSession';
@@ -30,7 +29,7 @@ function ProtectedRoute() {
 
   const isAuthenticated = isAuthenticatedMS || isAuthenticatedGoogle;
 
-  return isAuthenticated ? <Outlet /> : <Navigate to={`/${PATH_WEBAPP}`} replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 }
 
 export default ProtectedRoute;
