@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { LoginGoogleRequest, LoginGoogleResponseBody } from '../types/typesBackend';
 import { PATH_LOGIN_GOOGLE } from '../constants/constantsEndpointPaths';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
-import { useStoreActions, useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { getLoginGoogleInProgress, removeLoginGoogleInProgress } from '../helpers/localstorageHelpers';
+import { useStoreActions, useStoreState } from '../store/storeWithHooks';
 import { useQueryParam } from './useQueryParam';
 
 const failedPrefix = 'Failed to exchange code for tokens:';

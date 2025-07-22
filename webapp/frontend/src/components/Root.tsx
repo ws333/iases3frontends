@@ -1,6 +1,6 @@
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { StoreProvider, createStore } from 'easy-peasy';
+import { StoreProvider } from 'easy-peasy';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter } from 'react-router-dom';
@@ -10,20 +10,17 @@ import { PATH_BASE } from '../constants/constants';
 import ErrorFallback from '../../../../addon/packages/interface/src/components/ErrorFallback';
 import Loading from '../../../../addon/packages/interface/src/components/Loading';
 import { setDevModeIfLocalhost } from '../../../../addon/packages/interface/src/helpers/getSetDevMode';
-import { model } from '../../../../addon/packages/interface/src/model';
 import { PersistentStateKey, usePersistentState } from '../../../../addon/packages/interface/src/state/persistentState';
 import { MSAuthProvider } from '../auth/MSAuthProvider';
 import { GOOGLE_OAUTH_CLIENT_ID } from '../auth/autoConfigGoogle';
+import { store } from '../store/storeWithHooks';
 import SetProjectEnvironment from './SetProjectEnvironment';
-
-const store = createStore(model, { disableImmer: true });
 
 const queryClient = new QueryClient();
 
 export function Root() {
   setDevModeIfLocalhost();
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const [theme, setTheme] = usePersistentState<ThemePreference>(PersistentStateKey.ThemePreference, 'system');
 
   return (
