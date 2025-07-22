@@ -1,7 +1,8 @@
 packages:
   - addon
-  - addon/*
+  - addon/packages/*
   - webapp
+  - webapp/frontend
 
 ignoredBuiltDependencies:
   - ui-kit
