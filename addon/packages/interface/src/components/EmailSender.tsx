@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import type { Email } from "../types/modelTypes";
-import type { MessagePayload, ProjectEnvProps } from "../types/types";
+import type { Email, MessagePayload, ProjectEnvProps } from "../types/types";
 import type { ContactI3C, LogMessageOptions } from "../types/typesI3C";
 import {
     ERROR_ENVIRONMENT_UNKNOWN,

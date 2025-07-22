@@ -1,5 +1,4 @@
-import { Email } from '../../../../addon/packages/interface/src/types/modelTypes';
-import { StatusBackend } from '../../../../addon/packages/interface/src/types/types';
+import { Email, StatusBackend } from '../../../../addon/packages/interface/src/types/types';
 import { SendEmailGoogleResponseBody } from '../types/typesBackend';
 import { ERROR_FAILED_SENDING_EMAIL } from '../constants/constants';
 import { URL_SEND_EMAIL_GOOGLE } from '../constants/constantsImportMeta';

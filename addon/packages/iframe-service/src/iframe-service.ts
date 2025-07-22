@@ -1,8 +1,7 @@
 /*
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
-import type { Email } from "../../interface/src/types/modelTypes";
-import type { MessagePayload } from "../../interface/src/types/types";
+import type { Email, MessagePayload } from "../../interface/src/types/types";
 
 export type Message = MessagePayload & { direction: "tochild" | "fromchild" };
 
