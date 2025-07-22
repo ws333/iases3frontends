@@ -1,17 +1,15 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { StoreProvider, createStore } from "easy-peasy";
+import { StoreProvider } from "easy-peasy";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { ToastContainer } from "react-toastify";
 import { DarkLightThemeProvider, GlobalStyle, ThemePreference } from "ui-kit";
 import { setDevModeIfLocalhost } from "../helpers/getSetDevMode";
-import { model } from "../model";
 import { PersistentStateKey, usePersistentState } from "../state/persistentState";
+import { store } from "../store/store";
 import ErrorFallback from "./ErrorFallback";
 import Loading from "./Loading";
 import SetProjectEnvironment from "./SetProjectEnvironment";
-
-const store = createStore(model, { disableImmer: true });
 
 const queryClient = new QueryClient();
 

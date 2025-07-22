@@ -1,6 +1,6 @@
 import { MouseEventHandler } from "react";
 import { Button } from "ui-kit";
-import { useStoreState } from "../hooks/storeHooks";
+import { useStoreState } from "../store/store";
 
 type Props = {
     checkInProgress: boolean;

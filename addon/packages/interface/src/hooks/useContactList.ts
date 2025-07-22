@@ -6,7 +6,7 @@ import { getCountryCodeByIP } from "../helpers/getCountryCodeByIP";
 import { getCountryCode, getDeletedContacts } from "../helpers/indexedDB";
 import { isExtension } from "../helpers/isExtension";
 import { isOnline } from "../helpers/isOnline";
-import { useStoreActions, useStoreState } from "./storeHooks";
+import { useStoreActions, useStoreState } from "../store/store";
 
 function useContactList() {
     const contacts = useStoreState((state) => state.contactList.contacts);

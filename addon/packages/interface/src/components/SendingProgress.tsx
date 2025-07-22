@@ -1,5 +1,5 @@
 import { ContactI3C } from "../types/typesI3C";
-import { useStoreState } from "../hooks/storeHooks";
+import { useStoreState } from "../store/store";
 
 type Props = {
     maxSelectedContactsNotSent: number;

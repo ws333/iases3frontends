@@ -2,7 +2,7 @@ import { VStack } from "@lib/ui/css/stack";
 import { ExpandablePanel } from "@lib/ui/panel/ExpandablePanel";
 import { Tooltip } from "ui-kit";
 import { oneDay, oneHour, oneMonth, sevenDays, threeMonths } from "../constants/timeConstants";
-import { useStoreState } from "../hooks/storeHooks";
+import { useStoreState } from "../store/store";
 import "./SentCounts.css";
 
 export function SentCounts() {
