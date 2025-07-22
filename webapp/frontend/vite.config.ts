@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     port: PORT_DEV,
     fs: {
-      allow: [path.resolve(__dirname), path.resolve(__dirname, '../../addon/packages/thunderbird-extension/public')],
+      allow: [path.resolve(__dirname)],
     },
   },
   resolve: {
