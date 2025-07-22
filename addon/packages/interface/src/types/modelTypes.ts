@@ -1,7 +1,7 @@
 import { Action, Computed, Thunk, ThunkOn } from "easy-peasy";
 import { JSX } from "react";
 import { LanguageOption, SubjectPerLanguage } from "../constants/emailTemplates.ts";
-import type { CurrentLogin, TEmailComponent } from "./types.ts";
+import type { CurrentLogin, Email, TEmailComponent } from "./types.ts";
 import { ContactI3C } from "./typesI3C.ts";
 
 export interface Model {
@@ -52,8 +52,6 @@ interface ContactList {
     setIsSelectedAllNations: Action<ContactList, boolean>;
     toggleIsSelectedAllNations: Thunk<ContactList>;
 }
-
-export type Email = Pick<browser.compose.ComposeDetails, "from" | "to" | "subject" | "body">;
 
 interface EmailOptions {
     countryCode: string;

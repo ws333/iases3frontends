@@ -1,8 +1,8 @@
 /*
  * Provide a messaging api equivalent to what is supplied by Thunderbird when running as an extension
  */
-import { Email } from "../../interface/src/types/modelTypes";
-import { Message, iframeService } from "../../iframe-service/src/iframe-service";
+import type { Email } from "../../interface/src/types/types";
+import { type Message, iframeService } from "../../iframe-service/src/iframe-service";
 
 if (typeof iframeService === "undefined") {
     console.warn("iframeService is undefined. It must be loaded first!");

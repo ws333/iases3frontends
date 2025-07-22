@@ -1,4 +1,4 @@
-import { Email } from '../../../../addon/packages/interface/src/types/modelTypes';
+import { Email } from '../../../../addon/packages/interface/src/types/types';
 
 export async function fetchSendEmail(url: string, accessToken: string, email: Email) {
   return await fetch(url, {
