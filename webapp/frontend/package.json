@@ -41,6 +41,7 @@
     "@types/thunderbird-webext-browser": "^127.0.0",
     "eslint-plugin-react": "^7.37.4",
     "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.18"
+    "eslint-plugin-react-refresh": "^0.4.18",
+    "prettier": "^3.5.2"
   }
 }

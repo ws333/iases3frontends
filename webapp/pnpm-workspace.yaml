@@ -1,8 +1,0 @@
-packages:
-  - frontend
-
-ignoredBuiltDependencies:
-  - ui-kit
-
-onlyBuiltDependencies:
-  - esbuild
