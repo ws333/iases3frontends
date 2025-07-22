@@ -3,8 +3,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StoreProvider, createStore } from 'easy-peasy';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { DarkLightThemeProvider, GlobalStyle, ThemePreference } from 'ui-kit';
+import { PATH_BASE } from '../constants/constants';
 import ErrorFallback from '../../../../addon/packages/interface/src/components/ErrorFallback';
 import Loading from '../../../../addon/packages/interface/src/components/Loading';
 import { setDevModeIfLocalhost } from '../../../../addon/packages/interface/src/helpers/getSetDevMode';
@@ -33,7 +35,9 @@ export function Root() {
             <QueryClientProvider client={queryClient}>
               <GoogleOAuthProvider clientId={GOOGLE_OAUTH_CLIENT_ID}>
                 <MSAuthProvider>
-                  <SetProjectEnvironment />
+                  <BrowserRouter basename={PATH_BASE}>
+                    <SetProjectEnvironment />
+                  </BrowserRouter>
                 </MSAuthProvider>
               </GoogleOAuthProvider>
             </QueryClientProvider>
