@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ListIcon } from "ui-kit";
 import { MenuOption, MenuView } from "ui-kit";
-import { useStoreActions } from "../hooks/storeHooks";
 import { readSendingLog } from "../helpers/sendingLog";
 import { showFullSendingLogDialog } from "../helpers/showFullSendingLogDialog";
+import { useStoreActions } from "../store/store";
 
 type Props = {
     view: MenuView;

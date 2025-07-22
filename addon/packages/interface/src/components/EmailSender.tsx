@@ -7,7 +7,6 @@ import {
     fullProgressBarDelay,
     zeroWidtSpace,
 } from "../constants/constants";
-import { useStoreState } from "../hooks/storeHooks";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useUpdateSendingStats } from "../hooks/useUpdateSendingStats";
@@ -17,6 +16,7 @@ import { renderEmail } from "../helpers/renderEmail";
 import { getLogsToDisplay, logSendingMessage } from "../helpers/sendingLog";
 import { checkForDangelingSession, clearSessionState, updateSessionState } from "../helpers/sessionState";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
+import { useStoreState } from "../store/store";
 import ButtonEndSession from "./ButtonEndSession";
 import ButtonSendEmails from "./ButtonSendEmails";
 import ButtonStopSending from "./ButtonStopSending";
