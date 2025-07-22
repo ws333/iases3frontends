@@ -1,7 +1,7 @@
 import { useMsal } from '@azure/msal-react';
 import { POST_LOGOUT_REDIRECT_URI } from '../constants/constantsImportMeta';
-import { useStoreActions } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
+import { useStoreActions } from '../store/storeWithHooks';
 
 const MSLogOut = () => {
   const { instance } = useMsal();

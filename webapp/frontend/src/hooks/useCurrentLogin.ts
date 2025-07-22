@@ -1,9 +1,9 @@
 import { useMsal } from '@azure/msal-react';
 import { Email, ProjectEnvProps } from '../../../../addon/packages/interface/src/types/types';
-import { useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { sendEmailGoogle } from '../helpers/sendEmailGoogle';
 import { sendEmailMS } from '../helpers/sendEmailMS';
 import { loginRequest } from '../auth/authConfigMS';
+import { useStoreState } from '../store/storeWithHooks';
 import { useHandleGoogleAuthCode } from './useHandleGoogleAuthCode';
 import { useSetCurrentLoginMS } from './useSetCurrentLoginMS';
 
