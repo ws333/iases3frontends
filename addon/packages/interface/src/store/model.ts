@@ -149,7 +149,7 @@ export const model: Model = {
         setDelay: action((state, payload) => ({ ...state, delay: payload })),
         storeDelay: thunkOn(
             (actions) => actions.setDelay,
-            async (_actions, target) => {
+            (_actions, target) => {
                 storeOptionsKey(target.payload, "delay");
             }
         ),
@@ -188,7 +188,7 @@ export const model: Model = {
         })),
         storeLanguageAndUpdateNationOptions: thunkOn(
             (actions) => actions.setLanguage,
-            async (_actions, target, { getStoreState, getStoreActions }) => {
+            (_actions, target, { getStoreState, getStoreActions }) => {
                 const { payload } = target;
                 const storeState = getStoreState();
                 const storeActions = getStoreActions();
@@ -209,7 +209,7 @@ export const model: Model = {
         setLanguageOptions: action((state, payload) => ({ ...state, languageOptions: [...payload] })),
         updateLanguage: thunkOn(
             (actions) => actions.setLanguageOptions,
-            async (actions, target) => {
+            (actions, target) => {
                 actions.setLanguage({ language: target.payload[0] });
             }
         ),
@@ -225,7 +225,7 @@ export const model: Model = {
         })),
         storeSubjectPerLanguage: thunkOn(
             (actions) => actions.setSubjectPerLanguage,
-            async (_actions, target, { getState }) => {
+            (_actions, target, { getState }) => {
                 const storeState = getState();
                 storeOptionsKey({ ...storeState.subjectPerLanguage, ...target.payload }, "subject");
             }
@@ -235,7 +235,7 @@ export const model: Model = {
         setCustomSubject: action((state, payload) => ({ ...state, customSubject: payload })),
         storeCustomSubject: thunkOn(
             (actions) => actions.setCustomSubject,
-            async (_actions, target) => {
+            (_actions, target) => {
                 storeOptionsKey(target.payload, "customSubject");
             }
         ),
