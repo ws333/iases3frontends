@@ -1,8 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import Loading from '../../../../addon/packages/interface/src/components/Loading';
-import { useStoreState } from '../../../../addon/packages/interface/src/hooks/storeHooks';
 import { useVerifyAndRefreshSession } from '../hooks/useVerifyAndRefreshSession';
 import { getLoginGoogleInProgress } from '../helpers/localstorageHelpers';
+import { useStoreState } from '../store/storeWithHooks';
 
 function ProtectedRoute() {
   const loginGoogleInProgress = getLoginGoogleInProgress();
