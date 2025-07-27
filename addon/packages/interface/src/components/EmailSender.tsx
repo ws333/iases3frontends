@@ -35,7 +35,7 @@ import "./EmailSender.css";
 /**
  * - The EmailSender component is universal and used by both addon and webapp
  */
-function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn, InfoComponent }: ProjectEnvProps) {
+function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: ProjectEnvProps) {
     if (environment === "unknown") throw new Error(ERROR_ENVIRONMENT_UNKNOWN);
     const [message, setMessage] = useState<string>(zeroWidtSpace); // zeroWidtSpace used to keep styling consistent
     const [errorMessage, setErrorMessage] = useState<string>();
@@ -260,7 +260,6 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn, InfoCompo
     return (
         <div className="container_email_sender">
             <Header />
-            {InfoComponent}
             <br />
 
             {userDialog.isOpen && (

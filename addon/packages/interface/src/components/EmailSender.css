@@ -13,7 +13,8 @@ p {
 
 /* Main container for email sender component */
 .container_email_sender {
-    margin: 0 auto;
+    margin: auto;
+    margin-top: 2rem;
     width: 100%;
     max-width: var(--container-max-width);
     display: flex;
@@ -96,14 +97,6 @@ p {
     background-color: #111;
     border: 1px solid #fff1;
     border-radius: 13px;
-}
-
-.header-title {
-    margin: 0 2rem;
-}
-
-.no-wrap {
-    white-space: nowrap;
 }
 
 .progress_bar {

@@ -1,5 +1,6 @@
 import { googleLogout } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { Button } from 'ui-kit';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { revokeSessionGoogle } from '../helpers/revokeSessionGoogle';
 import { useStoreActions } from '../store/storeWithHooks';
@@ -16,12 +17,7 @@ const GoogleLogOut = () => {
     void navigate('/', { replace: true });
   };
 
-  return (
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    <button className="logout-button" onClick={onClickLogout}>
-      Logout
-    </button>
-  );
+  return <Button onClick={onClickLogout}>Logout</Button>;
 };
 
 export default GoogleLogOut;
