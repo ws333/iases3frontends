@@ -3,8 +3,13 @@ export const URL_BACKEND_PROD = 'https://backend.iase.one';
 
 export const PORT_DEV_WEBAPP = 5174;
 export const PORT_DEV_DOCS = 5175;
-export const SERVER_DEV = `http://localhost:${PORT_DEV_WEBAPP.toString()}`;
+export const SERVER_DEV = `http://localhost:${PORT_DEV_WEBAPP}`;
+export const SERVER_DEV_DOCS = `http://localhost:${PORT_DEV_DOCS}`;
 export const SERVER_PROD = 'https://iase.one';
+
+const PATH_DOCS = '/webapp/docs';
+export const URL_DOCS_DEV = `${SERVER_DEV_DOCS}${PATH_DOCS}`;
+export const URL_DOCS_PROD = `${SERVER_PROD}${PATH_DOCS}`;
 
 export const PATH_BASE = '/webapp';
 export const PATH_PROTECTED = '/authorized';
