@@ -13,7 +13,7 @@ export default function App({ environment, sendEmailFn, sendEmailPreflightFn, In
             <header className="header">
                 <div className="IFO-and-settings">
                     <IconIFO isHovering={false} />
-                    <SettingsMenu />
+                    <SettingsMenu environment={environment} />
                 </div>
             </header>
             <EmailSender
