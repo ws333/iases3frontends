@@ -16,7 +16,7 @@ import { PATH_SEND_EMAIL_GOOGLE, PATH_SEND_EMAIL_MS } from './constantsEndpointP
 
 export const DOCS_URL = import.meta.env.PROD ? URL_DOCS_PROD : URL_DOCS_DEV;
 
-export const REDIRECT_URI = import.meta.env.PROD ? `${SERVER_PROD}/${PATH_REDIRECT}` : `${SERVER_DEV}/${PATH_REDIRECT}`;
+export const REDIRECT_URI = import.meta.env.PROD ? `${SERVER_PROD}${PATH_REDIRECT}` : `${SERVER_DEV}${PATH_REDIRECT}`;
 
 export const POST_LOGOUT_REDIRECT_URI = import.meta.env.PROD
   ? `${SERVER_PROD}${PATH_BASE}`
