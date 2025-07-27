@@ -7,7 +7,7 @@
     "dev": "pnpm --filter webapp-frontend --filter webapp-docs run dev:vite",
     "dev:vite": "vite",
     "build": "vite build",
-    "upload": "pnpm run build && sh ./scripts/sftp_deploy.sh",
+    "upload": "pnpm run build && sftp_deploy",
     "preview": "vite preview",
     "check": "tsc",
     "format": "prettier --write .",
