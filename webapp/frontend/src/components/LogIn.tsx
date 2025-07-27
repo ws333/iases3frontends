@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
 import { AccountInfo, IPublicClientApplication, Provider } from '../types/types';
 import { PATH_PROTECTED } from '../constants/constants';
+import { DOCS_URL } from '../constants/constantsImportMeta';
 import HeaderWithIFO from '../../../../addon/packages/interface/src/components/HeaderWithIFO';
 import { useDebounceActiveLoginButtons } from '../hooks/useDebounceActiveLoginButtons';
 import { useIsActiveGoogleLogin } from '../hooks/useIsActiveGoogleLogin';
@@ -50,6 +51,10 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
     void navigate(PATH_PROTECTED, { replace: true });
   };
 
+  const onClickInformation = () => {
+    window.location.assign(DOCS_URL);
+  };
+
   const isActiveMSLogin = accountsMS.length > 0;
   const { isActiveGoogleLogin } = useIsActiveGoogleLogin();
 
@@ -60,6 +65,7 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
       <HeaderWithIFO />
       <div style={divContainerButtons}>
         <div style={divButtonsStylesRow}>
+          <Button onClick={onClickInformation}>Information</Button>
           <Button onClick={onClickGoogleLogin}>Login with Google</Button>
           <Button onClick={onClickLoginMS}>Login with Microsoft</Button>
         </div>
