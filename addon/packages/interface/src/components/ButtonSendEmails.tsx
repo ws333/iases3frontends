@@ -28,7 +28,7 @@ function ButtonSendEmails({
             : !selectedNations.length
               ? "No contacts selected"
               : !leftToSendCount
-                ? "Selected contacts already processed"
+                ? "Selected contacts processed"
                 : !emailsSent
                   ? "Send emails"
                   : "Continue";
