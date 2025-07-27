@@ -29,7 +29,7 @@ function SettingsMenu({ environment }: Props) {
     return (
         <Menu
             title={<StyledTitle>Settings</StyledTitle>}
-            renderOpener={({ props: { ref, ...props } }) => <OpenMenuButton ref={ref} {...props} />}
+            renderOpener={({ props: { ref, ...props } }) => <OpenMenuButton ref={ref} size="l" {...props} />}
             renderContent={({ view, onClose }) => {
                 const options: MenuOptionProps[] = [
                     {
