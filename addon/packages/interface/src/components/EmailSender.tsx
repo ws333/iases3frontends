@@ -5,7 +5,7 @@ import {
     ERROR_ENVIRONMENT_UNKNOWN,
     defaultRandomWindow,
     fullProgressBarDelay,
-    zeroWidtSpace,
+    zeroWidthSpace,
 } from "../constants/constants";
 import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
@@ -37,7 +37,7 @@ import "./EmailSender.css";
  */
 function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: ProjectEnvProps) {
     if (environment === "unknown") throw new Error(ERROR_ENVIRONMENT_UNKNOWN);
-    const [message, setMessage] = useState<string>(zeroWidtSpace); // zeroWidtSpace used to keep styling consistent
+    const [message, setMessage] = useState<string>(zeroWidthSpace); // zeroWidthSpace used to keep styling consistent
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isSending, setIsSending] = useState(false);
     const [prefilghtInProgess, setPrefilghtInProgess] = useState(false);

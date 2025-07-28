@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { IsActiveGoogleLogin, LoginDebounceMeasurements } from '../types/types';
 import { getLoginDebounceMeasurements, setLoginDebounceMeasurements } from '../helpers/localstorageHelpers';
 
-type ShowButtons = 'ms' | 'google' | 'both' | 'none';
+type ShowButtons = 'both' | 'google' | 'ms' | 'none';
 
 const maxMeasurements = 100;
 const defaultDebounceTime = 500;
