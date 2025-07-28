@@ -45,6 +45,6 @@ export const sessionFinishedText = "Session finished!";
 
 export const sessionStateKey = "sessionState";
 
-export const zeroWidtSpace = "\u200b";
+export const zeroWidthSpace = "\u200b";
 
 export const zipPassword = "Shivai2027!";
