@@ -1,5 +1,5 @@
 import { LogMessageOptions, SendingLogEntry } from "../types/typesI3C";
-import { logsToDisplaySize, zeroWidtSpace } from "../constants/constants";
+import { logsToDisplaySize, zeroWidthSpace } from "../constants/constants";
 import { getDateTime } from "./getDateTime";
 import { getSendingLog, storeSendingLog } from "./indexedDB";
 
@@ -8,7 +8,7 @@ export async function getLogsToDisplay() {
     const logsToDisplay = storedLog.reverse().slice(0, logsToDisplaySize);
 
     // Remove last session if not all logs are included
-    while (logsToDisplay.length && logsToDisplay[logsToDisplay.length - 1] !== zeroWidtSpace) {
+    while (logsToDisplay.length && logsToDisplay[logsToDisplay.length - 1] !== zeroWidthSpace) {
         logsToDisplay.pop();
     }
 
@@ -22,7 +22,7 @@ export async function readSendingLog() {
     const log = await getSendingLog();
 
     const formattedLog = log.map((log) => {
-        const message = log.message === zeroWidtSpace ? log.message : `${getDateTime(log.timestamp)} - ${log.message}`;
+        const message = log.message === zeroWidthSpace ? log.message : `${getDateTime(log.timestamp)} - ${log.message}`;
         return message;
     }, []);
 
@@ -44,9 +44,9 @@ export const logSendingMessage = (message: string, options: LogSendingMessageOpt
 
         // Using zero width space to force newline
         if (addNewline) {
-            newValue.unshift(zeroWidtSpace);
+            newValue.unshift(zeroWidthSpace);
             // The timestamp needes to be unique. Displayed in descending order.
-            storeValue.push({ message: zeroWidtSpace, timestamp: timestamp + 1 });
+            storeValue.push({ message: zeroWidthSpace, timestamp: timestamp + 1 });
         }
 
         storeSendingLog(storeValue);

@@ -1,5 +1,5 @@
 import { ContactI3C, SendingLogEntry } from "../types/typesI3C";
-import { zeroWidtSpace } from "../constants/constants";
+import { zeroWidthSpace } from "../constants/constants";
 import { SubjectPerLanguage } from "../constants/emailTemplates";
 
 const DB_NAME = "ContactsI3CDatabase";
@@ -41,9 +41,9 @@ export async function initializeStorage(contacts: ContactI3C[]): Promise<void> {
         }
         const existingSendingLog = await getSendingLog();
         if (existingSendingLog.length === 0) {
-            // An initial zeroWidtSpace is needed to ensure the first session is displayed since getLogsToDisplay()
-            // removes the last session if not all logs are included based on the presence of a zeroWidtSpace
-            const initialLogs: SendingLogEntry = { timestamp: 0, message: zeroWidtSpace };
+            // An initial zeroWidthSpace is needed to ensure the first session is displayed since getLogsToDisplay()
+            // removes the last session if not all logs are included based on the presence of a zeroWidthSpace
+            const initialLogs: SendingLogEntry = { timestamp: 0, message: zeroWidthSpace };
             await storeSendingLog(initialLogs);
             console.log("Initial sendingLog stored successfully");
         }
