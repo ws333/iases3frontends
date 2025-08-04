@@ -5,6 +5,11 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 
 function App() {
+  // Detect iframe context and apply class
+  if (window !== window.top) {
+    document.body.classList.add('iframe-content');
+  }
+
   return (
     <Routes>
       <Route index element={<Docs />} />
