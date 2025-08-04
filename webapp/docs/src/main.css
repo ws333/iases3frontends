@@ -27,12 +27,19 @@ body {
 /* Centered card style for landing and docs pages */
 .docs-container {
   max-width: 700px;
-  margin: 40px auto;
+  margin: auto;
   background: rgba(30, 30, 30, 0.95);
   border-radius: 18px;
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   padding: 2.5rem 2rem;
   color: #fff;
+  margin-top: 5rem;
+}
+
+/* Remove vertical margins for documentation loaded inside iframe */
+body.iframe-content .docs-container {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .docs-container h1 {
