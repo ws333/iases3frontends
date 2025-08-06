@@ -8,6 +8,7 @@ import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import { useStoreActions, useStoreState } from "../store/store";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
+import MenuOptionViewOnlineDocumentation from "./MenuOptionViewOnlineDocumentation";
 
 const StyledTitle = styled.span`
     font-weight: 600;
@@ -24,8 +25,9 @@ function SettingsMenu({ environment }: Props) {
 
     const importSendingHistory = "Import sending history";
     const viewFullSendingLog = "View full sending log";
+    const viewOnlineDocumentation = "View online documentation";
 
-    const DOCS_URL = environment === "webapp" ? DOCS_URL_WEBAPP_DOCUMENTATION : DOCS_URL_ADDON_DOCUMENTATION;
+    const docsUrl = environment === "webapp" ? DOCS_URL_WEBAPP_DOCUMENTATION : DOCS_URL_ADDON_DOCUMENTATION;
 
     return (
         <Menu
@@ -34,12 +36,9 @@ function SettingsMenu({ environment }: Props) {
             renderContent={({ view, onClose }) => {
                 const options: MenuOptionProps[] = [
                     {
-                        text: "View online documentation",
-                        onSelect: () => {
-                            window.open(DOCS_URL);
-                            onClose();
-                        },
-                        icon: <InfoIcon />,
+                        // Dummy to position menu option in MenuList below
+                        text: viewOnlineDocumentation,
+                        onSelect: () => {},
                     },
                     {
                         // Dummy to position menu option in MenuList below
@@ -80,7 +79,14 @@ function SettingsMenu({ environment }: Props) {
                 };
 
                 const MenuList = options.map((props, index) =>
-                    props.text === viewFullSendingLog ? (
+                    props.text === viewOnlineDocumentation ? (
+                        <MenuOptionViewOnlineDocumentation
+                            key={index}
+                            view={view}
+                            onClose={onClose}
+                            docsUrl={docsUrl}
+                        />
+                    ) : props.text === viewFullSendingLog ? (
                         <MenuOptionFullSendingLog key={index} view={view} onClose={onClose} />
                     ) : props.text === importSendingHistory ? (
                         <MenuOptionImport key={index} view={view} onClose={onClose} />
