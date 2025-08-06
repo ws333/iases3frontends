@@ -91,7 +91,10 @@ async function mergeSendingLogs(importedData: string) {
         // Merge with existing logs, timestamp is key so no duplicates are created
         await storeSendingLog(importedLogs);
 
-        return importedLogs.length;
+        const logsProcesed = importedLogs.filter(
+            (item) => item.message.includes("Email") || item.message.includes("Session")
+        );
+        return logsProcesed.length;
     } catch (error) {
         console.warn("Error during import: failed to merge sending logs:", error);
     }
