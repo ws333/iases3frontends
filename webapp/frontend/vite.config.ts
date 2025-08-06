@@ -1,6 +1,8 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
+// WARNING: Do NOT import any constants or files that use import.meta.env here!
+// Only import plain values. See constants.ts and constantsImportMeta.ts for details.
 import { PATH_BASE, PORT_DEV_WEBAPP } from './src/constants/constants';
 
 // https://vite.dev/config/
