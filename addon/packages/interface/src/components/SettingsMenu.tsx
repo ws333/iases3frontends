@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { DownloadIcon, InfoIcon, Menu, MenuOption, MenuOptionProps, OpenMenuButton, TrashBinIcon } from "ui-kit";
 import { ProjectEnvProps } from "../types/types";
-import { DOCS_URL_ADDON_DOCUMENTATION, DOCS_URL_WEBAPP_DOCUMENTATION } from "../constants/constants";
+import { DOCS_URL_ADDON_DOCUMENTATION } from "../constants/constants";
+import { DOCS_URL_WEBAPP_DOCUMENTATION } from "../constants/constantsDynamic";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import { useStoreActions, useStoreState } from "../store/store";

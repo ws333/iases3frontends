@@ -1,4 +1,17 @@
-export const __DEV__ = import.meta.env.DEV;
+export const PORT_DEV_WEBAPP = 5174;
+export const PORT_DEV_DOCS = 5175;
+
+export const SERVER_PROD = "https://iase.one";
+export const SERVER_DEV = `http://localhost:${PORT_DEV_WEBAPP}`;
+export const SERVER_DEV_DOCS = `http://localhost:${PORT_DEV_DOCS}`;
+
+const PATH_DOCS = "/webapp/docs";
+export const URL_DOCS_DEV = `${SERVER_DEV_DOCS}${PATH_DOCS}`;
+export const URL_DOCS_PROD = `${SERVER_PROD}${PATH_DOCS}`;
+
+const PATH_DOCUMENTATION = "/webapp/docs/documentation";
+export const URL_DOCUMENTATION_DEV = `${SERVER_DEV_DOCS}${PATH_DOCUMENTATION}`;
+export const URL_DOCUMENTATION_PROD = `${SERVER_PROD}${PATH_DOCUMENTATION}`;
 
 export const DOCS_URL_WEBAPP = "https://iase.one/webapp/docs";
 export const DOCS_URL_WEBAPP_DOCUMENTATION = "https://iase.one/webapp/docs/documentation";
