@@ -21,13 +21,12 @@ export function useCurrentLogin() {
     });
 
   if (provider === 'Google') {
-    sendEmailFn = async (email: Email) =>
-      await sendEmailGoogle({ accessToken: currentLogin.accessToken ?? '', email: { ...email, from: userEmail } });
+    sendEmailFn = async (email: Email) => await sendEmailGoogle({ accessToken: currentLogin.accessToken ?? '', email });
   }
 
   if (provider === 'MS') {
     sendEmailFn = async (email: Email) =>
-      await sendEmailMS({ email: { ...email, from: userEmail }, instance: instanceMS, accounts: accountsMS, scopes });
+      await sendEmailMS({ email, instance: instanceMS, accounts: accountsMS, scopes });
   }
 
   return { accountsMS, inProgressMS, instanceMS, userEmail, provider, sendEmailFn };
