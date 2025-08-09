@@ -37,7 +37,7 @@ export interface ImportData {
 
 export type ImportStats = { contactsDeleted: number; contactsProcessed: number; logsProcessed: number };
 
-export type LogMessageOptions = {
+export type AddLogItemOptions = {
     addNewline?: boolean;
 };
 

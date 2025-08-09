@@ -1,6 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
-import { threeMonths } from "../constants/timeConstants";
 import { fetchAndMergeContacts, fetchOnlineNations } from "../helpers/fetchAndMergeContacts";
 import { getCountryCodeByIP } from "../helpers/getCountryCodeByIP";
 import { getCountryCode, getDeletedContacts } from "../helpers/indexedDB";
@@ -11,7 +10,7 @@ function useContactList() {
     const contacts = useStoreState((state) => state.contactList.contacts);
     const setContact = useStoreActions((actions) => actions.contactList.setContact);
     const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
-    const selectedContacts = useStoreState((state) => state.contactList.selectedContacts);
+    const selectedContactsNotSent = useStoreState((state) => state.contactList.selectedContactsNotSent);
     const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
 
     const setCountryCode = useStoreActions((actions) => actions.emailOptions.setCountryCode);
@@ -29,7 +28,6 @@ function useContactList() {
     const nationOptions = useStoreState((state) => state.contactList.nationOptions);
     const setNationOptionsFetched = useStoreActions((actions) => actions.contactList.setNationOptionsFetched);
     const selectedNations = useStoreState((state) => state.contactList.selectedNations);
-    const setIsSelectedAllNations = useStoreActions((actions) => actions.contactList.setIsSelectedAllNations);
 
     useSuspenseQuery({
         queryKey: ["isOnline", forcedRender],
@@ -66,28 +64,19 @@ function useContactList() {
 
     useEffect(() => {
         setNationOptionsFetched(_nationOptions);
-        setContacts(_contacts);
-        setDeletedContacts(_deletedContacts);
         setCountryCode(_countryCode === "GB" ? "UK" : _countryCode); // Needs to be after setNationOptionsFetched
-    }, [
-        _contacts,
-        _countryCode,
-        _deletedContacts,
-        _nationOptions,
-        setContacts,
-        setCountryCode,
-        setDeletedContacts,
-        setIsSelectedAllNations,
-        setNationOptionsFetched,
-    ]);
+    }, [_countryCode, _nationOptions, setCountryCode, setNationOptionsFetched]);
 
-    const threeMonthsAgo = Date.now() - threeMonths;
-    const selectedContactsNotSent = selectedContacts.filter((contact) => contact.sd < threeMonthsAgo);
+    useEffect(() => {
+        setContacts(_contacts);
+    }, [_contacts, setContacts]);
+
+    useEffect(() => {
+        setDeletedContacts(_deletedContacts);
+    }, [_deletedContacts, setDeletedContacts]);
+
     const maxSelectedContactsNotSent = Math.min(selectedContactsNotSent.length, maxCount);
-    const nextContactNotSent = selectedContactsNotSent[0] || {
-        n: "",
-        e: "",
-    };
+    const nextContactNotSent = selectedContactsNotSent[0] || { n: "", e: "" };
 
     return {
         endSession,
