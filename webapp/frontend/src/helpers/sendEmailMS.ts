@@ -15,7 +15,7 @@ type Args = {
 
 export async function sendEmailMS({ email, instance, accounts, scopes }: Args): Promise<StatusBackend> {
   async function sendEmail(accessToken: string): Promise<StatusBackend> {
-    const response = await fetchSendEmail(URL_SEND_EMAIL_MS, accessToken, email);
+    const response = await fetchSendEmail({ url: URL_SEND_EMAIL_MS, accessToken, email });
 
     if (!response.ok) {
       return await sendEmailResponseErrorParser<SendEmailMSResponseBody>('MS', response);

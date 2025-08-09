@@ -1,7 +1,20 @@
 import { Request } from 'express';
 
+interface Cookies {
+  cookies: {
+    session?: string;
+  };
+}
+
+export interface RequestWithCookies extends Omit<Request, 'cookies'>, Cookies {}
+
+export type Session = {
+  email?: string;
+  sessionId?: string;
+};
+
 // Keep this synced between backend and frontend
-export interface LoginGoogleRequest extends Request {
+export interface LoginGoogleRequest extends RequestWithCookies {
   body: {
     code: string;
   };
@@ -10,7 +23,6 @@ export interface LoginGoogleRequest extends Request {
 // Keep this synced between backend and frontend
 export interface LoginGoogleResponseBody {
   userEmail?: string;
-  accessToken?: string | null;
   error?: string;
 }
 
@@ -18,7 +30,6 @@ export interface LoginGoogleResponseBody {
 export interface VerifySessionGoogleResponseBody {
   valid: boolean;
   userEmail?: string;
-  accessToken?: string | null;
   error?: string;
 }
 
@@ -31,9 +42,8 @@ export interface RevokeSessionGoogleResponseBody {
 }
 
 // Keep this synced between backend and frontend
-export interface SendEmailGoogleRequest extends Request {
+export interface SendEmailGoogleRequest extends RequestWithCookies {
   body: {
-    accessToken: string;
     to: string;
     subject: string;
     emailBody: string; // HTML content
@@ -47,7 +57,7 @@ export interface SendEmailGoogleResponseBody {
 }
 
 // Keep this synced between backend and frontend
-export interface SendEmailMSRequest extends Request {
+export interface SendEmailMSRequest extends RequestWithCookies {
   body: {
     accessToken: string;
     to: string;

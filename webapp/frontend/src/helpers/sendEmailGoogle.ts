@@ -6,13 +6,12 @@ import { fetchSendEmail } from './fetchSendEmail';
 import { sendEmailResponseErrorParser } from './sendEmailResponseErrorParser';
 
 type Args = {
-  accessToken: string;
   email: Email;
 };
 
-export async function sendEmailGoogle({ accessToken, email }: Args): Promise<StatusBackend> {
-  async function sendEmail(accessToken: string): Promise<StatusBackend> {
-    const response = await fetchSendEmail(URL_SEND_EMAIL_GOOGLE, accessToken, email);
+export async function sendEmailGoogle({ email }: Args): Promise<StatusBackend> {
+  async function sendEmail(): Promise<StatusBackend> {
+    const response = await fetchSendEmail({ url: URL_SEND_EMAIL_GOOGLE, email });
 
     if (!response.ok) {
       return await sendEmailResponseErrorParser<SendEmailGoogleResponseBody>('Google', response);
@@ -24,7 +23,7 @@ export async function sendEmailGoogle({ accessToken, email }: Args): Promise<Sta
   }
 
   try {
-    return await sendEmail(accessToken);
+    return await sendEmail();
   } catch (catchError) {
     const message = ERROR_FAILED_SENDING_EMAIL;
     const error = `Unhandled error in sendEmailGoogle: ${catchError instanceof Error ? catchError.message : catchError}`;

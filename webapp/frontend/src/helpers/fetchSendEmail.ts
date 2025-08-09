@@ -1,9 +1,16 @@
 import { Email } from '../../../../addon/packages/interface/src/types/types';
 
-export async function fetchSendEmail(url: string, accessToken: string, email: Email) {
+interface Args {
+  url: string;
+  accessToken?: string;
+  email: Email;
+}
+
+export async function fetchSendEmail({ url, email, accessToken }: Args) {
   return await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({
       accessToken,
       to: email.to,

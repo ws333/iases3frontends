@@ -36,12 +36,12 @@ export function useHandleGoogleAuthCode() {
         });
 
         if (response.ok) {
-          const { userEmail, accessToken, error } = (await response.json()) as LoginGoogleResponseBody;
+          const { userEmail, error } = (await response.json()) as LoginGoogleResponseBody;
 
-          if (userEmail && accessToken) {
-            setCurrentLogin({ provider: 'Google', userEmail, accessToken });
+          if (userEmail) {
+            setCurrentLogin({ provider: 'Google', userEmail });
           } else {
-            console.warn(`${failedPrefix} no userEmail/accessToken received from backend: ${error}`);
+            console.warn(`${failedPrefix} no userEmail received from backend: ${error}`);
           }
         } else {
           console.warn(`${failedPrefix} ${response.status} ${response.statusText}`);
