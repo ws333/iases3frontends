@@ -7,10 +7,12 @@ import { ContactI3C } from "./typesI3C.ts";
 export interface Model {
     sendEmail: Thunk<Model, Email>;
     userDialog: UserDialog;
+    userMessage: UserMessage;
     contactList: ContactList;
     emailOptions: EmailOptions;
     auth: Auth;
     render: Render;
+    sendingLog: SendingLog;
 }
 
 interface Auth {
@@ -24,6 +26,7 @@ interface ContactList {
     setContact: Action<ContactList, ContactI3C>;
     setContacts: Action<ContactList, ContactI3C[]>;
     selectedContacts: Computed<ContactList, ContactI3C[], Model>;
+    selectedContactsNotSent: Computed<ContactList, ContactI3C[], Model>;
 
     deletedContacts: ContactI3C[];
     setDeletedContacts: Action<ContactList, ContactI3C[]>;
@@ -92,6 +95,13 @@ interface Render {
     initiateForcedRender: Action<Render>;
 }
 
+export interface SendingLog {
+    log: string[];
+    setLog: Action<SendingLog, string[]>;
+    fetchLog: Thunk<SendingLog>;
+    addLogItem: Thunk<SendingLog, { message: string; addNewline?: boolean }>;
+}
+
 export interface UserDialog {
     title?: string;
     message: string | JSX.Element;
@@ -102,4 +112,9 @@ export interface UserDialog {
     closeDialog: Thunk<UserDialog>;
     setUserDialog: Action<UserDialog, Partial<UserDialog>>;
     showConfirmationModal?: boolean;
+}
+
+export interface UserMessage {
+    message: string;
+    setMessage: Action<UserMessage, string>;
 }

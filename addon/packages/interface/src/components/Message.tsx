@@ -1,8 +1,8 @@
-type Props = {
-    message: string;
-};
+import { useStoreState } from "../store/store";
 
-function Message({ message }: Props) {
+function Message() {
+    const message = useStoreState((state) => state.userMessage.message);
+
     return (
         <div className="container_message">
             {message.split("\n").map((line, idx) => (
