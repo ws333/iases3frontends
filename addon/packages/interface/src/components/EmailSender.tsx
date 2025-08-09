@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { Email, MessagePayload, ProjectEnvProps } from "../types/types";
-import type { ContactI3C, LogMessageOptions } from "../types/typesI3C";
+import type { ContactI3C } from "../types/typesI3C";
 import {
     ERROR_ENVIRONMENT_UNKNOWN,
     defaultRandomWindow,
@@ -11,13 +11,11 @@ import { useContactList } from "../hooks/useContactList";
 import { useEmailOptions } from "../hooks/useEmailOptions";
 import { useUpdateSendingStats } from "../hooks/useUpdateSendingStats";
 import { getSessionFinishedText } from "../helpers/getSessionFinishedText";
-import { isDevMode } from "../helpers/getSetDevMode";
 import { storeActiveContacts } from "../helpers/indexedDB";
 import { renderEmail } from "../helpers/renderEmail";
-import { getLogsToDisplay, logSendingMessage } from "../helpers/sendingLog";
 import { checkForDangelingSession, clearSessionState, updateSessionState } from "../helpers/sessionState";
 import { waitRandomSeconds } from "../helpers/waitRandomSeconds";
-import { useStoreState } from "../store/store";
+import { useStoreActions, useStoreState } from "../store/store";
 import ButtonEndSession from "./ButtonEndSession";
 import ButtonSendEmails from "./ButtonSendEmails";
 import ButtonStopSending from "./ButtonStopSending";
@@ -41,12 +39,12 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isSending, setIsSending] = useState(false);
     const [prefilghtInProgess, setPrefilghtInProgess] = useState(false);
-    const [sendingLog, setSendingLog] = useState<string[]>([]);
 
     const userDialog = useStoreState((state) => state.userDialog);
-    const forcedRender = useStoreState((state) => state.render.forcedRender);
     const countryCodeRef = useRef("");
     countryCodeRef.current = useStoreState((state) => state.emailOptions.countryCode);
+
+    const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
 
     const controller = useRef(new AbortController());
 
@@ -67,21 +65,9 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
 
     const { delay, EmailComponent, selectedSubject } = useEmailOptions();
 
-    const logMessage = (message: string, options?: LogMessageOptions) => {
-        logSendingMessage(message, { setFn: setSendingLog, ...options });
-    };
-
     useEffect(() => {
-        if (isDevMode()) console.log(`Updating sendingLog after reset on render #${forcedRender}`);
-
-        async function readLog() {
-            await checkForDangelingSession();
-            const logsToDisplay = await getLogsToDisplay();
-            setSendingLog(logsToDisplay);
-        }
-
-        void readLog();
-    }, [forcedRender]);
+        void checkForDangelingSession();
+    }, []);
 
     const leftToSendCount = useRef(0);
     const remainingCountSession = Math.max(0, maxCount - emailsSent);
@@ -101,7 +87,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                 await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
                 const message = getSessionFinishedText(emailsSent);
                 setMessage(message);
-                logMessage(message, { addNewline: true });
+                addLogItem({ message, addNewline: true });
                 clearSessionState();
                 checkInProgress.current = false;
                 setEmailsSent(0);
@@ -111,7 +97,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
             }
         }
         void checkIfSessionFinished();
-    }, [emailsSent, endSession, setEmailsSent, setEndSession, selectedNationsChangedSinceLastSending]);
+    }, [emailsSent, endSession, setEmailsSent, setEndSession, selectedNationsChangedSinceLastSending, addLogItem]);
 
     useEffect(() => {
         const handleEmailStatus = (e: MessageEvent<MessagePayload>) => {
@@ -208,12 +194,12 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                 contact.sc++;
                 setContact(contact); // Update the contact in state
                 await storeActiveContacts(contact); // Update the contact in indexedDB
-                logMessage(`Email sent to ${logContact}`);
+                addLogItem({ message: `Email sent to ${logContact}` });
 
                 await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
             } catch (error) {
                 console.warn("Error in onClickSendEmail:", error);
-                logMessage(`Failed to send email to ${logContact}`);
+                addLogItem({ message: `Failed to send email to ${logContact}` });
             }
         }
 
@@ -328,7 +314,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                 </div>
             </div>
 
-            <SendingLog logMessages={sendingLog} />
+            <SendingLog />
         </div>
     );
 }

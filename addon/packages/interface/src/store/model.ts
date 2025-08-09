@@ -4,6 +4,7 @@
  */
 import { action, computed, thunk, thunkOn } from "easy-peasy";
 import type { Model } from "../types/modelTypes";
+import { zeroWidthSpace } from "../constants/constants";
 import { defaultMaxCount, defaultSendingDelay } from "../constants/constants";
 import { countryCodes_EU } from "../constants/countryCodes";
 import {
@@ -14,7 +15,10 @@ import {
     subjects,
 } from "../constants/emailTemplates";
 import TextEndingSession from "../components/dialogTexts/TextEndingSession";
+import { getDateTime } from "../helpers/getDateTime";
+import { storeSendingLog } from "../helpers/indexedDB";
 import { storeOptionsKey } from "../helpers/indexedDB";
+import { getLogsToDisplay } from "../helpers/sendingLog";
 import { messageParent } from "../service";
 
 export const model: Model = {
@@ -254,5 +258,33 @@ export const model: Model = {
     render: {
         forcedRender: 1,
         initiateForcedRender: action((state) => ({ ...state, forcedRender: state.forcedRender + 1 })),
+    },
+    sendingLog: {
+        log: await getLogsToDisplay(),
+        setLog: action((state, payload) => ({
+            ...state,
+            log: [...payload],
+        })),
+        fetchLog: thunk(async (actions) => {
+            const logs = await getLogsToDisplay();
+            actions.setLog(logs);
+        }),
+        addLogItem: thunk(async (actions, payload, { getState }) => {
+            const { message, addNewline } = payload;
+            const state = getState();
+
+            const timestamp = Date.now();
+            const messageWithTime = `${getDateTime(timestamp)} - ${message}`;
+            const newValue = [messageWithTime, ...state.log];
+            const newStorageEntry = [{ message, timestamp }];
+
+            if (addNewline) {
+                newValue.unshift(zeroWidthSpace);
+                newStorageEntry.push({ message: zeroWidthSpace, timestamp: timestamp + 1 });
+            }
+
+            await storeSendingLog(newStorageEntry);
+            actions.setLog(newValue);
+        }),
     },
 };

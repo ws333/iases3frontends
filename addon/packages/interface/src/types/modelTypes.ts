@@ -11,6 +11,7 @@ export interface Model {
     emailOptions: EmailOptions;
     auth: Auth;
     render: Render;
+    sendingLog: SendingLog;
 }
 
 interface Auth {
@@ -90,6 +91,13 @@ interface EmailOptions {
 interface Render {
     forcedRender: number;
     initiateForcedRender: Action<Render>;
+}
+
+export interface SendingLog {
+    log: string[];
+    setLog: Action<SendingLog, string[]>;
+    fetchLog: Thunk<SendingLog>;
+    addLogItem: Thunk<SendingLog, { message: string; addNewline?: boolean }>;
 }
 
 export interface UserDialog {
