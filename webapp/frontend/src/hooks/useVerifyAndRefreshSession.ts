@@ -28,8 +28,7 @@ export function useVerifyAndRefreshSession({ loginGoogleInProgress }: Args) {
 
   const lastClickedLogin = getLastLoginButtonClicked();
 
-  // Check if we're in a legitimate Google OAuth flow
-  const hasGoogleOAuthParams = location.search.includes('code=');
+  const hasGoogleOAuthParams = location.search.includes('code='); // Check if we're in a Google OAuth flow
 
   useEffect(() => {
     async function verifyAndRefreshSessionGoogle(): Promise<void> {
@@ -45,15 +44,18 @@ export function useVerifyAndRefreshSession({ loginGoogleInProgress }: Args) {
           const resRefresh = await fetch(urlRefresh, { credentials: 'include' });
 
           if (resRefresh.ok) {
-            const { userEmail, accessToken } = (await resRefresh.json()) as RefreshSessionGoogleResponseBody;
+            const { userEmail } = (await resRefresh.json()) as RefreshSessionGoogleResponseBody;
 
-            if (userEmail && accessToken) {
-              setCurrentLogin({ provider: 'Google', userEmail, accessToken });
+            if (!userEmail) alert('No userEmail received from  backend after refresh token'); // Todo: Remove this line
+
+            if (userEmail) {
+              setCurrentLogin({ provider: 'Google', userEmail });
+              return;
             } else {
-              console.warn(`${failedPrefix} no userEmail/accessToken received from backend`);
+              console.warn(`${failedPrefix} no userEmail received from backend`);
               resetCurrentLogin();
+              return;
             }
-            return;
           } else {
             // Status for resRefresh is not 200
             console.warn(`${failedPrefix} ${resRefresh.status} ${resRefresh.statusText}`);
@@ -65,14 +67,15 @@ export function useVerifyAndRefreshSession({ loginGoogleInProgress }: Args) {
         } else if (!resVerify.ok) {
           // Status for resVerify is not 200 and other than 401 not authorized - reset currentLogin just in case
           resetCurrentLogin();
-          return console.warn(`${failedPrefix} ${resVerify.status} ${resVerify.statusText}`);
+          console.warn(`${failedPrefix} ${resVerify.status} ${resVerify.statusText}`);
+          return;
         }
 
         // Session is still valid if we get this far
-        const { valid, userEmail, accessToken, error } = (await resVerify.json()) as VerifySessionGoogleResponseBody;
+        const { valid, userEmail, error } = (await resVerify.json()) as VerifySessionGoogleResponseBody;
 
-        if (valid && userEmail && accessToken) {
-          setCurrentLogin({ provider: 'Google', userEmail, accessToken });
+        if (valid && userEmail) {
+          setCurrentLogin({ provider: 'Google', userEmail });
         } else {
           console.warn(`${failedPrefix} error: ${error}`);
         }

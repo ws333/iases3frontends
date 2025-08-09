@@ -21,7 +21,7 @@ export function useCurrentLogin() {
     });
 
   if (provider === 'Google') {
-    sendEmailFn = async (email: Email) => await sendEmailGoogle({ accessToken: currentLogin.accessToken ?? '', email });
+    sendEmailFn = async (email: Email) => await sendEmailGoogle({ email });
   }
 
   if (provider === 'MS') {
