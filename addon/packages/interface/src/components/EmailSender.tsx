@@ -111,7 +111,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
             if (message.type === "SEND_EMAIL_STATUS" && message.data?.sendEmailStatus?.headerMessageId === null) {
                 controller.current.abort();
                 setMessage(
-                    "Sending of the last email failed or was cancelled by user, if it failed please make sure you are online."
+                    "The last email failed to send or was canceled. If it failed, please check your internet connection."
                 );
             }
         };
