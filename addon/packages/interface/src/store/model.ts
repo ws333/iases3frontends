@@ -72,7 +72,7 @@ export const model: Model = {
         setEndSession: action((state, payload) => ({ ...state, endSession: payload })),
 
         nationOptions: [],
-        setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload] })),
+        setNationOptions: action((state, payload) => ({ ...state, nationOptions: [...payload.sort()] })),
         updateSelectedNations: thunkOn(
             (actions) => actions.setNationOptions,
             (actions, target, { getState }) => {
