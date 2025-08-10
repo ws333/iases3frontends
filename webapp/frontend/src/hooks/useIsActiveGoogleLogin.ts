@@ -8,25 +8,20 @@ export function useIsActiveGoogleLogin() {
   const [isActiveGoogleLogin, setIsActiveGoogleLogin] = useState<IsActiveGoogleLogin>({ status: false, userEmail: '' });
 
   useEffect(() => {
-    let isUnmounted = false;
-    async function checkSession() {
+    void (async () => {
       try {
         const urlVerify = `${URL_BACKEND}/${PATH_VERIFY_SESSION_GOOGLE}`;
         const res = await fetch(urlVerify, { credentials: 'include' });
         if (!res.ok) return;
 
         const { valid, userEmail } = (await res.json()) as VerifySessionGoogleResponseBody;
-        if (!isUnmounted && userEmail) {
+        if (userEmail) {
           setIsActiveGoogleLogin({ status: valid, userEmail });
         }
       } catch (error) {
         console.warn(`Error checking for active Google login: ${error}`);
       }
-    }
-    void checkSession();
-    return () => {
-      isUnmounted = true;
-    };
+    })();
   }, []);
 
   return { isActiveGoogleLogin };
