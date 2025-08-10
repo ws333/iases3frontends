@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { IsActiveGoogleLogin, LoginDebounceMeasurements } from '../types/types';
+import { IsActiveGoogleLogin, LoginDebounceMeasurements, ShowActiveLoginButtons } from '../types/types';
 import { getLoginDebounceMeasurements, setLoginDebounceMeasurements } from '../helpers/localstorageHelpers';
-
-type ShowButtons = 'both' | 'google' | 'ms' | 'none';
 
 const maxMeasurements = 100;
 const defaultDebounceTime = 500;
@@ -15,7 +13,7 @@ interface Props {
 
 export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSLogin }: Props) {
   // Debounce and measurement logic
-  const [showButtons, setShowButtons] = useState<ShowButtons>('none');
+  const [showActiveLoginButtons, setShowActiveLoginButtons] = useState<ShowActiveLoginButtons>('none');
   const [debounceTime, setDebounceTime] = useState(defaultDebounceTime);
   const mountTimeRef = useRef<number>(Date.now());
   const measurementsRef = useRef<LoginDebounceMeasurements>([]);
@@ -59,13 +57,13 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
     if (elapsed < debounceTime) {
       timeout = setTimeout(() => {
         if (isActiveMSLogin && isActiveGoogleLogin.status) {
-          setShowButtons('both');
+          setShowActiveLoginButtons('both');
         } else if (isActiveMSLogin) {
-          setShowButtons('ms');
+          setShowActiveLoginButtons('ms');
         } else if (isActiveGoogleLogin.status) {
-          setShowButtons('google');
+          setShowActiveLoginButtons('google');
         } else {
-          setShowButtons('none');
+          setShowActiveLoginButtons('none');
         }
       }, debounceTime - elapsed);
     }
@@ -73,5 +71,5 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
     return () => clearTimeout(timeout);
   }, [isActiveMSLogin, isActiveGoogleLogin.status, debounceTime]);
 
-  return { showButtons };
+  return { showActiveLoginButtons };
 }
