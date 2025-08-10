@@ -8,6 +8,8 @@ export type LoginDebounceMeasurements = number[];
 
 export type LoginGoogleInProgress = 'true' | 'cleanedup';
 
+export type ShowActiveLoginButtons = 'both' | 'google' | 'ms' | 'none';
+
 export type { AccountInfo, IPublicClientApplication, InteractionStatus } from '@azure/msal-browser';
 
 export type { Provider } from '../../../../addon/packages/interface/src/types/types';
