@@ -4,8 +4,8 @@ import { AccountInfo, IPublicClientApplication } from '../types/types';
 import { DOCS_URL } from '../constants/constantsImportMeta';
 import HeaderWithIFO from '../../../../addon/packages/interface/src/components/HeaderWithIFO';
 import { setLastLoginButtonClicked, setLoginGoogleInProgress } from '../helpers/localstorageHelpers';
+import { GOOGLE_LOGIN_CONFIG } from '../auth/authConfigGoogle.ts';
 import { loginRequest } from '../auth/authConfigMS';
-import { GOOGLE_LOGIN_CONFIG } from '../auth/autoConfigGoogle';
 import { divButtonsStylesRow, divContainerButtons, outerDivStyles } from '../styles/loginStyles';
 import ActiveLoginButtons from './ActiveLoginButtons';
 
