@@ -282,7 +282,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
 
                 <div className="container_buttons">
                     {!isSending && (
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="container_buttons_not_issending">
                             {emailsSent > 0 && !endSession && !checkInProgress.current && (
                                 <ButtonEndSession onClick={onClickEndSession} />
                             )}

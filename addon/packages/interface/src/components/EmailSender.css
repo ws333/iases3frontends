@@ -45,6 +45,11 @@ p {
     justify-content: center;
 }
 
+.container_buttons_not_issending {
+    display: flex;
+    justify-content: "space-between";
+}
+
 .session_buttons {
     margin-left: 0.5rem !important;
     margin-right: 0.5rem !important;
