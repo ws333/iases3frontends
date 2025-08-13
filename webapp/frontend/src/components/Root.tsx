@@ -12,7 +12,7 @@ import Loading from '../../../../addon/packages/interface/src/components/Loading
 import { setDevModeIfLocalhost } from '../../../../addon/packages/interface/src/helpers/getSetDevMode';
 import { PersistentStateKey, usePersistentState } from '../../../../addon/packages/interface/src/state/persistentState';
 import { MSAuthProvider } from '../auth/MSAuthProvider';
-import { GOOGLE_OAUTH_CLIENT_ID } from '../auth/autoConfigGoogle';
+import { GOOGLE_OAUTH_CLIENT_ID } from '../auth/authConfigGoogle';
 import { store } from '../store/storeWithHooks';
 import SetProjectEnvironment from './SetProjectEnvironment';
 
