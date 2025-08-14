@@ -8,7 +8,12 @@ import {
   URL_DOCS_DEV,
   URL_DOCS_PROD,
 } from './constants';
-import { PATH_SEND_EMAIL_GOOGLE, PATH_SEND_EMAIL_MS } from './constantsEndpointPaths';
+import {
+  PATH_LOGIN_GOOGLE_OAUTH2,
+  PATH_PING,
+  PATH_SEND_EMAIL_GOOGLE,
+  PATH_SEND_EMAIL_MS,
+} from './constantsEndpointPaths';
 
 /**
  * WARNING: Do NOT import this file in vite.config.ts or anything imported by it!
@@ -29,13 +34,17 @@ if (!import.meta?.env) {
 
 export const DOCS_URL = import.meta.env.PROD ? URL_DOCS_PROD : URL_DOCS_DEV;
 
-export const REDIRECT_URI = import.meta.env.PROD ? `${SERVER_PROD}${PATH_REDIRECT}` : `${SERVER_DEV}${PATH_REDIRECT}`;
+export const URL_WEBAPP_PROTECTED = import.meta.env.PROD
+  ? `${SERVER_PROD}${PATH_REDIRECT}`
+  : `${SERVER_DEV}${PATH_REDIRECT}`;
 
-export const POST_LOGOUT_REDIRECT_URI = import.meta.env.PROD
-  ? `${SERVER_PROD}${PATH_BASE}`
-  : `${SERVER_DEV}${PATH_BASE}`;
+export const URL_WEBAPP_BASE = import.meta.env.PROD ? `${SERVER_PROD}${PATH_BASE}` : `${SERVER_DEV}${PATH_BASE}`;
 
 export const URL_BACKEND = import.meta.env.PROD ? URL_BACKEND_PROD : URL_BACKEND_DEV;
 
-export const URL_SEND_EMAIL_GOOGLE = `${URL_BACKEND}/${PATH_SEND_EMAIL_GOOGLE}`;
-export const URL_SEND_EMAIL_MS = `${URL_BACKEND}/${PATH_SEND_EMAIL_MS}`;
+export const URL_SEND_EMAIL_GOOGLE = `${URL_BACKEND}${PATH_SEND_EMAIL_GOOGLE}`;
+export const URL_SEND_EMAIL_MS = `${URL_BACKEND}${PATH_SEND_EMAIL_MS}`;
+
+export const URI_LOGIN_GOOGLE_REDIRECT = `${URL_BACKEND}${PATH_LOGIN_GOOGLE_OAUTH2}`;
+
+export const URL_BACKEND_PING = `${URL_BACKEND}${PATH_PING}`;

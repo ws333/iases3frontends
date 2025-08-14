@@ -2,11 +2,9 @@ import { CurrentLogin } from '../../../../addon/packages/interface/src/types/typ
 
 export type IsActiveGoogleLogin = { status: boolean; userEmail: string };
 
-export type LastLoginButtonValue = NonNullable<CurrentLogin['provider']>;
+export type LastClickedLoginButton = NonNullable<CurrentLogin['provider']>;
 
 export type LoginDebounceMeasurements = number[];
-
-export type LoginGoogleInProgress = 'true' | 'cleanedup';
 
 export type ShowActiveLoginButtons = 'both' | 'google' | 'ms' | 'none';
 

@@ -1,30 +1,14 @@
 import { Request } from 'express';
 
+// Keep this synced between backend and frontend
 interface Cookies {
   cookies: {
     session?: string;
   };
 }
 
+// Keep this synced between backend and frontend
 export interface RequestWithCookies extends Omit<Request, 'cookies'>, Cookies {}
-
-export type Session = {
-  email?: string;
-  sessionId?: string;
-};
-
-// Keep this synced between backend and frontend
-export interface LoginGoogleRequest extends RequestWithCookies {
-  body: {
-    code: string;
-  };
-}
-
-// Keep this synced between backend and frontend
-export interface LoginGoogleResponseBody {
-  userEmail?: string;
-  error?: string;
-}
 
 // Keep this synced between backend and frontend
 export interface VerifySessionGoogleResponseBody {
