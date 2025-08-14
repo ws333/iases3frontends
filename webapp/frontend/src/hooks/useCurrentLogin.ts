@@ -4,11 +4,9 @@ import { sendEmailMS } from '../helpers/sendEmailMS';
 import { loginRequest } from '../auth/authConfigMS';
 import { useStoreState } from '../store/storeWithHooks';
 import { useCheckAndSetCurrentLoginMS } from './useCheckAndSetCurrentLoginMS';
-import { useHandleGoogleAuthCode } from './useHandleGoogleAuthCode';
 
 export function useCurrentLogin() {
   const { accountsMS, inProgressMS, instanceMS } = useCheckAndSetCurrentLoginMS();
-  useHandleGoogleAuthCode();
 
   const currentLogin = useStoreState((state) => state.auth.currentLogin);
 

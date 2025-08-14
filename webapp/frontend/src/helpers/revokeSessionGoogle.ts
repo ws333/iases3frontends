@@ -3,10 +3,10 @@ import { PATH_REVOKE_SESSION_GOOGLE } from '../constants/constantsEndpointPaths'
 import { URL_BACKEND } from '../constants/constantsImportMeta';
 
 export async function revokeSessionGoogle() {
-  const url = `${URL_BACKEND}/${PATH_REVOKE_SESSION_GOOGLE}`;
+  const url = `${URL_BACKEND}${PATH_REVOKE_SESSION_GOOGLE}`;
   const response = await fetch(url, {
     method: 'GET',
-    credentials: 'include', // To send cookies
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
   });
 

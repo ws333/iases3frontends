@@ -1,6 +1,6 @@
 import { Button } from 'ui-kit';
 import { IPublicClientApplication } from '../types/types';
-import { POST_LOGOUT_REDIRECT_URI } from '../constants/constantsImportMeta';
+import { URL_WEBAPP_BASE } from '../constants/constantsImportMeta';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { useStoreActions } from '../store/storeWithHooks';
 
@@ -15,7 +15,7 @@ const MSLogOut = ({ instance }: Props) => {
     instance
       .logoutRedirect({
         account: instance.getActiveAccount(),
-        postLogoutRedirectUri: POST_LOGOUT_REDIRECT_URI,
+        postLogoutRedirectUri: URL_WEBAPP_BASE,
       })
       .then(() => {
         removeLastLoginButtonClicked();

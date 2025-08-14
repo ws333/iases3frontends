@@ -18,10 +18,10 @@ function SetProjectEnvironment() {
   const sendEmailPreflightFn = pingBackend;
 
   const HeaderButtonsComponent =
-    provider === 'MS' ? (
-      <MSHeaderButtons accounts={accountsMS} instance={instanceMS} />
-    ) : (
+    provider === 'Google' ? (
       <GoogleHeaderButtons userEmail={userEmail} />
+    ) : (
+      <MSHeaderButtons accounts={accountsMS} instance={instanceMS} />
     );
 
   return (

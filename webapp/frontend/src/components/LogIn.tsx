@@ -3,7 +3,7 @@ import { Button } from 'ui-kit';
 import { AccountInfo, IPublicClientApplication } from '../types/types';
 import { DOCS_URL } from '../constants/constantsImportMeta';
 import HeaderWithIFO from '../../../../addon/packages/interface/src/components/HeaderWithIFO';
-import { setLastLoginButtonClicked, setLoginGoogleInProgress } from '../helpers/localstorageHelpers';
+import { setLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { GOOGLE_LOGIN_CONFIG } from '../auth/authConfigGoogle.ts';
 import { loginRequest } from '../auth/authConfigMS';
 import { divButtonsStylesRow, divContainerButtons, outerDivStyles } from '../styles/loginStyles';
@@ -28,7 +28,6 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
 
   const onClickGoogleLogin = () => {
     setLastLoginButtonClicked('Google');
-    setLoginGoogleInProgress('true');
     googleLogin();
   };
 
