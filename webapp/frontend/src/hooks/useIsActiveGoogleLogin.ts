@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react';
-import { IsActiveGoogleLogin } from '../types/types';
-import { verifyGoogleLogin } from '../auth/verifyGoogleLogin';
+import { useQuery } from '@tanstack/react-query';
+import { fetchVerifySessionGoogle } from '../helpers/fetchVerifySessionGoogle';
 
 export function useIsActiveGoogleLogin() {
-  const [isActiveGoogleLogin, setIsActiveGoogleLogin] = useState<IsActiveGoogleLogin>({ status: false, userEmail: '' });
+  const { data = { status: false, userEmail: '' }, ...query } = useQuery({
+    queryKey: ['isActiveGoogleLogin'],
+    queryFn: fetchVerifySessionGoogle,
+  });
 
-  useEffect(() => {
-    void verifyGoogleLogin(setIsActiveGoogleLogin);
-  }, []);
-
-  return { isActiveGoogleLogin };
+  return { isActiveGoogleLogin: data, ...query };
 }
