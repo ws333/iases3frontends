@@ -1,5 +1,7 @@
 import { CurrentLogin } from '../../../../addon/packages/interface/src/types/types';
 
+export type ButtonAuthType = 'signIn' | 'continue';
+
 export type IsActiveGoogleLogin = { status: boolean; userEmail: string };
 
 export type LastClickedLoginButton = NonNullable<CurrentLogin['provider']>;
