@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 function Docs() {
   return (
     <div className="docs-container">
-      <h1>Information</h1>
+      <h1>Documentation and information</h1>
       <ul>
         <li>
           <Link to="/documentation">Documentation</Link>
