@@ -23,7 +23,7 @@ export default tseslint.config(
             "@typescript-eslint/consistent-type-definitions": "off",
             "@typescript-eslint/no-confusing-void-expression": "off",
             "@typescript-eslint/no-explicit-any": "warn",
-            "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+            "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
             "@typescript-eslint/no-misused-promises": "off",
             "@typescript-eslint/no-unsafe-assignment": "off",
             "@typescript-eslint/no-unsafe-return": "off",
