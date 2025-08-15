@@ -6,8 +6,15 @@ import HeaderWithIFO from '../../../../addon/packages/interface/src/components/H
 import { setLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { GOOGLE_LOGIN_CONFIG } from '../auth/authConfigGoogle.ts';
 import { loginRequest } from '../auth/authConfigMS';
-import { divButtonsStylesRow, divContainerButtons, outerDivStyles } from '../styles/loginStyles';
+import {
+  buttonDocumentationStyles,
+  divButtonsColumnStyles,
+  divContainerButtons,
+  outerDivStyles,
+} from '../styles/loginStyles';
 import ActiveLoginButtons from './ActiveLoginButtons';
+import ButtonGoogle from './ButtonGoogle.tsx';
+import ButtonMS from './ButtonMS.tsx';
 
 interface Props {
   accountsMS: AccountInfo[];
@@ -24,6 +31,10 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
       .catch((error: unknown) => console.warn(error));
   };
 
+  const onClickInformation = () => {
+    window.location.assign(DOCS_URL);
+  };
+
   const googleLogin = useGoogleLogin(GOOGLE_LOGIN_CONFIG);
 
   const onClickGoogleLogin = () => {
@@ -31,18 +42,16 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
     googleLogin();
   };
 
-  const onClickInformation = () => {
-    window.location.assign(DOCS_URL);
-  };
-
   return (
     <div style={outerDivStyles}>
       <HeaderWithIFO />
       <div style={divContainerButtons}>
-        <div style={divButtonsStylesRow}>
-          <Button onClick={onClickInformation}>Information</Button>
-          <Button onClick={onClickGoogleLogin}>Login with Google</Button>
-          <Button onClick={onClickLoginMS}>Login with Microsoft</Button>
+        <div style={divButtonsColumnStyles}>
+          <Button style={buttonDocumentationStyles} onClick={onClickInformation}>
+            Documentation and information
+          </Button>
+          <ButtonGoogle type="signIn" onClick={onClickGoogleLogin} />
+          <ButtonMS type="signIn" onClick={onClickLoginMS} />
         </div>
         <ActiveLoginButtons accountsMS={accountsMS} />
       </div>
