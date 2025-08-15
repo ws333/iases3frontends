@@ -1,16 +1,21 @@
 import { googleLogout } from '@react-oauth/google';
+import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
+import { fetchRevokeSessionGoogle } from '../helpers/fetchRevokeSessionGoogle';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
-import { revokeSessionGoogle } from '../helpers/revokeSessionGoogle';
 import { useStoreActions } from '../store/storeWithHooks';
 
 const GoogleLogOut = () => {
   const resetCurrentLogin = useStoreActions((state) => state.auth.resetCurrentLogin);
   const navigate = useNavigate();
 
+  const { mutateAsync: revokeSession } = useMutation({
+    mutationFn: fetchRevokeSessionGoogle,
+  });
+
   const onClickLogout = async () => {
-    await revokeSessionGoogle();
+    await revokeSession();
     googleLogout();
     removeLastLoginButtonClicked();
     resetCurrentLogin();
