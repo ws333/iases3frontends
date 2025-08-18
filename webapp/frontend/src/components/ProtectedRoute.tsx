@@ -15,13 +15,13 @@ function ProtectedRoute({ accountsMS, inProgressMS }: Props) {
   const currentLogin = useStoreState((state) => state.auth.currentLogin);
 
   const lastClickedLogin = getLastLoginButtonClicked();
-  const { verifyInProgessGoogle } = useVerifyAndRefreshSessionGoogle({ lastClickedLogin });
+  const { verifyInProgessGoogle, verifyErrorGoogle } = useVerifyAndRefreshSessionGoogle({ lastClickedLogin });
   useCheckAndSetCurrentLoginMS();
 
   if (
     inProgressMS !== 'none' ||
     (verifyInProgessGoogle && lastClickedLogin === 'Google') ||
-    (currentLogin.provider == null && lastClickedLogin === 'Google')
+    (currentLogin.provider == null && !verifyErrorGoogle && lastClickedLogin === 'Google')
   ) {
     return <Loading showSpinner={false} />;
   }

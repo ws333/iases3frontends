@@ -4,6 +4,7 @@ import { PATH_PROTECTED } from '../constants/constants';
 import App from '../../../../addon/packages/interface/src/components/App';
 import { useCurrentLogin } from '../hooks/useCurrentLogin';
 import { pingBackend } from '../helpers/pingBackend';
+import { sendEmailPreflightFnGoogle } from '../helpers/sendEmailPreflightFnGoogle';
 import GoogleHeaderButtons from './GoogleHeaderButtons';
 import LogIn from './LogIn';
 import MSHeaderButtons from './MSHeaderButtons';
@@ -15,14 +16,14 @@ function SetProjectEnvironment() {
 
   const { accountsMS, inProgressMS, instanceMS, userEmail, provider, sendEmailFn } = useCurrentLogin();
 
-  const sendEmailPreflightFn = pingBackend;
-
   const HeaderButtonsComponent =
     provider === 'Google' ? (
       <GoogleHeaderButtons userEmail={userEmail} />
     ) : (
       <MSHeaderButtons accounts={accountsMS} instance={instanceMS} />
     );
+
+  const sendEmailPreflightFn = provider === 'Google' ? sendEmailPreflightFnGoogle : pingBackend;
 
   return (
     <Routes>

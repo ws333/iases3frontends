@@ -13,6 +13,7 @@ export interface RequestWithCookies extends Omit<Request, 'cookies'>, Cookies {}
 // Keep this synced between backend and frontend
 export interface VerifySessionGoogleResponseBody {
   valid: boolean;
+  missingRefreshToken?: boolean;
   userEmail?: string;
   error?: string;
 }
@@ -25,13 +26,15 @@ export interface RevokeSessionGoogleResponseBody {
   error?: string;
 }
 
+type SendEmailRequestBodyBase = {
+  to: string;
+  subject: string;
+  emailBody: string; // HTML content
+};
+
 // Keep this synced between backend and frontend
 export interface SendEmailGoogleRequest extends RequestWithCookies {
-  body: {
-    to: string;
-    subject: string;
-    emailBody: string; // HTML content
-  };
+  body: SendEmailRequestBodyBase;
 }
 
 // Keep this synced between backend and frontend
@@ -42,11 +45,8 @@ export interface SendEmailGoogleResponseBody {
 
 // Keep this synced between backend and frontend
 export interface SendEmailMSRequest extends RequestWithCookies {
-  body: {
+  body: SendEmailRequestBodyBase & {
     accessToken: string;
-    to: string;
-    subject: string;
-    emailBody: string; // HTML content
   };
 }
 
