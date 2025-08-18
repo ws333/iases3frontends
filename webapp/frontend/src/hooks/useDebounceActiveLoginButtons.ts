@@ -12,7 +12,6 @@ interface Props {
 }
 
 export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSLogin }: Props) {
-  // Debounce and measurement logic
   const [showActiveLoginButtons, setShowActiveLoginButtons] = useState<ShowActiveLoginButtons>('none');
   const [debounceTime, setDebounceTime] = useState(defaultDebounceTime);
   const mountTimeRef = useRef<number>(Date.now());
@@ -26,7 +25,7 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
 
   // Google login check is the slowest so only measure the time and update rolling window if active google login
   useEffect(() => {
-    if (isActiveGoogleLogin.status) {
+    if (isActiveGoogleLogin.valid) {
       const now = Date.now();
       const elapsed = Math.min(maxDebounceTime, now - mountTimeRef.current);
 
@@ -47,7 +46,7 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
         setDebounceTime(percentile99);
       }
     }
-  }, [isActiveMSLogin, isActiveGoogleLogin.status]);
+  }, [isActiveMSLogin, isActiveGoogleLogin.valid]);
 
   // Debounce display: only show buttons after debounceTime has passed
   useEffect(() => {
@@ -56,11 +55,11 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
     const elapsed = now - mountTimeRef.current;
     if (elapsed < debounceTime) {
       timeout = setTimeout(() => {
-        if (isActiveMSLogin && isActiveGoogleLogin.status) {
+        if (isActiveMSLogin && isActiveGoogleLogin.valid) {
           setShowActiveLoginButtons('both');
         } else if (isActiveMSLogin) {
           setShowActiveLoginButtons('ms');
-        } else if (isActiveGoogleLogin.status) {
+        } else if (isActiveGoogleLogin.valid) {
           setShowActiveLoginButtons('google');
         } else {
           setShowActiveLoginButtons('none');
@@ -69,7 +68,7 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
     }
 
     return () => clearTimeout(timeout);
-  }, [isActiveMSLogin, isActiveGoogleLogin.status, debounceTime]);
+  }, [isActiveMSLogin, isActiveGoogleLogin.valid, debounceTime]);
 
   return { showActiveLoginButtons };
 }

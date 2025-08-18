@@ -12,7 +12,7 @@ export type Email = Pick<browser.compose.ComposeDetails, "to" | "subject" | "bod
 
 export type StatusBackend = {
     status: "OK" | "ERROR";
-    message: string; // Message to display to user
+    message?: string; // Message to display to user
     error?: string;
 };
 
