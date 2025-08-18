@@ -136,7 +136,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
             const result = await sendEmailPreflightFn();
             setPrefilghtInProgess(false);
 
-            if (result.status === "ERROR") {
+            if (result.status === "ERROR" && result.message) {
                 setMessage(result.message);
                 return;
             }
