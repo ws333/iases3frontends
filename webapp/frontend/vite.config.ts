@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     port: PORT_DEV_WEBAPP,
     fs: {
-      allow: [path.resolve(__dirname)],
+      allow: [path.resolve(__dirname), path.resolve(__dirname, '../../addon/packages/interface')],
     },
   },
   resolve: {
