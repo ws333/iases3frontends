@@ -69,15 +69,6 @@ function SettingsMenu({ environment }: Props) {
                     },
                 ];
 
-                const optionEndActiveSession: MenuOptionProps = {
-                    text: "Sending session in progress! Click the 'Stop and/or End session' button to enable settings",
-                    kind: "alert",
-                    onSelect: () => {
-                        onClose();
-                    },
-                    icon: <InfoIcon />,
-                };
-
                 const MenuList = options.map((props, index) =>
                     props.text === viewOnlineDocumentation ? (
                         <MenuOptionViewOnlineDocumentation
@@ -94,8 +85,16 @@ function SettingsMenu({ environment }: Props) {
                         <MenuOption key={index} view={view} {...props} />
                     )
                 );
+
+                const optionEndActiveSession: MenuOptionProps = {
+                    text: "Sending session in progress! Click the 'Stop' or 'End session' button to enable settings",
+                    kind: "alert",
+                    onSelect: onClose,
+                    icon: <InfoIcon />,
+                };
+
                 return (
-                    <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div className="settings_menu">
                         {emailsSent ? <MenuOption key={1} view={view} {...optionEndActiveSession} /> : MenuList}
                     </div>
                 );

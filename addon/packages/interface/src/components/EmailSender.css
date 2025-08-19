@@ -120,3 +120,8 @@ p {
 .container_message > p {
     text-align: center;
 }
+
+.settings_menu {
+    display: flex;
+    flex-direction: column;
+}
