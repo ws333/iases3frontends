@@ -14,7 +14,11 @@
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "ca": "pnpm run check && pnpm run lint && pnpm run format:check",
-    "clean": "sh ./cleanProject.sh"
+    "clean": "sh ./cleanProject.sh",
+    "test:e2e": "playwright test --output='playwright/last-run'",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:report": "pnpm exec playwright show-report"
   },
   "dependencies": {
     "@azure/msal-browser": "^4.4.0",
@@ -35,9 +39,11 @@
     "ui-kit": "file:../../addon/vendor/ui-kit-0.2.1.tgz"
   },
   "devDependencies": {
+    "@playwright/test": "^1.54.2",
     "@types/express": "^5.0.3",
     "@types/node": "^22.13.4",
     "@types/papaparse": "^5.3.15",
-    "@types/thunderbird-webext-browser": "^127.0.0"
+    "@types/thunderbird-webext-browser": "^127.0.0",
+    "playwright": "^1.49.1"
   }
 }
