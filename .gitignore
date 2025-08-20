@@ -7,6 +7,7 @@ sftp_deploy.sh
 .env
 *.local
 pnpm-debug.log*
+playwright
 
 # Editor directories and files
 .vscode/*
