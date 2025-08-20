@@ -98,15 +98,15 @@ export async function fetchAndMergeContacts(fetchFn = fetchOnlineContacts): Prom
     const isDev = isDevMode();
     const addedContacts = onlineContacts.filter((onlineContact) => !localContactsMap.has(onlineContact.uid));
     if (addedContacts.length) {
-        console.log(`Added ${addedContacts.length} contact${addedContacts.length > 1 ? "s" : ""}:`);
+        console.log(`Added ${addedContacts.length} contact${addedContacts.length > 1 ? "s" : ""}`);
         if (isDev) console.table(addedContacts);
     }
     if (deletedContacts.length) {
-        console.log(`Deleted ${deletedContacts.length} contact${deletedContacts.length > 1 ? "s" : ""}:`);
+        console.log(`Deleted ${deletedContacts.length} contact${deletedContacts.length > 1 ? "s" : ""}`);
         if (isDev) console.table(deletedContacts);
     }
     if (updatedContacts.length) {
-        console.log(`Updated ${updatedContacts.length} contact${updatedContacts.length > 1 ? "s" : ""}:`);
+        console.log(`Updated ${updatedContacts.length} contact${updatedContacts.length > 1 ? "s" : ""}`);
         if (isDev) console.table(updatedContacts);
     }
 
