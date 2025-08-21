@@ -22,6 +22,7 @@ const GoogleLogOut = () => {
     void navigate('/', { replace: true });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-misused-promises
   return <Button onClick={onClickLogout}>Logout</Button>;
 };
 
