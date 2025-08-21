@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
-import { AccountInfo, LocationWithState, Provider } from '../types/types';
+import { AccountInfo, Provider } from '../types/types';
 import { PATH_PROTECTED } from '../constants/constants';
 import { useDebounceActiveLoginButtons } from '../hooks/useDebounceActiveLoginButtons';
 import { useIsActiveGoogleLogin } from '../hooks/useIsActiveGoogleLogin';
 import { setLastLoginButtonClicked } from '../helpers/localstorageHelpers';
-import { useStoreActions } from '../../../../addon/packages/interface/src/store/store';
 import {
   activeUserEmailStyles,
   displayFlexRow,
@@ -21,24 +20,13 @@ type Props = {
 };
 
 function ActiveLoginButtons({ accountsMS }: Props) {
-  const location = useLocation() as LocationWithState;
-
   const isActiveMSLogin = accountsMS.length > 0;
   const { isActiveGoogleLogin } = useIsActiveGoogleLogin();
-
-  useEffect(() => {
-    if (location.state?.refresh && !isActiveGoogleLogin.valid) {
-      window.location.reload();
-    }
-  }, [isActiveGoogleLogin.valid, location.state?.refresh]);
-
   const { showActiveLoginButtons } = useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSLogin });
 
-  const resetCurrentLogin = useStoreActions((state) => state.auth.resetCurrentLogin);
   const navigate = useNavigate();
 
   const onClickUseActiveLogin = (provider: Provider) => {
-    resetCurrentLogin();
     setLastLoginButtonClicked(provider);
     void navigate(PATH_PROTECTED);
   };
