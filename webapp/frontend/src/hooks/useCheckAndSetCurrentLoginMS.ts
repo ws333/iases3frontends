@@ -4,7 +4,7 @@ import { getLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { useStoreActions } from '../store/storeWithHooks';
 
 export function useCheckAndSetCurrentLoginMS() {
-  const { accounts, inProgress, instance } = useMsal();
+  const { accounts } = useMsal();
 
   const setCurrentLogin = useStoreActions((actions) => actions.auth.setCurrentLogin);
 
@@ -14,6 +14,4 @@ export function useCheckAndSetCurrentLoginMS() {
       setCurrentLogin({ provider: 'MS', userEmail: accounts[0].username });
     }
   }, [accounts, setCurrentLogin]);
-
-  return { accountsMS: accounts, inProgressMS: inProgress, instanceMS: instance };
 }
