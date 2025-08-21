@@ -14,9 +14,9 @@ type Props = {
 function ProtectedRoute({ accountsMS, inProgressMS }: Props) {
   const currentLogin = useStoreState((state) => state.auth.currentLogin);
 
+  useCheckAndSetCurrentLoginMS();
   const lastClickedLogin = getLastLoginButtonClicked();
   const { verifyInProgessGoogle, verifyErrorGoogle } = useVerifyAndRefreshSessionGoogle({ lastClickedLogin });
-  useCheckAndSetCurrentLoginMS();
 
   if (
     inProgressMS !== 'none' ||

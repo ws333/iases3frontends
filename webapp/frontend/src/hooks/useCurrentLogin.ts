@@ -1,16 +1,15 @@
+import { useMsal } from '@azure/msal-react';
 import { Email, ProjectEnvProps } from '../../../../addon/packages/interface/src/types/types';
 import { sendEmailGoogle } from '../helpers/sendEmailGoogle';
 import { sendEmailMS } from '../helpers/sendEmailMS';
 import { loginRequest } from '../auth/authConfigMS';
 import { useStoreState } from '../store/storeWithHooks';
-import { useCheckAndSetCurrentLoginMS } from './useCheckAndSetCurrentLoginMS';
 
 export function useCurrentLogin() {
-  const { accountsMS, inProgressMS, instanceMS } = useCheckAndSetCurrentLoginMS();
+  const { accounts, inProgress, instance } = useMsal();
+  const { scopes } = loginRequest;
 
   const currentLogin = useStoreState((state) => state.auth.currentLogin);
-
-  const { scopes } = loginRequest;
   const { provider, userEmail } = currentLogin;
 
   let sendEmailFn: ProjectEnvProps['sendEmailFn'] = (_email: Email) =>
@@ -23,9 +22,8 @@ export function useCurrentLogin() {
   }
 
   if (provider === 'MS') {
-    sendEmailFn = async (email: Email) =>
-      await sendEmailMS({ email, instance: instanceMS, accounts: accountsMS, scopes });
+    sendEmailFn = async (email: Email) => await sendEmailMS({ email, instance, accounts, scopes });
   }
 
-  return { accountsMS, inProgressMS, instanceMS, userEmail, provider, sendEmailFn };
+  return { accountsMS: accounts, inProgressMS: inProgress, instanceMS: instance, userEmail, provider, sendEmailFn };
 }
