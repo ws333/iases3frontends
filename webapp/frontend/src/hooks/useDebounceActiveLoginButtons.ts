@@ -2,22 +2,21 @@ import { useEffect, useRef, useState } from 'react';
 import { IsActiveGoogleLogin, LoginDebounceMeasurements, ShowActiveLoginButtons } from '../types/types';
 import { getLoginDebounceMeasurements, setLoginDebounceMeasurements } from '../helpers/localstorageHelpers';
 
-const maxMeasurements = 100;
+const maxMeasurements = 30;
+const maxDebounceTime = 1000;
 const defaultDebounceTime = 500;
 const debounceTimeSafetyWindow = 50;
 
-interface Props {
+type Props = {
   isActiveGoogleLogin: IsActiveGoogleLogin;
   isActiveMSLogin: boolean;
-}
+};
 
 export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSLogin }: Props) {
   const [showActiveLoginButtons, setShowActiveLoginButtons] = useState<ShowActiveLoginButtons>('none');
   const [debounceTime, setDebounceTime] = useState(defaultDebounceTime);
   const mountTimeRef = useRef<number>(Date.now());
   const measurementsRef = useRef<LoginDebounceMeasurements>([]);
-
-  const maxDebounceTime = 1000;
 
   useEffect(() => {
     measurementsRef.current = getLoginDebounceMeasurements(maxMeasurements);
@@ -48,7 +47,7 @@ export function useDebounceActiveLoginButtons({ isActiveGoogleLogin, isActiveMSL
     }
   }, [isActiveMSLogin, isActiveGoogleLogin.valid]);
 
-  // Debounce display: only show buttons after debounceTime has passed
+  // Only show buttons after debounceTime has passed
   useEffect(() => {
     let timeout: NodeJS.Timeout;
     const now = Date.now();
