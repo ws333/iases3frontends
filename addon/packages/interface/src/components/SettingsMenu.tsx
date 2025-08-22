@@ -5,7 +5,7 @@ import { DOCS_URL_ADDON_DOCUMENTATION } from "../constants/constants";
 import { DOCS_URL_WEBAPP_DOCUMENTATION } from "../constants/constantsDynamic";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
-import { useStoreActions, useStoreState } from "../store/store";
+import { useStoreState } from "../store/store";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
 import MenuOptionViewOnlineDocumentation from "./MenuOptionViewOnlineDocumentation";
@@ -20,8 +20,6 @@ type Props = Pick<ProjectEnvProps, "environment">;
 
 function SettingsMenu({ environment }: Props) {
     const emailsSent = useStoreState((state) => state.contactList.emailsSent);
-    const setUserDialog = useStoreActions((actions) => actions.userDialog.setUserDialog);
-    const initiateForcedRender = useStoreActions((actions) => actions.render.initiateForcedRender);
 
     const importSendingHistory = "Import sending history";
     const viewFullSendingLog = "View full sending log";
@@ -62,7 +60,7 @@ function SettingsMenu({ environment }: Props) {
                         text: "Reset sending history",
                         kind: "alert",
                         onSelect: () => {
-                            showDeleteHistoryDialog({ initiateForcedRender, setUserDialog });
+                            showDeleteHistoryDialog();
                             onClose();
                         },
                         icon: <TrashBinIcon />,
