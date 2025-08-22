@@ -21,7 +21,7 @@ function IconIFO({ isHovering = true }: Props) {
 }
 export default IconIFO;
 
-const iconSize = 70;
+export const iconSize = 70;
 
 const iconStyles: CSSProperties = {
     width: iconSize,

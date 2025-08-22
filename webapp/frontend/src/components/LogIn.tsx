@@ -44,7 +44,7 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
 
   return (
     <div style={outerDivStyles}>
-      <HeaderWithIFO />
+      <HeaderWithIFO showWhenMounted />
       <div style={divContainerButtons}>
         <div style={divButtonsColumnStyles}>
           <Button style={buttonDocumentationStyles} onClick={onClickInformation}>
