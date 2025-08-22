@@ -3,6 +3,7 @@ import { sessionStateKey, zeroWidthSpace } from "../constants/constants";
 import { getSessionFinishedText } from "./getSessionFinishedText";
 import { storeSendingLog } from "./indexedDB";
 import { isExtension } from "./isExtension";
+import { updateSendingLogState } from "./updateSendingLogState";
 
 /**
  * - The session state is used to update the log if a user close the window during a session
@@ -51,6 +52,7 @@ export async function checkForDangelingSession() {
             { message: zeroWidthSpace, timestamp: timestamp + 1 },
         ];
         await storeSendingLog(storeValue);
+        await updateSendingLogState();
         clearSessionState();
     }
 }

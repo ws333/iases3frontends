@@ -5,6 +5,7 @@ import { RefreshIcon } from "ui-kit";
 import { MenuOption, MenuView, Text } from "ui-kit";
 import { ImportStats } from "../types/typesI3C";
 import { importToLocalStorage } from "../helpers/importToLocalStorage";
+import { updateSendingLogState } from "../helpers/updateSendingLogState";
 import { useStoreActions } from "../store/store";
 import { toastOptions } from "../styles/styles";
 
@@ -101,6 +102,7 @@ const MenuOptionImport = ({ view, onClose }: Props) => {
                 throw importStatsOrError;
             }
 
+            updateSendingLogState();
             initiateForcedRender();
             toast(ImportStatsComponent, {
                 ...toastOptions,
