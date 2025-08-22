@@ -36,7 +36,6 @@ https://www.bashar.org/socialexperiment
 - The sc field is incremented and the sd field updated for a contact when the user sends an email to that contact.
 
 - The goal is to keep the local contacts list in sync with the online contacts list while retaining the local stats. I.e. sc should always reflect the true sent count to the respective contact, no matter if the contact is active or deleted. This is accomplished by...
-
   - Updating all local ContactsI3C fields on app start/refresh expect for sd, sc, dd, cf1 and cf2 to retain the local stats.
   - If IndexedDB active contacts contains contacts not in fetched online contacts AND the contact has sc > 0, those contacts are moved from IndexedDB active contacts to IndexedDB deleted contacts, setting field dd to Date.now(), while retaining the other fields.
 
@@ -45,10 +44,8 @@ https://www.bashar.org/socialexperiment
 - Exported files contain the date of the export. At import this export date is stored in lastImportExportDate in IndexedDB, this date is then used at the next import to determine how the import is to be applied.
 
 - To sum up the requirements of the logic:
-
   - The sc stats are to be kept accurate in all possible scenarios, i.e. always reflect the true sent count. _The exception is if there has been sending from multiple devices without exporting and importing sequentially between sending sessions, which would create overlapping stats and scew the sent counts_.
   - Users can:
-
     - Send emails (i.e. increment sc) in multiple sessions
     - Export files in between sending sessions
     - Import any previous export multiple times in between sending sessions
@@ -58,25 +55,15 @@ https://www.bashar.org/socialexperiment
 
 - To view more detailed logging create key "devmode" with value "1" in localStorage
 
-## Updated Development Workflow
+## Development Workflow
 
 ```bash
 # Install all dependencies
 pnpm install
 
-# Start development (two terminals)
-# Terminal 1: Watch shared components
-pnpm watch:shared
+# Start addon development
+cd addon && pnpm run dev
 
-# Terminal 2: Start webapp
-pnpm dev:webapp
-
-# Or start addon development
-pnpm dev:addon
-
-# Run all builds
-pnpm build
-
-# Run all linting
-pnpm lint
+# Start webapp development
+cd webapp && pnpm run dev
 ```
