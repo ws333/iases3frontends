@@ -4,6 +4,7 @@ import { ProjectEnvProps } from "../types/types";
 import { DOCS_URL_ADDON_DOCUMENTATION } from "../constants/constants";
 import { DOCS_URL_WEBAPP_DOCUMENTATION } from "../constants/constantsDynamic";
 import { exportFromLocalStorage } from "../helpers/exportFromLocalStorage";
+import { showCountryCodesLegendDialog } from "../helpers/showCountryCodesLegendDialog";
 import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import { useStoreState } from "../store/store";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
@@ -47,6 +48,14 @@ function SettingsMenu({ environment }: Props) {
                         // Dummy to position menu option in MenuList below
                         text: importSendingHistory,
                         onSelect: () => {},
+                    },
+                    {
+                        text: "Show country codes legend",
+                        onSelect: () => {
+                            showCountryCodesLegendDialog();
+                            onClose();
+                        },
+                        icon: <InfoIcon />,
                     },
                     {
                         text: "Export sending history",
