@@ -112,6 +112,7 @@ export interface UserDialog {
     closeDialog: Thunk<UserDialog>;
     setUserDialog: Action<UserDialog, Partial<UserDialog>>;
     showConfirmationModal?: boolean;
+    maxWidth: number;
 }
 
 export interface UserMessage {

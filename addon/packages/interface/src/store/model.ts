@@ -4,8 +4,7 @@
  */
 import { action, computed, thunk, thunkOn } from "easy-peasy";
 import type { Model } from "../types/modelTypes";
-import { zeroWidthSpace } from "../constants/constants";
-import { defaultMaxCount, defaultSendingDelay } from "../constants/constants";
+import { defaultDialogMaxWidth, defaultMaxCount, defaultSendingDelay, zeroWidthSpace } from "../constants/constants";
 import { countryCodes_EU } from "../constants/countryCodes";
 import {
     customSubjectTitlesArray,
@@ -36,6 +35,7 @@ export const model: Model = {
         }),
         setUserDialog: action((state, payload) => ({ ...state, isOpen: true, ...payload })),
         showConfirmationModal: true,
+        maxWidth: defaultDialogMaxWidth,
     },
     userMessage: {
         message: zeroWidthSpace,
