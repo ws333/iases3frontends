@@ -7,9 +7,7 @@ function SendingLog() {
         <section className="section_emails_sent_log">
             <h2>Recent activity</h2>
             <div className="container_emails_sent_log">
-                {log.map((msg, idx) => (
-                    <div key={idx}>{msg}</div>
-                ))}
+                {log.length ? log.map((msg, idx) => <div key={idx}>{msg}</div>) : "No activity to display yet"}
             </div>
         </section>
     );
