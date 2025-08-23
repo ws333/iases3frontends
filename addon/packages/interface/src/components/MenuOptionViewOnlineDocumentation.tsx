@@ -1,4 +1,4 @@
-import { ListIcon, MenuOption, MenuView } from "ui-kit";
+import { BookIcon, MenuOption, MenuView } from "ui-kit";
 import { showDocumentationDialog } from "../helpers/showDocumentationDialog";
 import { useStoreActions } from "../store/store";
 
@@ -18,7 +18,7 @@ const MenuOptionViewOnlineDocumentation = ({ view, onClose }: Props) => {
 
     return (
         <div>
-            <MenuOption view={view} text={"View documentation"} onSelect={onSelectMenuOption} icon={<ListIcon />} />
+            <MenuOption view={view} text={"View documentation"} onSelect={onSelectMenuOption} icon={<BookIcon />} />
         </div>
     );
 };

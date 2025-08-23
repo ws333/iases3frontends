@@ -12,5 +12,6 @@ export function showDocumentationDialog({ setUserDialog }: Args) {
         message: TextDocumentation(),
         confirmActionText: "Close",
         showConfirmationModal: false,
+        maxWidth: 1000,
     });
 }
