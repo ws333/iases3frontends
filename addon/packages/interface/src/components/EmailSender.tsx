@@ -261,6 +261,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                     onClose={userDialog.onClose}
                     onConfirm={userDialog.onConfirm}
                     showConfirmationModal={userDialog.showConfirmationModal}
+                    maxWidth={userDialog.maxWidth}
                 />
             )}
 

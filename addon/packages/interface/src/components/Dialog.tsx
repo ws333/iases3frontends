@@ -22,13 +22,20 @@ const StyledConfirmationModal = styled(ConfirmationModal)`
     }
 `;
 
+// Extend Modal props to include maxWidth
+interface ModalProps {
+    maxWidth?: number;
+}
+
 // Inject styles into Modal
-const StyledModal = styled(Modal)`
+const StyledModal = styled(Modal)<ModalProps>`
     overflow-y: auto;
     overflow: hidden auto;
     width: 92%;
-    max-width: 800px;
+    max-width: ${({ maxWidth }) => maxWidth}px;
 `;
+
+const defaultMaxWidth = 800;
 
 function Dialog({
     title = "Confirmation",
@@ -37,6 +44,7 @@ function Dialog({
     onClose = () => {},
     onConfirm = () => {},
     showConfirmationModal,
+    maxWidth,
 }: Props) {
     const closeDialog = useStoreActions((actions) => actions.userDialog.closeDialog);
 
@@ -56,7 +64,12 @@ function Dialog({
             <VStack gap={12}>{message}</VStack>
         </StyledConfirmationModal>
     ) : (
-        <StyledModal title={title} onClose={_onClose} footer={<Button onClick={_onClose}>{confirmActionText}</Button>}>
+        <StyledModal
+            maxWidth={maxWidth ?? defaultMaxWidth}
+            title={title}
+            onClose={_onClose}
+            footer={<Button onClick={_onClose}>{confirmActionText}</Button>}
+        >
             {message}
         </StyledModal>
     );
