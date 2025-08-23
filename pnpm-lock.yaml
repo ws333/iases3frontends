@@ -2949,7 +2949,7 @@ packages:
     resolution: {integrity: sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==}
 
   ui-kit@file:addon/vendor/ui-kit-0.2.1.tgz:
-    resolution: {integrity: sha512-wrMOrxmd22qBHuAejfEoZ5BdN+hspeiMy/sBRs31eY4eWGBQI75Q0nA+dW5W9yhw+TPmQgWtxdHrhaBMzPbqyg==, tarball: file:addon/vendor/ui-kit-0.2.1.tgz}
+    resolution: {integrity: sha512-jtQZOnES3sItXn7mg6jmYORbAeVwymryFZ42EKtQWAE7bC9T5q5oC65oLbw/t19e3GYmEJSGdEWGbdUi6OFSyg==, tarball: file:addon/vendor/ui-kit-0.2.1.tgz}
     version: 0.2.1
 
   unbox-primitive@1.1.0:
