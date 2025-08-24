@@ -5,6 +5,7 @@ import App from '../../../../addon/packages/interface/src/components/App';
 import { useCurrentLogin } from '../hooks/useCurrentLogin';
 import { pingBackend } from '../helpers/pingBackend';
 import { sendEmailPreflightFnGoogle } from '../helpers/sendEmailPreflightFnGoogle';
+import Footer from './Footer';
 import GoogleHeaderButtons from './GoogleHeaderButtons';
 import LogIn from './LogIn';
 import MSHeaderButtons from './MSHeaderButtons';
@@ -32,12 +33,15 @@ function SetProjectEnvironment() {
         <Route
           path={PATH_PROTECTED}
           element={
-            <App
-              environment={environment}
-              sendEmailFn={sendEmailFn}
-              sendEmailPreflightFn={sendEmailPreflightFn}
-              HeaderButtonsComponent={HeaderButtonsComponent}
-            />
+            <>
+              <App
+                environment={environment}
+                sendEmailFn={sendEmailFn}
+                sendEmailPreflightFn={sendEmailPreflightFn}
+                HeaderButtonsComponent={HeaderButtonsComponent}
+              />
+              <Footer />
+            </>
           }
         />
       </Route>
