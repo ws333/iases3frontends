@@ -17,7 +17,7 @@ const common: CSSProperties = {
 
 export const divContainerButtons: CSSProperties = {
   maxHeight: '30vh',
-  marginTop: '1rem',
+  marginTop: '4rem',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
