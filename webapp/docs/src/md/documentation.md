@@ -1,13 +1,10 @@
-<div style="text-align:right; font-size:12px;"><i>Last updated: July 25, 2025</i></div>
+<div style="text-align:right; font-size:12px;"><i>Last updated: August 25, 2025</i></div>
 
 <br/>
 
 # Web app documentation
 
 <br/>
-
-The **Interstellar Alliance Social Experiment Step 3 web app** is an open-source platform designed to empower individuals and organizations to efficiently send advocacy emails to relevant decision-makers, researchers, and leaders. Its primary purpose is to streamline the process of civic engagement by providing curated contact lists tailored to the user's country or institution, ensuring that messages reach the appropriate recipients. The web app emphasizes privacy, ease of use, and responsible communication, making it simple for users to participate in campaigns, track their sending history, and manage their sending history across devices.
-
 <br/>
 
 ### 📧 Starting a Sending Session

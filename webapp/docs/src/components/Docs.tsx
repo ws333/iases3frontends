@@ -1,9 +1,13 @@
 import { Link } from 'react-router-dom';
+import HeaderWithIFO from './HeaderWithIFO';
+import Introduction from './Introduction';
 
 function Docs() {
   return (
-    <div className="docs-container">
-      <h1>Documentation and information</h1>
+    <div className="docs-outer-div">
+      <HeaderWithIFO showIFOWhenMounted />
+      <Introduction />
+
       <ul>
         <li>
           <Link to="/documentation">Documentation</Link>

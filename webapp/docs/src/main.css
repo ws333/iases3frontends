@@ -3,24 +3,58 @@
 html,
 body {
   background: linear-gradient(135deg, #141414 0%, #414345 100%);
-  background-attachment: fixed;
   min-height: 100vh;
   margin: 0;
   overflow-x: hidden;
   font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: #fffd;
+}
+
+.docs-outer-div {
+  margin: 5rem auto;
+}
+
+.docs-outer-div > ul > li {
+  font-size: 1.2rem;
+}
+
+.docs-outer-div > ul {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+  gap: 2rem;
+}
+
+.docs-outer-div a,
+.docs-container a {
+  color: #d18907;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.docs-outer-div a:hover,
+.docs-container a:hover {
+  color: #f8a408;
 }
 
 /* Centered card style for landing and docs pages */
 .docs-container {
-  color: #fffd;
-  max-width: 700px;
+  max-width: 900px;
   margin: 5rem auto;
   padding: 2.5rem 2rem;
   background: linear-gradient(135deg, #2c2c2c 0%, #292929 100%);
   box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
   border-radius: 18px;
+}
+
+.smaller-vertical-margins {
+  margin: 3rem auto;
 }
 
 /* Remove vertical margins for documentation loaded inside iframe */
@@ -34,16 +68,6 @@ body.iframe-content .docs-container {
   margin-bottom: 1.2rem;
   text-align: center;
   letter-spacing: 1px;
-}
-
-/* Only apply flex to landing page list */
-.docs-container > ul {
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0 0 0;
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
 }
 
 /* Reset Markdown list styles */
@@ -64,21 +88,6 @@ body.iframe-content .docs-container {
 
 .docs-markdown li {
   margin: 0.2em 0;
-}
-
-.docs-container li {
-  font-size: 1.1rem;
-}
-
-.docs-container a {
-  color: #d18907;
-  text-decoration: none;
-  font-weight: 600;
-  transition: color 0.2s;
-}
-
-.docs-container a:hover {
-  color: #f8a408;
 }
 
 .docs-markdown {

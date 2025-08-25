@@ -1,4 +1,4 @@
-<div style="text-align:right; font-size:12px;"><i>Last updated: July 25, 2025</i></div>
+<div style="text-align:right; font-size:12px;"><i>Last updated: August 26, 2025</i></div>
 
 <br/>
 
@@ -6,11 +6,11 @@
 
 <br/>
 
-Welcome to our web application (the "Service"). By accessing or using the Service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Service.
+Welcome to our web application (the "Service").
 
-This Service is a web-based platform that empowers users to efficiently send advocacy emails to decision-makers, researchers, and leaders. It provides curated contact lists tailored to the user's country, streamlines civic engagement, and emphasizes privacy, ease of use, and responsible communication.
+By accessing or using the Service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Service.
 
-Tthe frontend code of this Service is open source. By using, contributing to, or distributing the frontend code, you agree to comply with the terms of the applicable open source license and these Terms.
+The frontend code of this Service is open source. By using, contributing to, or distributing the frontend code, you agree to comply with the terms of the applicable open source license and these Terms.
 
 ## 1. Use of Service
 

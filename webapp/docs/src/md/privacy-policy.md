@@ -4,11 +4,7 @@
 
 <br/>
 
-Welcome to our web application (the "Service").
-
-This Service is a web-based platform that empowers users to efficiently send advocacy emails to decision-makers, researchers, and leaders. It provides curated contact lists tailored to the user's country, streamlines civic engagement, and emphasizes privacy, ease of use, and responsible communication. Data collection is limited to what is strictly necessary for authentication, contact management, and email functionality, as described below.
-
-The frontend code of this Service is open source and free to use; however, the backend is proprietary. The only data collected and temporarily stored are authentication tokens (from providers like Google or Microsoft) and a country code. Tokens are stored encrypted, used only for authentication, and deleted upon logout. The country code is used for displaying relevant contact lists, it's stored locally in the browser and can be deleted at any time.
+The data collected and temporarily stored are authentication tokens, from providers like Google or Microsoft, and a country code. Tokens are stored encrypted, used only for authentication. The country code is used for displaying relevant contact lists. The data is deleted upon logout.
 
 ## 1. Data Collection and Usage
 
@@ -112,6 +108,6 @@ If you have questions, concerns, or requests regarding this Privacy Policy or ou
 
 # \*
 
-<div style="text-align:center"><i>This privacy policy is effective as of August 24, 2025</i></div>
+<div style="text-align:center"><i>This privacy policy is effective as of August 26, 2025</i></div>
 
 # 🛸✨🌀
