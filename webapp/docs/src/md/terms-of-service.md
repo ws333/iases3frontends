@@ -7,7 +7,10 @@
 <br/>
 
 Welcome to our web application (the "Service"). By accessing or using the Service, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Service.
-This Service is provided as an open source project. By using, contributing to, or distributing the Service, you agree to comply with the terms of the applicable open source license and these Terms.
+
+This Service is a web-based platform that empowers users to efficiently send advocacy emails to decision-makers, researchers, and leaders. It provides curated contact lists tailored to the user's country, streamlines civic engagement, and emphasizes privacy, ease of use, and responsible communication.
+
+Tthe frontend code of this Service is open source. By using, contributing to, or distributing the frontend code, you agree to comply with the terms of the applicable open source license and these Terms.
 
 ## 1. Use of Service
 
@@ -17,10 +20,14 @@ You are responsible for your own use and any consequences thereof.
 
 ## 2. Acceptable Use
 
+You agree not to use the Service to:
+
 - Violate any applicable laws or regulations
 - Infringe upon the rights of others
 - Distribute malware or harmful code
 - Attempt to gain unauthorized access to other accounts or systems
+
+Any use of the Service for the above purposes is strictly prohibited and may result in suspension or termination of your access.
 
 ## 3. Privacy
 
@@ -28,7 +35,8 @@ Your use of the Service is also governed by our Privacy Policy, which explains h
 
 ## 4. Intellectual Property
 
-The Service is released under an open source license. You are free to use, copy, modify, and distribute the Service in accordance with the terms of its open source license (see the LICENSE file in the repository for details).
+The source code for the frontend of the Service is released under an open source license. You are free to use, copy, modify, and distribute the frontend code in accordance with the terms of its open source license (see the LICENSE file in the repository for details).
+The backend is not covered by the open source license.
 Some trademarks and third-party content may remain the property of their respective owners.
 
 ## 5. Disclaimer and Limitation of Liability

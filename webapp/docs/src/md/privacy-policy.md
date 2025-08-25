@@ -4,38 +4,114 @@
 
 <br/>
 
-Welcome to our web application (the "Service"). This Service is open source and free to use. We do not store personal accounts or unnecessary personal data. The only data collected are authentication tokens (from providers like Google or Microsoft) and a country code, strictly for login and localization purposes. Tokens are encrypted, used only for authentication, and deleted upon logout. Country code is stored locally and can be deleted at any time.
+Welcome to our web application (the "Service").
+
+This Service is a web-based platform that empowers users to efficiently send advocacy emails to decision-makers, researchers, and leaders. It provides curated contact lists tailored to the user's country, streamlines civic engagement, and emphasizes privacy, ease of use, and responsible communication. Data collection is limited to what is strictly necessary for authentication, contact management, and email functionality, as described below.
+
+The frontend code of this Service is open source and free to use; however, the backend is proprietary. The only data collected and temporarily stored are authentication tokens (from providers like Google or Microsoft) and a country code. Tokens are stored encrypted, used only for authentication, and deleted upon logout. The country code is used for displaying relevant contact lists, it's stored locally in the browser and can be deleted at any time.
 
 ## 1. Data Collection and Usage
 
-- Authentication tokens are collected only for login purposes and are encrypted.
-- Country code is used for localization and stored locally.
-- No personal accounts or unnecessary personal data are stored.
+### Google User Data
 
-## 2. Cookies
+When you sign in with Google, we access and use your Google user data in strict compliance with Google's API Services User Data Policy and Limited Use requirements:
 
-- Cookies are used only to support authentication and session management.
-- You may delete cookies at any time.
+- **Authentication tokens**: Stored encrypted for login verification and email sending functionality
+- **Profile information**: Basic profile data (name, email) for account identification and display
+- **Email access**: Limited access to send emails on your behalf through our application features
 
-## 3. Data Security
+### Usage Limitations
 
-- All sensitive data is fully encrypted.
-- No method of internet transmission or electronic storage is 100% secure.
+Your Google user data is used **only** for the specific user-facing features described above that are prominent in our application interface. We comply with Google's Limited Use requirements, which means:
 
-## 4. Policy Updates
+- Data is used solely to provide or improve the features you see and interact with in our app
+- We do not transfer, sell, or share your Google user data with third parties except as explicitly permitted below
+- We do not use your data for advertising, profiling, or any purposes beyond our core application functionality
 
-- This Privacy Policy may be updated periodically.
-- Please review this page for changes.
-- For more details, see our Terms of Service.
+### Other Data
 
-## 5. Contact Us
+- **Country code**: Stored locally in your browser for showing relevant contact lists and can be deleted at any time
+- **Session data**: Temporary data to maintain your login session
 
-If you have questions or suggestions, please contact us by email.
+## 2. Data Transfers and Sharing
+
+### Google User Data Transfers
+
+In compliance with Google's Limited Use requirements, we do **not** transfer, sell, or share your Google user data to third parties, except in the following limited circumstances:
+
+- **Security purposes**: To investigate potential abuse or security issues
+- **Legal compliance**: When required by applicable law
+- **User consent**: Only with your explicit prior consent for specific features you request
+
+### Prohibited Uses
+
+We explicitly **do not**:
+
+- Sell your Google user data to advertising platforms, data brokers, or information resellers
+- Use your Google user data for advertising, retargeting, or interest-based advertising
+- Use your Google user data for credit assessments or lending purposes
+- Allow unauthorized human access to your Google user data
+
+## 3. Data Retention and Deletion
+
+### Google User Data
+
+- **Authentication tokens**: Automatically revoked and deleted when you log out
+- **Profile information**: Automatically deleted when you log out
+
+### Local Data
+
+- **Country code**: Stored locally in your browser and can be deleted at any time by clearing browser data
+- **Cookies**: Automatically expire when you log out
+
+## 4. Cookies and Local Storage
+
+- Cookies are used only to support authentication and session management
+- You may delete cookies at any time through your browser settings
+- No tracking or advertising cookies are used
+
+## 5. Data Security
+
+### Encryption and Protection
+
+- All Google user data and authentication tokens are fully encrypted in transit and at rest
+- We implement appropriate technical and organizational measures to protect against unauthorized access, alteration, disclosure, or destruction
+- Access to user data is restricted to authorized personnel only and only when necessary for security purposes
+
+### Limited Access
+
+- Human access to your Google user data is strictly prohibited except when:
+  - You provide explicit consent for specific support requests
+  - Required for security purposes (investigating abuse or technical issues)
+  - Required by applicable law
+
+## 6. Google API Services Compliance
+
+This application uses Google API Services and complies with:
+
+- **Google API Services User Data Policy**: All access and use of Google user data follows Google's requirements for transparency, limited use, and user consent
+- **Limited Use Requirements**: Your Google user data is used exclusively for the user-facing features described in this policy and visible in our application interface
+- **OAuth 2.0 Standards**: We follow Google's OAuth 2.0 protocols for secure authentication and authorization
+
+### Your Rights and Controls
+
+- You can revoke our access to your Google data at any time through your [Google Account settings](https://myaccount.google.com/permissions)
+- You can review and modify the permissions you've granted to our application
+
+## 7. Policy Updates
+
+- This Privacy Policy may be updated periodically, please review this page regularly for any updates
+- Continued use of the service after policy updates constitutes acceptance of the revised policy
+- For more details, see our Terms of Service
+
+## 8. Contact Us
+
+If you have questions, concerns, or requests regarding this Privacy Policy or our handling of your data, please contact us by email:
 
 [contact-email]
 
 # \*
 
-<div style="text-align:center"><i>This privacy policy is effective as of July 25, 2025</i></div>
+<div style="text-align:center"><i>This privacy policy is effective as of August 24, 2025</i></div>
 
 # 🛸✨🌀
