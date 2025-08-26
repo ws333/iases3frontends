@@ -1,5 +1,14 @@
 import styled from "styled-components";
-import { DownloadIcon, InfoIcon, Menu, MenuOption, MenuOptionProps, OpenMenuButton, TrashBinIcon } from "ui-kit";
+import {
+    BookIcon,
+    DownloadIcon,
+    InfoIcon,
+    Menu,
+    MenuOption,
+    MenuOptionProps,
+    OpenMenuButton,
+    TrashBinIcon,
+} from "ui-kit";
 import { ProjectEnvProps } from "../types/types";
 import { DOCS_URL_ADDON_DOCUMENTATION } from "../constants/constants";
 import { DOCS_URL_WEBAPP_DOCUMENTATION } from "../constants/constantsDynamic";
@@ -9,7 +18,6 @@ import { showDeleteHistoryDialog } from "../helpers/showDeleteHistoryDialog";
 import { useStoreState } from "../store/store";
 import MenuOptionFullSendingLog from "./MenuOptionFullSendingLog";
 import MenuOptionImport from "./MenuOptionImport";
-import MenuOptionViewOnlineDocumentation from "./MenuOptionViewOnlineDocumentation";
 
 const StyledTitle = styled.span`
     font-weight: 600;
@@ -24,9 +32,8 @@ function SettingsMenu({ environment }: Props) {
 
     const importSendingHistory = "Import sending history";
     const viewFullSendingLog = "View full sending log";
-    const viewOnlineDocumentation = "View online documentation";
 
-    const docsUrl = environment === "webapp" ? DOCS_URL_WEBAPP_DOCUMENTATION : DOCS_URL_ADDON_DOCUMENTATION;
+    const urlDocumentation = environment === "webapp" ? DOCS_URL_WEBAPP_DOCUMENTATION : DOCS_URL_ADDON_DOCUMENTATION;
 
     return (
         <Menu
@@ -36,18 +43,16 @@ function SettingsMenu({ environment }: Props) {
                 const options: MenuOptionProps[] = [
                     {
                         // Dummy to position menu option in MenuList below
-                        text: viewOnlineDocumentation,
-                        onSelect: () => {},
-                    },
-                    {
-                        // Dummy to position menu option in MenuList below
                         text: viewFullSendingLog,
                         onSelect: () => {},
                     },
                     {
-                        // Dummy to position menu option in MenuList below
-                        text: importSendingHistory,
-                        onSelect: () => {},
+                        text: "View online documentation",
+                        onSelect: () => {
+                            window.open(urlDocumentation, "_blank", "noopener,noreferrer");
+                            onClose();
+                        },
+                        icon: <BookIcon />,
                     },
                     {
                         text: "Show country codes legend",
@@ -56,6 +61,11 @@ function SettingsMenu({ environment }: Props) {
                             onClose();
                         },
                         icon: <InfoIcon />,
+                    },
+                    {
+                        // Dummy to position menu option in MenuList below
+                        text: importSendingHistory,
+                        onSelect: () => {},
                     },
                     {
                         text: "Export sending history",
@@ -77,14 +87,7 @@ function SettingsMenu({ environment }: Props) {
                 ];
 
                 const MenuList = options.map((props, index) =>
-                    props.text === viewOnlineDocumentation ? (
-                        <MenuOptionViewOnlineDocumentation
-                            key={index}
-                            view={view}
-                            onClose={onClose}
-                            docsUrl={docsUrl}
-                        />
-                    ) : props.text === viewFullSendingLog ? (
+                    props.text === viewFullSendingLog ? (
                         <MenuOptionFullSendingLog key={index} view={view} onClose={onClose} />
                     ) : props.text === importSendingHistory ? (
                         <MenuOptionImport key={index} view={view} onClose={onClose} />
