@@ -25,7 +25,7 @@ function ErrorFallback({ error }: FallbackProps) {
     }
     return (
         <div role="alert" style={divStyles}>
-            <HeaderWithIFO />
+            <HeaderWithIFO showIFOWhenMounted />
             <Text size={16} style={textStyles}>
                 {error.message}
             </Text>

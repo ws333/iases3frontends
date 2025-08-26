@@ -34,7 +34,7 @@ const LogIn = ({ accountsMS, instanceMS }: Props) => {
 
   return (
     <div style={outerDivStyles}>
-      <HeaderWithIFO />
+      <HeaderWithIFO showIFOWhenMounted />
       <div style={divContainerButtons}>
         <div style={divButtonsColumnStyles}>
           <ButtonGoogle type="signIn" onClick={onClickGoogleLogin} />
