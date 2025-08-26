@@ -6,15 +6,16 @@ import { buttonLogoMSStyles, buttonMSStyles, buttonSpanMSStyles } from '../style
 interface Props {
   type: ButtonAuthType;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  ref?: React.RefObject<HTMLButtonElement | null>;
 }
 
-function ButtonMS({ type, onClick }: Props) {
+function ButtonMS({ type, onClick, ref }: Props) {
   // Match design of official Google buttons for consistent layout
   const width = type === 'signIn' ? 175 : 189;
   const text = type === 'signIn' ? 'Sign in with Microsoft' : 'Continue with Microsoft';
 
   return (
-    <Button onClick={onClick} style={{ ...buttonMSStyles, width }} aria-label={text}>
+    <Button ref={ref} onClick={onClick} style={{ ...buttonMSStyles, width }} aria-label={text}>
       <img src={msLogo} alt={text} style={buttonLogoMSStyles} />
       <span style={buttonSpanMSStyles}>{text}</span>
     </Button>

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
 import { AccountInfo, Provider } from '../types/types';
@@ -31,20 +31,22 @@ function ActiveLoginButtons({ accountsMS }: Props) {
     void navigate(PATH_PROTECTED);
   };
 
-  // The width of ButtonGoogle is used to offset marginLeft for component displaying active user email
-  // A default width different from the width of ButtonGoogle cause a nice slide in effect
-  const buttonGoogleRef = useRef<HTMLButtonElement>(null);
-  const [googleButtonWidth, setGoogleButtonWidth] = useState(0);
+  // The width is used to offset marginLeft of the component displaying active user email
+  // A default width different from the width of the button cause a nice slide in effect
+  const [buttonWidthGoogle, setButtonWidthGoogle] = useState(0);
+  const [buttonWidthMS, setButtonWidthMS] = useState(0);
 
-  const handleGoogleImgLoad = () => {
-    if (buttonGoogleRef.current) {
-      setGoogleButtonWidth(buttonGoogleRef.current.offsetWidth);
-    }
-  };
+  const buttonRefGoogle = useRef<HTMLButtonElement>(null);
+  const buttonRefMS = useRef<HTMLButtonElement>(null);
+
+  useLayoutEffect(() => {
+    if (buttonRefGoogle.current) setButtonWidthGoogle(buttonRefGoogle.current.offsetWidth);
+    if (buttonRefMS.current) setButtonWidthMS(buttonRefMS.current.offsetWidth);
+  }, [showActiveLoginButtons]);
 
   const buttonStyles = useMemo(
-    () => ({ ...activeUserEmailStyles, marginLeft: googleButtonWidth }),
-    [googleButtonWidth],
+    () => ({ ...activeUserEmailStyles, marginLeft: buttonWidthGoogle || buttonWidthMS }),
+    [buttonWidthGoogle, buttonWidthMS],
   );
 
   return (
@@ -53,12 +55,7 @@ function ActiveLoginButtons({ accountsMS }: Props) {
         <div style={divButtonsColumnStyles}>
           {(showActiveLoginButtons === 'both' || showActiveLoginButtons === 'google') && (
             <div style={displayFlexRow}>
-              <ButtonGoogle
-                ref={buttonGoogleRef}
-                type="continue"
-                onClick={() => onClickUseActiveLogin('Google')}
-                onImgLoad={handleGoogleImgLoad}
-              />
+              <ButtonGoogle type="continue" onClick={() => onClickUseActiveLogin('Google')} ref={buttonRefGoogle} />
               <Button kind="outlined" isDisabled style={buttonStyles}>
                 {isActiveGoogleLogin.userEmail}
               </Button>
@@ -66,7 +63,7 @@ function ActiveLoginButtons({ accountsMS }: Props) {
           )}
           {(showActiveLoginButtons === 'both' || showActiveLoginButtons === 'ms') && (
             <div style={displayFlexRow}>
-              <ButtonMS type="continue" onClick={() => onClickUseActiveLogin('MS')} />
+              <ButtonMS type="continue" onClick={() => onClickUseActiveLogin('MS')} ref={buttonRefMS} />
               <Button kind="outlined" isDisabled style={buttonStyles} onClick={() => onClickUseActiveLogin('MS')}>
                 {accountsMS[0]?.username}
               </Button>
