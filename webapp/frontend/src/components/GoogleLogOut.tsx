@@ -2,6 +2,7 @@ import { googleLogout } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
+import { storeOptionsKey } from '../../../../addon/packages/interface/src/helpers/indexedDB';
 import { fetchRevokeSessionGoogle } from '../helpers/fetchRevokeSessionGoogle';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { useStoreActions } from '../store/storeWithHooks';
@@ -18,6 +19,7 @@ const GoogleLogOut = () => {
     await revokeSession();
     googleLogout();
     removeLastLoginButtonClicked();
+    await storeOptionsKey('', 'countryCode');
     resetCurrentLogin();
     void navigate('/', { replace: true });
   };
