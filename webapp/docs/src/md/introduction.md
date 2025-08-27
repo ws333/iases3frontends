@@ -1,4 +1,4 @@
-### Welcome to the Interstellar Alliance Social Experiment Step 3 [web app](https://iase.one/webapp)
+### Welcome to the Interstellar Alliance Social Experiment Step 3 [web app]({{URL_WEBAPP}})
 
 <br>
 The Interstellar Alliance Social Experiment Group is a grass roots movement that urges officials to publicly disclose the reality about UFOs, UAPs, and extraterrestrial life within one year, emphasizing that these phenomena pose no threat to humanity. We call for transparency and public education, stating that we will only support leaders who actively promote full disclosure.
@@ -17,4 +17,4 @@ The email text is from the [Interstellar Alliance Social Experiment Step 3 lette
 
 Read more about the Interstellar Alliance Social Experiment [here](https://www.bashar.org/socialexperiment)
 
-[Click here](https://iase.one/webapp) to go to the web app login page
+[Click here]({{URL_WEBAPP}}) to go to the web app login page
