@@ -2,7 +2,9 @@ import js from "@eslint/js";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
+import { dirname } from "path";
 import tseslint from "typescript-eslint";
+import { fileURLToPath } from "url";
 
 export default tseslint.config(
     { ignores: ["**/dist/**", "**/_backup/**", "addon_build", "scripts", "*.config.ts"] },
@@ -12,6 +14,9 @@ export default tseslint.config(
         languageOptions: {
             ecmaVersion: 2020,
             globals: globals.browser,
+            parserOptions: {
+                tsconfigRootDir: dirname(fileURLToPath(import.meta.url)),
+            },
         },
         plugins: {
             "react-hooks": reactHooks,
