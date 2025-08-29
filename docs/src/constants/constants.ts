@@ -1,4 +1,4 @@
-import { URL_WEBAPP_BASE } from '../../../webapp/frontend/src/constants/constantsImportMeta';
+import { URL_WEBAPP_BASE } from '../../../webapp/src/constants/constantsImportMeta';
 
 // Define all markdown placeholders and their replacements
 export const placeholders = {

@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { AccountInfo, InteractionStatus } from '../types/types';
-import Loading from '../../../../addon/packages/interface/src/components/Loading';
+import Loading from '../../../addon/packages/interface/src/components/Loading';
 import { useCheckAndSetCurrentLoginMS } from '../hooks/useCheckAndSetCurrentLoginMS';
 import { useVerifyAndRefreshSessionGoogle } from '../hooks/useVerifyAndRefreshSessionGoogle';
 import { getLastLoginButtonClicked } from '../helpers/localstorageHelpers';

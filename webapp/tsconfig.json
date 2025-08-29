@@ -1,25 +1,36 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "jsx": "react-jsx",
-    "strict": true,
-    "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "allowSyntheticDefaultImports": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
     "noEmit": true,
-    "types": ["vite/client"]
+    "jsx": "react-jsx",
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true,
+
+    /* To show expanded type on hover */
+    "noErrorTruncation": true,
+    "paths": {
+      // For internal resolution and subpaths, for optimal setup see
+      // https://www.typescriptlang.org/docs/handbook/modules/reference.html#paths-should-not-point-to-monorepo-packages-or-node_modules-packages
+      "@lib/ui/*": ["./node_modules/ui-kit/lib/ui/*"],
+      "@lib/utils/*": ["./node_modules/ui-kit/lib/utils/*"],
+      "@lib/codegen/*": ["./node_modules/ui-kit/lib/codegen/*"]
+    }
   },
-  "include": [
-    "frontend/src",
-    "frontend/vite.config.ts",
-    "frontend/playwright.config.ts",
-    "docs/src",
-    "docs/vite.config.ts"
-  ],
+  "include": ["./src", "vite.config.ts", "playwright.config.ts"],
   "exclude": ["node_modules", "dist"]
 }

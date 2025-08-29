@@ -1,8 +1,8 @@
-import { StatusBackend } from '../../../../addon/packages/interface/src/types/types';
+import { StatusBackend } from '../../../addon/packages/interface/src/types/types';
 import { PATH_PING } from '../constants/constantsEndpointPaths';
 import { URL_BACKEND_PING } from '../constants/constantsImportMeta';
-import { fetchWithTimeout } from '../../../../addon/packages/interface/src/helpers/fetchWithTimeout';
-import { waitRandomSeconds } from '../../../../addon/packages/interface/src/helpers/waitRandomSeconds';
+import { fetchWithTimeout } from '../../../addon/packages/interface/src/helpers/fetchWithTimeout';
+import { waitRandomSeconds } from '../../../addon/packages/interface/src/helpers/waitRandomSeconds';
 
 const EROR_BACKEND_NOT_RESPONDING: StatusBackend = {
   status: 'ERROR',

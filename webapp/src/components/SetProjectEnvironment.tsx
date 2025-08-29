@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import { ProjectEnvironment } from '../../../../addon/packages/interface/src/types/types';
+import { ProjectEnvironment } from '../../../addon/packages/interface/src/types/types';
 import { PATH_PROTECTED } from '../constants/constants';
-import App from '../../../../addon/packages/interface/src/components/App';
+import App from '../../../addon/packages/interface/src/components/App';
 import { useCurrentLogin } from '../hooks/useCurrentLogin';
 import { pingBackend } from '../helpers/pingBackend';
 import { sendEmailPreflightFnGoogle } from '../helpers/sendEmailPreflightFnGoogle';

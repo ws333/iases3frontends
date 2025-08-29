@@ -1,6 +1,6 @@
 import { useGoogleLogin } from '@react-oauth/google';
 import { AccountInfo, IPublicClientApplication } from '../types/types';
-import HeaderWithIFO from '../../../../addon/packages/interface/src/components/HeaderWithIFO';
+import HeaderWithIFO from '../../../addon/packages/interface/src/components/HeaderWithIFO';
 import { setLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { GOOGLE_LOGIN_CONFIG } from '../auth/authConfigGoogle.ts';
 import { loginRequest } from '../auth/authConfigMS';

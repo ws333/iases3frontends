@@ -1,7 +1,7 @@
 import { Button } from 'ui-kit';
 import { IPublicClientApplication } from '../types/types';
 import { URL_WEBAPP_BASE } from '../constants/constantsImportMeta';
-import { storeOptionsKey } from '../../../../addon/packages/interface/src/helpers/indexedDB';
+import { storeOptionsKey } from '../../../addon/packages/interface/src/helpers/indexedDB';
 import { removeLastLoginButtonClicked } from '../helpers/localstorageHelpers';
 import { useStoreActions } from '../store/storeWithHooks';
 

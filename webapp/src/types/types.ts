@@ -1,4 +1,4 @@
-import { CurrentLogin } from '../../../../addon/packages/interface/src/types/types';
+import { CurrentLogin } from '../../../addon/packages/interface/src/types/types';
 import { VerifySessionGoogleResponseBody } from './typesBackend';
 
 export type ButtonAuthType = 'signIn' | 'continue';
@@ -13,4 +13,4 @@ export type ShowActiveLoginButtons = 'both' | 'google' | 'ms' | 'none';
 
 export type { AccountInfo, IPublicClientApplication, InteractionStatus } from '@azure/msal-browser';
 
-export type { Provider } from '../../../../addon/packages/interface/src/types/types';
+export type { Provider } from '../../../addon/packages/interface/src/types/types';

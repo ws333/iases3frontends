@@ -2,6 +2,8 @@
 
 ### 🚧 _Under construction_ 🚧
 
-<br/>
+#### React frontend for web app using ContactI3C contact list
 
-Web app for sending the Step 3 letter by email with Google Gmail or Microsoft Outlook
+- Supports logins with...
+  - Microsoft account (Microsoft Graph)
+  - Google account (Oauth2)

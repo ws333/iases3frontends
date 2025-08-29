@@ -1,4 +1,4 @@
-import { Provider, StatusBackend } from '../../../../addon/packages/interface/src/types/types';
+import { Provider, StatusBackend } from '../../../addon/packages/interface/src/types/types';
 import { SendEmailGoogleResponseBody, SendEmailMSResponseBody } from '../types/typesBackend';
 
 export async function sendEmailResponseErrorParser<T extends SendEmailMSResponseBody | SendEmailGoogleResponseBody>(

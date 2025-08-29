@@ -3,4 +3,4 @@ export {
   useStoreActions,
   useStoreState,
   useStoreDispatch,
-} from '../../../../addon/packages/interface/src/store/store';
+} from '../../../addon/packages/interface/src/store/store';

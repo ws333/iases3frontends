@@ -1,4 +1,4 @@
-import { StatusBackend } from '../../../../addon/packages/interface/src/types/types';
+import { StatusBackend } from '../../../addon/packages/interface/src/types/types';
 import { fetchVerifyAndRefreshSessionGoogle } from './fetchVerifyAndRefreshSessionGoogle';
 
 export async function sendEmailPreflightFnGoogle(): Promise<StatusBackend> {

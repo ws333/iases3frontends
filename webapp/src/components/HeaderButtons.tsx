@@ -1,6 +1,7 @@
 import { Button } from 'ui-kit';
 import { buttonStyles, outerDivStyles } from '../styles/headerButtonsStyles';
-import SwitchUser from './SwitchUser';
+
+// import SwitchUser from './SwitchUser';
 
 type Props = {
   userEmail: string;
@@ -14,7 +15,7 @@ function HeaderButtons({ userEmail, LogOutComponent }: Props) {
       <Button isDisabled={'Current logged in user'} kind="outlined" style={buttonStyles}>
         {userEmail}
       </Button>
-      <SwitchUser />
+      {/* <SwitchUser /> */}
       {LogOutComponent}
     </div>
   );

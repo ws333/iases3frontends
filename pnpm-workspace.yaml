@@ -3,7 +3,6 @@ packages:
   - addon/packages/*
   - docs
   - webapp
-  - webapp/frontend
 
 ignoredBuiltDependencies:
   - ui-kit

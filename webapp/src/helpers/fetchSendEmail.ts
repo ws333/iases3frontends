@@ -1,4 +1,4 @@
-import { Email } from '../../../../addon/packages/interface/src/types/types';
+import { Email } from '../../../addon/packages/interface/src/types/types';
 
 interface Args {
   url: string;

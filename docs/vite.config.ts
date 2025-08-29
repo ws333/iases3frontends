@@ -2,7 +2,7 @@ import react from '@vitejs/plugin-react';
 import fs from 'fs';
 import path from 'path';
 import { defineConfig } from 'vite';
-import { PORT_DEV_DOCS } from '../webapp/frontend/src/constants/constants';
+import { PORT_DEV_DOCS } from '../webapp/src/constants/constants';
 
 export default defineConfig({
   server: {
