@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter webapp-frontend --filter webapp-docs run dev:vite",
+    "dev": "pnpm --filter webapp-frontend --filter docs run dev:vite",
     "dev:vite": "vite",
     "build": "vite build",
-    "upload": "cd .. && pnpm run build && sftp_deploy",
+    "upload": "pnpm --filter docs run build && pnpm run build && sftp_deploy",
     "preview": "vite preview",
     "check": "tsc",
     "format": "prettier --write .",

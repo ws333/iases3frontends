@@ -194,9 +194,7 @@ importers:
 
   addon/packages/thunderbird-iframe-service: {}
 
-  webapp: {}
-
-  webapp/docs:
+  docs:
     dependencies:
       react:
         specifier: ^19.1.1
@@ -213,6 +211,8 @@ importers:
       rehype-raw:
         specifier: ^7.0.0
         version: 7.0.0
+
+  webapp: {}
 
   webapp/frontend:
     dependencies:

@@ -1,10 +1,10 @@
 {
-  "name": "webapp-docs",
+  "name": "docs",
   "private": true,
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter webapp-frontend --filter webapp-docs run dev:vite",
+    "dev": "pnpm --filter webapp-frontend --filter docs run dev:vite",
     "dev:vite": "vite",
     "build": "vite build",
     "check": "tsc --noemit",

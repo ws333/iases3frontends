@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter webapp-frontend --filter webapp-docs run dev:vite",
-    "build": "pnpm --filter webapp-frontend --filter webapp-docs run build",
-    "upload": "pnpm --filter webapp-docs run build && cd frontend && pnpm run upload",
-    "check": "pnpm --filter webapp-frontend --filter webapp-docs run check",
+    "dev": "pnpm --filter webapp-frontend --filter docs run dev:vite",
+    "build": "pnpm --filter webapp-frontend --filter docs run build",
+    "upload": "pnpm --filter docs run build && cd frontend && pnpm run upload",
+    "check": "pnpm --filter webapp-frontend run check",
     "format": "cd frontend && pnpm run format",
     "format:check": "cd frontend && pnpm run format:check",
-    "lint": "pnpm --filter webapp-frontend --filter webapp-docs run lint",
-    "ca": "pnpm --filter webapp-frontend --filter webapp-docs run ca"
+    "lint": "pnpm --filter webapp-frontend run lint",
+    "ca": "pnpm --filter webapp-frontend run ca"
   }
 }
