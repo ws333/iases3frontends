@@ -8,6 +8,7 @@ sftp_deploy.sh
 *.local
 pnpm-debug.log*
 playwright
+htaccess
 
 # Editor directories and files
 .vscode/*
