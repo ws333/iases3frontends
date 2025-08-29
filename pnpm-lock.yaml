@@ -194,79 +194,6 @@ importers:
 
   addon/packages/thunderbird-iframe-service: {}
 
-  faxapp:
-    dependencies:
-      '@azure/msal-browser':
-        specifier: ^4.4.0
-        version: 4.16.0
-      '@azure/msal-react':
-        specifier: ^3.0.5
-        version: 3.0.16(@azure/msal-browser@4.16.0)(react@19.1.0)
-      '@floating-ui/react':
-        specifier: ^0.27.13
-        version: 0.27.13(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@react-oauth/google':
-        specifier: ^0.12.2
-        version: 0.12.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@tanstack/react-query':
-        specifier: ^5.71.5
-        version: 5.83.0(react@19.1.0)
-      easy-peasy:
-        specifier: ^6.1.0
-        version: 6.1.0(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      papaparse:
-        specifier: ^5.5.2
-        version: 5.5.3
-      react:
-        specifier: ^19.1.0
-        version: 19.1.0
-      react-dom:
-        specifier: ^19.1.0
-        version: 19.1.0(react@19.1.0)
-      react-error-boundary:
-        specifier: ^5.0.0
-        version: 5.0.0(react@19.1.0)
-      react-focus-lock:
-        specifier: ^2.13.6
-        version: 2.13.6(@types/react@19.1.8)(react@19.1.0)
-      react-router:
-        specifier: ^7.6.3
-        version: 7.7.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-router-dom:
-        specifier: ^7.6.3
-        version: 7.7.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      react-toastify:
-        specifier: ^11.0.5
-        version: 11.0.5(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      styled-components:
-        specifier: ^6.1.15
-        version: 6.1.19(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      ui-kit:
-        specifier: file:../addon/vendor/ui-kit-0.2.1.tgz
-        version: file:addon/vendor/ui-kit-0.2.1.tgz
-    devDependencies:
-      '@playwright/test':
-        specifier: ^1.55.0
-        version: 1.55.0
-      '@types/express':
-        specifier: ^5.0.3
-        version: 5.0.3
-      '@types/node':
-        specifier: ^24.3.0
-        version: 24.3.0
-      '@types/papaparse':
-        specifier: ^5.3.16
-        version: 5.3.16
-      '@types/thunderbird-webext-browser':
-        specifier: ^127.0.0
-        version: 127.0.0
-      pdf-lib:
-        specifier: ^1.17.1
-        version: 1.17.1
-      playwright:
-        specifier: ^1.55.0
-        version: 1.55.0
-
   webapp: {}
 
   webapp/docs:
@@ -317,14 +244,11 @@ importers:
         specifier: ^19.1.0
         version: 19.1.0(react@19.1.0)
       react-error-boundary:
-        specifier: ^5.0.0
-        version: 5.0.0(react@19.1.0)
+        specifier: ^6.0.0
+        version: 6.0.0(react@19.1.0)
       react-focus-lock:
         specifier: ^2.13.6
         version: 2.13.6(@types/react@19.1.8)(react@19.1.0)
-      react-router:
-        specifier: ^7.6.3
-        version: 7.7.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react-router-dom:
         specifier: ^7.6.3
         version: 7.7.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -339,22 +263,22 @@ importers:
         version: file:addon/vendor/ui-kit-0.2.1.tgz
     devDependencies:
       '@playwright/test':
-        specifier: ^1.54.2
+        specifier: ^1.55.0
         version: 1.55.0
       '@types/express':
         specifier: ^5.0.3
         version: 5.0.3
       '@types/node':
-        specifier: ^22.13.4
-        version: 22.16.5
+        specifier: ^24.3.0
+        version: 24.3.0
       '@types/papaparse':
-        specifier: ^5.3.15
+        specifier: ^5.3.16
         version: 5.3.16
       '@types/thunderbird-webext-browser':
         specifier: ^127.0.0
         version: 127.0.0
       playwright:
-        specifier: ^1.49.1
+        specifier: ^1.55.0
         version: 1.55.0
 
 packages:
@@ -451,6 +375,10 @@ packages:
 
   '@babel/runtime@7.28.2':
     resolution: {integrity: sha512-KHp2IflsnGywDjBWDkR9iEqiWSpc8GIi0lgTT3mOElT0PP1tG26P4tmFI2YvAdzgq9RGyoHZQEIEdZy6Ec5xCA==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.28.3':
+    resolution: {integrity: sha512-9uIQ10o0WGdpP6GDhXcdOJPJuDgFtIDtN/9+ArJQ2NAfAmiuhTQdzkaTGR33v43GYS2UrSA0eX2pPPHoFVvpxA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -758,12 +686,6 @@ packages:
   '@nodelib/fs.walk@1.2.8':
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
-
-  '@pdf-lib/standard-fonts@1.0.0':
-    resolution: {integrity: sha512-hU30BK9IUN/su0Mn9VdlVKsWBS6GyhVfqjwl1FjZN4TxP6cCw0jP2w7V3Hf5uX7M0AZJ16vey9yE0ny7Sa59ZA==}
-
-  '@pdf-lib/upng@1.0.1':
-    resolution: {integrity: sha512-dQK2FUMQtowVP00mtIksrlZhdFXQZPC+taih1q4CvPZ5vqdxR/LKBaFg0oAfzd1GlHZXXSPdQfzQnt+ViGvEIQ==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -2427,9 +2349,6 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
-  pako@1.0.11:
-    resolution: {integrity: sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==}
-
   papaparse@5.5.3:
     resolution: {integrity: sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==}
 
@@ -2471,9 +2390,6 @@ packages:
   pathval@2.0.1:
     resolution: {integrity: sha512-//nshmD55c46FuFw26xV/xFAaB5HF9Xdap7HJBBnrKdAd6/GxDBaNA1870O79+9ueg61cZLSVc+OaFlfmObYVQ==}
     engines: {node: '>= 14.16'}
-
-  pdf-lib@1.17.1:
-    resolution: {integrity: sha512-V/mpyJAoTsN4cnP31vc0wfNA1+p20evqqnap0KLoRUN0Yk/p3wN52DOEsL4oBFcLdb76hlpKPtzJIgo67j/XLw==}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
@@ -2570,6 +2486,11 @@ packages:
 
   react-error-boundary@5.0.0:
     resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
+    peerDependencies:
+      react: '>=16.13.1'
+
+  react-error-boundary@6.0.0:
+    resolution: {integrity: sha512-gdlJjD7NWr0IfkPlaREN2d9uUZUlksrfOx7SX62VRerwXbMY6ftGCIZua1VG1aXFNOimhISsTq+Owp725b9SiA==}
     peerDependencies:
       react: '>=16.13.1'
 
@@ -2981,9 +2902,6 @@ packages:
     peerDependenciesMeta:
       typescript:
         optional: true
-
-  tslib@1.14.1:
-    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
   tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
@@ -3405,6 +3323,8 @@ snapshots:
 
   '@babel/runtime@7.28.2': {}
 
+  '@babel/runtime@7.28.3': {}
+
   '@babel/template@7.27.2':
     dependencies:
       '@babel/code-frame': 7.27.1
@@ -3670,14 +3590,6 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@pdf-lib/standard-fonts@1.0.0':
-    dependencies:
-      pako: 1.0.11
-
-  '@pdf-lib/upng@1.0.1':
-    dependencies:
-      pako: 1.0.11
-
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
@@ -3839,7 +3751,7 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
 
   '@types/chai@5.2.2':
     dependencies:
@@ -3847,7 +3759,7 @@ snapshots:
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
 
   '@types/debug@4.1.12':
     dependencies:
@@ -3863,7 +3775,7 @@ snapshots:
 
   '@types/express-serve-static-core@5.0.7':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.5
@@ -3900,7 +3812,7 @@ snapshots:
 
   '@types/papaparse@5.3.16':
     dependencies:
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
 
   '@types/qs@6.14.0': {}
 
@@ -3917,12 +3829,12 @@ snapshots:
   '@types/send@0.17.5':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
 
   '@types/serve-static@1.15.8':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 22.16.5
+      '@types/node': 24.3.0
       '@types/send': 0.17.5
 
   '@types/stylis@4.2.5': {}
@@ -5759,8 +5671,6 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  pako@1.0.11: {}
-
   papaparse@5.5.3: {}
 
   parent-module@1.0.1:
@@ -5799,13 +5709,6 @@ snapshots:
   pathe@2.0.3: {}
 
   pathval@2.0.1: {}
-
-  pdf-lib@1.17.1:
-    dependencies:
-      '@pdf-lib/standard-fonts': 1.0.0
-      '@pdf-lib/upng': 1.0.1
-      pako: 1.0.11
-      tslib: 1.14.1
 
   picocolors@1.1.1: {}
 
@@ -5891,6 +5794,11 @@ snapshots:
   react-error-boundary@5.0.0(react@19.1.0):
     dependencies:
       '@babel/runtime': 7.28.2
+      react: 19.1.0
+
+  react-error-boundary@6.0.0(react@19.1.0):
+    dependencies:
+      '@babel/runtime': 7.28.3
       react: 19.1.0
 
   react-focus-lock@2.13.6(@types/react@19.1.8)(react@19.1.0):
@@ -6378,8 +6286,6 @@ snapshots:
   tsconfck@3.1.6(typescript@5.8.3):
     optionalDependencies:
       typescript: 5.8.3
-
-  tslib@1.14.1: {}
 
   tslib@2.6.2: {}
 
