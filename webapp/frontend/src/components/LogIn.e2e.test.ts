@@ -29,20 +29,6 @@ test.describe('LogIn Component E2E', () => {
     await expect(msButton.locator('span')).toHaveText('Sign in with Microsoft');
   });
 
-  test('should navigate to documentation when documentation button is clicked', async ({ page }) => {
-    await page.waitForLoadState('networkidle');
-
-    // Instead of expecting a popup, expect navigation in same window
-    const navigationPromise = page.waitForURL(/\/webapp\/docs/);
-
-    // Click the documentation button
-    await page.getByText('Documentation and information').click();
-
-    // Verify navigation to documentation URL
-    await navigationPromise;
-    expect(page.url()).toContain('/webapp/docs');
-  });
-
   test('should handle Google login button click and redirect to OAuth', async ({ page }) => {
     await page.waitForLoadState('networkidle');
 

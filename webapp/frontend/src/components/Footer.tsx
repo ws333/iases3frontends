@@ -13,7 +13,7 @@ const Footer = () => {
         className="footer-link"
         onClick={(e) => {
           e.preventDefault();
-          openInNewTab(`${DOCS_URL}/documentation`);
+          openInNewTab(`${DOCS_URL}documentation`);
         }}
       >
         Documentation
@@ -23,7 +23,7 @@ const Footer = () => {
         className="footer-link"
         onClick={(e) => {
           e.preventDefault();
-          openInNewTab(`${DOCS_URL}/privacy-policy`);
+          openInNewTab(`${DOCS_URL}privacy-policy`);
         }}
       >
         Privacy Policy
@@ -33,7 +33,7 @@ const Footer = () => {
         className="footer-link"
         onClick={(e) => {
           e.preventDefault();
-          openInNewTab(`${DOCS_URL}/terms-of-service`);
+          openInNewTab(`${DOCS_URL}terms-of-service`);
         }}
       >
         Terms of Service

@@ -41,7 +41,7 @@ _Note: Microsoft does not officially publish the exact daily sending limit for f
 To start a sending session, select a contact list available for your country and click the **Send emails** button.
 
 <div style="text-align:center">
-  <img src="/webapp/docs/img/send-email-page.png" alt="Screenshot: Send Email Page" width="100%" />
+  <img src="docs/img/send-email-page.png" alt="Screenshot: Send Email Page" width="100%" />
 </div>
 
 # \*
@@ -100,7 +100,7 @@ Only contact lists relevant to your country code are shown. This helps ensure yo
 If you switch to another browser or computer, use the export/import feature (found in the menu by clicking the three dots in the upper right corner) to transfer your sending history. Export your history from your current device, then import it on your new device.
 
 <div style="text-align:center">
-  <img src="/webapp/docs/img/settings-menu.png" alt="Screenshot: Settings Menu" width="50%" />
+  <img src="/docs/img/settings-menu.png" alt="Screenshot: Settings Menu" width="50%" />
 </div>
 
 <br/>
