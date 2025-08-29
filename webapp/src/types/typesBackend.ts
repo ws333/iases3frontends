@@ -26,7 +26,7 @@ export interface RevokeSessionGoogleResponseBody {
   error?: string;
 }
 
-type SendEmailRequestBodyBase = {
+export type SendEmailRequestBodyBase = {
   to: string;
   subject: string;
   emailBody: string; // HTML content
