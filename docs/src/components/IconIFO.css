@@ -1,0 +1,183 @@
+.icon_ifo {
+  margin: 0; /* Too avoid linting error for empty css class, and icon_ifo is needed for hover to work */
+}
+
+/* Glow effect on hover */
+.icon_ifo:hover {
+  /* Enhanced glow effect when user hovers */
+  filter: drop-shadow(0 0 10px rgba(157, 187, 255, 0.9));
+  /* Animation with subtle rotation when user hovers over the IFO */
+  animation:
+    randomHover 8s ease-in-out infinite,
+    wiggle 2s ease-in-out infinite;
+}
+
+/* Combined hover and glow effect */
+.hovering_ifo {
+  /* Using multiple animations to create a more organic movement */
+  animation:
+    randomHover 8s ease-in-out infinite,
+    wiggle 2s ease-in-out infinite;
+  /* Adding a subtle glow effect */
+  filter: drop-shadow(0 0 5px rgba(157, 187, 255, 0.7));
+  /* Smooth transition for hover state */
+  transition: all 0.3s ease;
+  /* Set transform origin to center for better rotation */
+  transform-origin: center center;
+}
+
+/* Animation for the hovering effect - vertical movement */
+@keyframes hover {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Animation for horizontal movement */
+@keyframes drift {
+  0% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(-8px);
+  }
+  66% {
+    transform: translateX(8px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Subtle rotation to enhance the hovering effect */
+@keyframes subtleRotate {
+  0% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  100% {
+    transform: rotate(-2deg);
+  }
+}
+
+/* Animation for slight wiggling movement */
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-1deg) scale(1.01);
+  }
+  50% {
+    transform: rotate(0deg) scale(0.99);
+  }
+  75% {
+    transform: rotate(1deg) scale(1.01);
+  }
+}
+
+/* More random and unpredictable movement pattern */
+@keyframes randomHover {
+  0% {
+    transform: translate(0, 0);
+  }
+  10% {
+    transform: translate(3px, -7px);
+  }
+  25% {
+    transform: translate(10px, -5px);
+  }
+  35% {
+    transform: translate(7px, -9px);
+  }
+  50% {
+    transform: translate(0, -12px);
+  }
+  65% {
+    transform: translate(-6px, -8px);
+  }
+  75% {
+    transform: translate(-9px, -4px);
+  }
+  90% {
+    transform: translate(-4px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Combined keyframes for multi-directional movement - kept for reference */
+@keyframes hoverAndDrift {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(8px, -5px);
+  }
+  50% {
+    transform: translate(0, -10px);
+  }
+  75% {
+    transform: translate(-8px, -5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Faster and more erratic version of the random movement for hover state */
+@keyframes randomHoverFast {
+  0% {
+    transform: translate(0, 0);
+  }
+  15% {
+    transform: translate(5px, -8px);
+  }
+  30% {
+    transform: translate(12px, -4px);
+  }
+  45% {
+    transform: translate(3px, -12px);
+  }
+  60% {
+    transform: translate(-4px, -10px);
+  }
+  75% {
+    transform: translate(-12px, -5px);
+  }
+  90% {
+    transform: translate(-6px, -2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Faster version of the multi-directional movement for hover state - kept for reference */
+@keyframes hoverAndDriftFast {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(10px, -7px);
+  }
+  50% {
+    transform: translate(0, -12px);
+  }
+  75% {
+    transform: translate(-10px, -7px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}

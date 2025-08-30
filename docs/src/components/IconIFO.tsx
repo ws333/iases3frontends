@@ -2,9 +2,9 @@
  * Modified copy (imports) of IconIFO.tsx from addon interface
  */
 import { CSSProperties } from 'react';
-import { IASE_URL } from '../../../addon/packages/interface/src/constants/constants';
-import '../../../addon/packages/interface/src/components/IconIFO.css';
-import icon from '../../../addon/packages/thunderbird-extension/public/skin/icon64.png';
+import { IASE_URL } from '../constants/constants';
+import icon from '../../public/img/ifo/icon64.png';
+import './IconIFO.css';
 
 type Props = {
   isHovering?: boolean;
