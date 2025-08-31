@@ -4,8 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter faxapp-frontend --filter faxapp-docs run dev:vite",
-    "dev:vite": "vite",
+    "dev": "vite",
     "build": "vite build",
     "upload": "pnpm run build && sftp_deploy_faxapp",
     "preview": "vite preview",

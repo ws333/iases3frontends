@@ -1,6 +1,6 @@
 import { CSSProperties } from 'react';
 import { IASE_URL } from '../../../addon/packages/interface/src/constants/constants';
-import icon from '../../public/img/ifo/icon64.png';
+import icon from '../assets/img/ifo/icon64.png';
 import './IconIFO.css';
 
 type Props = {
