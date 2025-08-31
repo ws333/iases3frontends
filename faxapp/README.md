@@ -4,4 +4,4 @@
 
 <br/>
 
-Web app for sending the Step 3 letter by fax using a API key from a fax service provider
+Web app for sending the Step 3 letter by fax using an API key from a fax service provider
