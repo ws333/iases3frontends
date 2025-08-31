@@ -1,0 +1,164 @@
+h2 {
+  margin: 0.5rem;
+}
+
+p {
+  margin: 8px 0px 9px;
+}
+
+/* Root level CSS variables for consistent sizing */
+:root {
+  --container-max-width: 50rem;
+}
+
+/* Main container for fax sender component */
+.container_fax_sender {
+  margin: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: var(--container-max-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container_options_and_preview {
+  color: #fff;
+  text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.container_options {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.container_buttons {
+  margin: 0.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.container_buttons_not_issending {
+  display: flex;
+  justify-content: 'space-between';
+}
+
+.session_buttons {
+  margin-left: 0.5rem !important;
+  margin-right: 0.5rem !important;
+}
+
+.column_options_left,
+.column_options_right {
+  width: 380px;
+}
+
+.column_options_left {
+  padding: 1rem;
+  text-align: right;
+  border-radius: 13px;
+  box-sizing: border-box;
+}
+
+.column_options_right {
+  padding: 1rem;
+  text-align: left;
+  border-radius: 13px;
+  box-sizing: border-box;
+}
+
+.container_fax_preview {
+  max-width: var(--container-max-width);
+}
+
+.fax_preview_content {
+  background-color: #111;
+  border: 1px solid #fff1;
+  border-radius: 13px;
+  padding: 2rem;
+  margin: 1rem;
+  text-align: left;
+}
+
+.section_faxes_sent_log {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container_faxes_sent_log {
+  font-size: small;
+  max-height: 12.5rem;
+  overflow-y: scroll;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  background-color: #111;
+  border: 1px solid #fff1;
+  border-radius: 13px;
+}
+
+.progress_bar {
+  width: 100%;
+}
+
+.section_sending_progress {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 85%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container_message > p {
+  text-align: center;
+}
+
+.settings_menu {
+  display: flex;
+  flex-direction: column;
+}
+
+.country_code_table {
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px 0 #0002;
+  border: 1px solid #fff2;
+}
+
+.country_code_th {
+  padding: 8px;
+  color: orange;
+  border-bottom: 1px solid #fff2;
+  border-right: 1px solid #fff1;
+}
+.country_code_th:last-child {
+  border-right: none;
+}
+.country_code_td {
+  padding: 8px;
+  border-bottom: 1px solid #fff1;
+  border-right: 1px solid #fff1;
+  padding-right: 3rem;
+}
+.country_code_td:last-child {
+  border-right: none;
+}
+.country_code_table tr:last-child .country_code_td {
+  border-bottom: none;
+}
+
+.country_code_th_name,
+.country_code_td_name {
+  padding-left: 2rem;
+}

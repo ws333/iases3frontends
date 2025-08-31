@@ -2,6 +2,7 @@ packages:
   - addon
   - addon/packages/*
   - docs
+  - faxapp
   - webapp
 
 ignoredBuiltDependencies:

@@ -1,36 +1,30 @@
 {
-  "name": "webapp-frontend",
+  "name": "faxapp-frontend",
   "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter webapp-frontend --filter docs run dev:vite",
+    "dev": "pnpm --filter faxapp-frontend --filter faxapp-docs run dev:vite",
     "dev:vite": "vite",
     "build": "vite build",
-    "upload": "pnpm --filter docs run build && pnpm run build && sftp_deploy_webapp",
+    "upload": "pnpm run build && sftp_deploy_faxapp",
     "preview": "vite preview",
     "check": "tsc",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "ca": "pnpm run check && pnpm run lint && pnpm run format:check",
-    "clean": "sh ./cleanProject.sh",
-    "test:e2e": "playwright test --output='playwright/last-run'",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:report": "pnpm exec playwright show-report"
+    "clean": "sh ./cleanProject.sh"
   },
   "dependencies": {
-    "@azure/msal-browser": "^4.4.0",
-    "@azure/msal-react": "^3.0.5",
     "@floating-ui/react": "^0.27.13",
-    "@react-oauth/google": "^0.12.2",
     "@tanstack/react-query": "^5.71.5",
+    "@zip.js/zip.js": "^2.7.72",
     "easy-peasy": "^6.1.0",
     "papaparse": "^5.5.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "react-error-boundary": "^6.0.0",
+    "react-dom": "^19.1.1",
+    "react-error-boundary": "^5.0.0",
     "react-focus-lock": "^2.13.6",
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
@@ -43,6 +37,7 @@
     "@types/node": "^24.3.0",
     "@types/papaparse": "^5.3.16",
     "@types/thunderbird-webext-browser": "^127.0.0",
+    "pdf-lib": "^1.17.1",
     "playwright": "^1.55.0"
   }
 }

@@ -3,7 +3,7 @@ dist
 TODO.md
 addon_build
 sftp_deploy.sh
-
+.vite
 .env
 *.local
 pnpm-debug.log*
