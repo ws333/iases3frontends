@@ -62,7 +62,7 @@ function EmailOptions({ isSending }: EmailOptionsProps) {
 
     return (
         <div className="email-options">
-            <div className="delay-input">
+            <div>
                 <Tooltip
                     placement="top"
                     renderOpener={(props) => (
@@ -101,7 +101,7 @@ function EmailOptions({ isSending }: EmailOptionsProps) {
                 />
             </div>
 
-            <div className="number-of-emails">
+            <div>
                 <label>
                     Number of emails to send in this session
                     <br />
