@@ -22,6 +22,7 @@
         "find-unused-files": "pnpm exec tsx scripts/run-analyze.ts",
         "watch": "cd packages/interface && pnpm run watch && cd ../..",
         "watch:all": "pnpm exec tsx ./scripts/watch-build.ts packages",
+        "upuk": "cp ../../../oss/ui-kit/ui-kit-0.2.2.tgz ../addon/vendor && pnpm add ../addon/vendor/ui-kit-0.2.2.tgz && pnpm run build",
         "clean": "./cleanProject.sh",
         "test": "vitest packages/*"
     },
