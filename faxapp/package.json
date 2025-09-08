@@ -29,7 +29,7 @@
     "react-router-dom": "^7.6.3",
     "react-toastify": "^11.0.5",
     "styled-components": "^6.1.15",
-    "ui-kit": "file:../addon/vendor/ui-kit-0.2.1.tgz"
+    "ui-kit": "file:../addon/vendor/ui-kit-0.2.2.tgz"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.0",

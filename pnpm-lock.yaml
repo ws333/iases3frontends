@@ -251,8 +251,8 @@ importers:
         specifier: ^6.1.15
         version: 6.1.19(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       ui-kit:
-        specifier: file:../addon/vendor/ui-kit-0.2.1.tgz
-        version: file:addon/vendor/ui-kit-0.2.1.tgz
+        specifier: file:../addon/vendor/ui-kit-0.2.2.tgz
+        version: file:addon/vendor/ui-kit-0.2.2.tgz
     devDependencies:
       '@playwright/test':
         specifier: ^1.55.0
@@ -3013,6 +3013,10 @@ packages:
   ui-kit@file:addon/vendor/ui-kit-0.2.1.tgz:
     resolution: {integrity: sha512-jtQZOnES3sItXn7mg6jmYORbAeVwymryFZ42EKtQWAE7bC9T5q5oC65oLbw/t19e3GYmEJSGdEWGbdUi6OFSyg==, tarball: file:addon/vendor/ui-kit-0.2.1.tgz}
     version: 0.2.1
+
+  ui-kit@file:addon/vendor/ui-kit-0.2.2.tgz:
+    resolution: {integrity: sha512-zxEadV09HH0QaJ0woAb7tYFXhB7ukt1KnECWSASreY8VZTaJV+zyEKYTnMtWv+kkBcJFbGFvhyQNu4HEHbKVJQ==, tarball: file:addon/vendor/ui-kit-0.2.2.tgz}
+    version: 0.2.2
 
   unbox-primitive@1.1.0:
     resolution: {integrity: sha512-nWJ91DjeOkej/TA8pXQ3myruKpKEYgqvpw9lz4OPHj/NWFNluYrjbz9j01CJ8yKQd2g4jFoOkINCTW2I5LEEyw==}
@@ -6411,6 +6415,8 @@ snapshots:
   ufo@1.6.1: {}
 
   ui-kit@file:addon/vendor/ui-kit-0.2.1.tgz: {}
+
+  ui-kit@file:addon/vendor/ui-kit-0.2.2.tgz: {}
 
   unbox-primitive@1.1.0:
     dependencies:
