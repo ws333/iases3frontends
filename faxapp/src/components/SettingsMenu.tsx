@@ -3,6 +3,7 @@ import { DownloadIcon, InfoIcon, Menu, MenuOption, MenuOptionProps, OpenMenuButt
 import { exportFromLocalStorage } from '../helpers/exportFromLocalStorage';
 import { showCountryCodesLegendDialog } from '../helpers/showCountryCodesLegendDialog';
 import { showDeleteHistoryDialog } from '../helpers/showDeleteHistoryDialog';
+import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
 import { useStoreState } from '../store/store';
 import MenuOptionFullSendingLog from './MenuOptionFullSendingLog';
 import MenuOptionImport from './MenuOptionImport';
@@ -28,7 +29,15 @@ function SettingsMenu() {
           {
             // Dummy to position menu option in MenuList below
             text: viewFullSendingLog,
-            onSelect: () => undefined,
+            onSelect: () => {},
+          },
+          {
+            text: 'Register or edit API key',
+            onSelect: () => {
+              showRegisterFaxApiKey();
+              onClose();
+            },
+            icon: <InfoIcon />,
           },
           {
             text: 'Show country codes legend',
@@ -38,10 +47,11 @@ function SettingsMenu() {
             },
             icon: <InfoIcon />,
           },
+
           {
             // Dummy to position menu option in MenuList below
             text: importSendingHistory,
-            onSelect: () => undefined,
+            onSelect: () => {},
           },
           {
             text: 'Export sending history',

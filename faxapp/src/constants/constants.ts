@@ -38,6 +38,7 @@ export const STORAGE_KEY = {
 
 export type StorageKey = keyof typeof STORAGE_KEY;
 
+export const defaultDialogWidth = 400;
 export const defaultDialogMaxWidth = 800;
 
 export const minSendingDelay = 1; // Minimum delay between faxes being sent in seconds
@@ -49,6 +50,8 @@ export const logsToDisplaySize = 1000;
 
 export const maxCountOptions = [5, 10, 25, 50, 75, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000];
 export const defaultMaxCount = maxCountOptions[5];
+
+export const minPassphraseLength = 3;
 
 export const sessionFinishedText = 'Session finished!';
 

@@ -1,12 +1,15 @@
-/*
- * A model for a Redux store (using easy-peasy) for all mailmerge code.
- * All persistent state is stored via this model.
- */
 import { action, computed, thunk, thunkOn } from 'easy-peasy';
 import type { Model } from '../types/modelTypes';
-import { defaultDialogMaxWidth, defaultMaxCount, defaultSendingDelay, zeroWidthSpace } from '../constants/constants';
+import {
+  defaultDialogMaxWidth,
+  defaultDialogWidth,
+  defaultMaxCount,
+  defaultSendingDelay,
+  zeroWidthSpace,
+} from '../constants/constants';
 import { defaultLanguage, defaultLanguageOptions, faxComponents } from '../constants/faxTemplates';
 import { threeMonths } from '../constants/timeConstants';
+import Overlay from '../components/Overlay';
 import TextEndingSession from '../components/dialogTexts/TextEndingSession';
 import { getDateTime } from '../helpers/getDateTime';
 import { storeSendingLog } from '../helpers/indexedDB';
@@ -19,11 +22,11 @@ export const model: Model = {
     message: '',
     confirmActionText: 'Confirm',
     isOpen: false,
-    closeDialog: thunk((actions) => {
-      actions.setUserDialog({ ...model.userDialog });
-    }),
+    closeDialog: thunk((actions) => actions.setUserDialog({ ...model.userDialog })),
     setUserDialog: action((state, payload) => ({ ...state, isOpen: true, ...payload })),
     showConfirmationModal: true,
+    confirmActionKind: 'primary',
+    width: defaultDialogWidth,
     maxWidth: defaultDialogMaxWidth,
   },
   userMessage: {
@@ -32,6 +35,23 @@ export const model: Model = {
       ...state,
       message: payload,
     })),
+  },
+  fullPageOverlay: {
+    isOpen: false,
+    title: '',
+    Component: null,
+    content: computed((state) => {
+      if (state.Component === null) return null;
+      return <Overlay Component={state.Component} title={state.title} />;
+    }),
+    OverlayComponent: Overlay,
+    closeOverlay: thunk((actions) => actions.showOverlay({ isOpen: false, title: '', Component: null })),
+    showOverlay: action((state, payload) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { content: _, ...restPayload } = payload;
+      if (restPayload.Component === null || restPayload.Component === undefined) return { ...state, ...restPayload };
+      return { ...state, isOpen: true, ...restPayload };
+    }),
   },
   contactList: {
     contacts: [],

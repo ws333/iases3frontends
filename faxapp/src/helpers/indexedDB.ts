@@ -27,6 +27,8 @@ export const OPTIONS_KEY = {
   LANGUAGE: 'language',
   COUNTRY_CODE: 'countryCode',
   COUNTRY_CODES_FETCHED: 'countryCodesFetched',
+  API_KEY: 'apiKey',
+  API_KEY_SALT: 'apiKeySalt',
 } as const;
 export type OptionsKey = (typeof OPTIONS_KEY)[keyof typeof OPTIONS_KEY];
 
@@ -202,10 +204,27 @@ export async function storeOptionsKey(value: number | string | string[], key: Op
     await new Promise<void>((resolve, reject) => {
       const request = store.put(value, key);
       request.onsuccess = () => resolve();
-      request.onerror = () => reject(new Error(`Failed to store key: ${key}`));
+      request.onerror = () => reject(new Error(`Failed to store options key: ${key}`));
     });
   } catch (error) {
     console.warn(`Error storing key ${key}:`, error);
+  } finally {
+    db.close();
+  }
+}
+
+export async function deleteOptionsKey(key: OptionsKey): Promise<void> {
+  const db = await openDatabase();
+  try {
+    const transaction = db.transaction(STORE.OPTIONS, 'readwrite');
+    const store = transaction.objectStore(STORE.OPTIONS);
+    await new Promise<void>((resolve, reject) => {
+      const request = store.delete(key);
+      request.onsuccess = () => resolve();
+      request.onerror = () => reject(new Error(`Failed to delete options key: ${key}`));
+    });
+  } catch (error) {
+    console.warn(`Error deleting key ${key}:`, error);
   } finally {
     db.close();
   }
@@ -318,6 +337,44 @@ export async function getOptions(): Promise<{ key: string; value: number | strin
   } catch (error) {
     console.warn('Error retrieving options:', error);
     return [];
+  } finally {
+    db.close();
+  }
+}
+
+// Get API key from the OPTIONS store
+export async function getOptionApiKey(): Promise<string> {
+  const db = await openDatabase();
+  try {
+    const transaction = db.transaction(STORE.OPTIONS, 'readonly');
+    const store = transaction.objectStore(STORE.OPTIONS);
+    const request: IDBRequest<string | undefined> = store.get(OPTIONS_KEY.API_KEY);
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result ?? '');
+      request.onerror = () => reject(new Error('Failed to retrieve API key'));
+    });
+  } catch (error) {
+    console.warn('Error retrieving API key:', error);
+    return '';
+  } finally {
+    db.close();
+  }
+}
+
+// Get API key salt from the OPTIONS store
+export async function getOptionApiKeySalt(): Promise<string> {
+  const db = await openDatabase();
+  try {
+    const transaction = db.transaction(STORE.OPTIONS, 'readonly');
+    const store = transaction.objectStore(STORE.OPTIONS);
+    const request: IDBRequest<string | undefined> = store.get(OPTIONS_KEY.API_KEY_SALT);
+    return new Promise((resolve, reject) => {
+      request.onsuccess = () => resolve(request.result ?? '');
+      request.onerror = () => reject(new Error('Failed to retrieve API key salt'));
+    });
+  } catch (error) {
+    console.warn('Error retrieving API key salt:', error);
+    return '';
   } finally {
     db.close();
   }

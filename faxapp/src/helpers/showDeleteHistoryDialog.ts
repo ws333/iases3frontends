@@ -11,6 +11,7 @@ export function showDeleteHistoryDialog() {
     title: 'Deletion warning!',
     message: TextDeletingData,
     confirmActionText: 'Confirm deletion',
+    confirmActionKind: 'alert',
     onConfirm: () => {
       async function handler() {
         const resetOk = await resetStorage();

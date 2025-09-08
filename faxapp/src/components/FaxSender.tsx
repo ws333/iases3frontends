@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import type { Fax } from '../types/types';
 import { ContactI3CFax } from '../types/typesI3C';
 import { defaultRandomWindow, fullProgressBarDelay } from '../../../addon/packages/interface/src/constants/constants';
-import Dialog from '../../../addon/packages/interface/src/components/Dialog';
 import ErrorMessage from '../../../addon/packages/interface/src/components/ErrorMessage';
 import Header from '../../../addon/packages/interface/src/components/Header';
 import Message from '../../../addon/packages/interface/src/components/Message';
@@ -10,15 +9,18 @@ import { useContactListFax } from '../hooks/useContactListFax';
 import { useFaxOptions } from '../hooks/useFaxOptions';
 import { useUpdateSendingStats } from '../hooks/useUpdateSendingStats';
 import { waitRandomSeconds } from '../../../addon/packages/interface/src/helpers/waitRandomSeconds';
+import { checkApiKeyExists } from '../helpers/crypto';
 import { getSessionFinishedText } from '../helpers/getSessionFinishedText';
 import { storeActiveContacts } from '../helpers/indexedDB';
 import { renderFaxPdf } from '../helpers/renderFaxPdf';
 import { sendFax } from '../helpers/sendFax';
 import { checkForDangelingSession, clearSessionState, updateSessionState } from '../helpers/sessionState';
+import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
 import { useStoreActions, useStoreState } from '../store/store';
 import ButtonEndSession from './ButtonEndSession';
 import ButtonSendFaxes from './ButtonSendFaxes';
 import ButtonStopSending from './ButtonStopSending';
+import Dialog from './Dialog';
 import FaxOptions from './FaxOptions';
 import FaxPreview from './FaxPreview';
 import SelectNations from './SelectNations';
@@ -31,6 +33,7 @@ function FaxSender() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isSending, setIsSending] = useState(false);
 
+  const fullPageOverlay = useStoreState((state) => state.fullPageOverlay);
   const userDialog = useStoreState((state) => state.userDialog);
 
   const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
@@ -56,6 +59,10 @@ function FaxSender() {
 
   useEffect(() => {
     void checkForDangelingSession();
+  }, []);
+
+  useEffect(() => {
+    void checkApiKeyExists().then((exists) => (!exists ? showRegisterFaxApiKey() : null));
   }, []);
 
   const leftToSendCount = useRef(0);
@@ -190,7 +197,8 @@ function FaxSender() {
   return (
     <div className="container_fax_sender">
       <Header />
-      <br />
+
+      {fullPageOverlay.isOpen && fullPageOverlay.content}
 
       {userDialog.isOpen && (
         <Dialog
@@ -201,6 +209,10 @@ function FaxSender() {
           onClose={userDialog.onClose}
           onConfirm={userDialog.onConfirm}
           showConfirmationModal={userDialog.showConfirmationModal}
+          confirmActionKind={userDialog.confirmActionKind}
+          showConfirm={userDialog.showConfirm}
+          showCancel={userDialog.showCancel}
+          width={userDialog.width}
           maxWidth={userDialog.maxWidth}
         />
       )}

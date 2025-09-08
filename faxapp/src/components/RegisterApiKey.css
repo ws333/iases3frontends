@@ -1,0 +1,74 @@
+.outer-div {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 20px;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 1rem;
+  margin-top: 2rem;
+}
+
+.input-row {
+  align-items: left;
+  display: flex;
+}
+
+.inputs-column {
+  align-items: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  margin: 8px;
+  padding: 8px;
+  width: 500px;
+}
+
+.button-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3em;
+  margin-top: 3em;
+}
+
+.button-toggle-show {
+  min-width: 80px;
+}
+
+.button-row .button-delete {
+  padding: 8px 16px;
+  text-align: center;
+  white-space: normal;
+  min-height: 4rem;
+  max-width: 10em;
+}
+
+.button-edit-save {
+  margin-right: 3em;
+  padding: 8px 16px;
+  width: 80px;
+  min-height: 4rem;
+}
+
+.p-message {
+  color: orange;
+  margin-top: 2em;
+  text-align: center;
+}
+
+.p-description {
+  color: #999;
+  font-size: 12px;
+  margin: 0 1rem;
+}
