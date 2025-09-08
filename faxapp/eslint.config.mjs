@@ -38,6 +38,7 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-confusing-void-expression': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-misused-promises': 'warn',
       '@typescript-eslint/no-non-null-assertion': 'off',
