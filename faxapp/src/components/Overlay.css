@@ -1,4 +1,4 @@
-.overlay {
+.overlay-container {
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
@@ -11,7 +11,7 @@
   z-index: 9999;
 }
 
-.modal {
+.overlay-modal {
   background-color: #111;
   border: 1px solid #fff1;
   border-radius: 13px;
@@ -25,7 +25,7 @@
   width: 90%;
 }
 
-.close-button {
+.overlay-close-button {
   background: none;
   border: none;
   border-radius: 4px;
@@ -38,7 +38,7 @@
   top: 10px;
 }
 
-.close-button:hover {
+.overlay-close-button:hover {
   background-color: #333;
 }
 

@@ -165,7 +165,7 @@ function RegisterApiKey() {
   const btnToggleShowApiKeyHidden = apiValueExists && !apiKey && !storedApiKey.current;
 
   return (
-    <div className="outer-div">
+    <div className="reg-outer-div">
       <form
         ref={formRef}
         method="post"
@@ -179,18 +179,18 @@ function RegisterApiKey() {
           }
         }}
       >
-        <div className="inputs-column">
-          <label htmlFor="passPhrase" className="label">
+        <div className="reg-inputs-column">
+          <label htmlFor="passPhrase" className="reg-label">
             Passphrase
           </label>
-          <div className="input-row">
+          <div className="reg-input-row">
             <input
               ref={passphraseInputRef}
               id="passPhrase"
               name="password"
               value={passphrase}
               type={showPassphrase ? 'text' : 'password'}
-              className="input"
+              className="reg-input"
               autoComplete="current-password"
               onChange={(e) => void onChangePassphrase(e)}
               disabled={!inputPassphraseEnabled}
@@ -198,7 +198,7 @@ function RegisterApiKey() {
             />
             <Button
               onClick={() => setShowPassphrase(!showPassphrase)}
-              className="button-toggle-show"
+              className="reg-button-toggle-show"
               kind="ghost"
               disabled={btnToggleShowPassphraseHidden}
               isDisabled={btnToggleShowPassphraseHidden}
@@ -207,10 +207,10 @@ function RegisterApiKey() {
             </Button>
           </div>
 
-          <label htmlFor="apiKey" className="label">
+          <label htmlFor="apiKey" className="reg-label">
             API key
           </label>
-          <div className="input-row">
+          <div className="reg-input-row">
             <input
               id="apiKey"
               name="API key"
@@ -220,12 +220,12 @@ function RegisterApiKey() {
               onChange={onChangeApiKey}
               placeholder={apiValueExists && !editMode ? '•'.repeat(33) : msg.enterApiKey}
               autoComplete="off"
-              className="input"
+              className="reg-input"
             />
 
             <Button
               onClick={() => setShowApiKey(!showApiKey)}
-              className="button-toggle-show"
+              className="reg-button-toggle-show"
               kind="ghost"
               disabled={btnToggleShowApiKeyHidden}
               isDisabled={btnToggleShowApiKeyHidden}
@@ -233,17 +233,17 @@ function RegisterApiKey() {
               {btnToggleShowApiKeyHidden ? '' : showApiKey ? 'Hide' : 'Show'}
             </Button>
           </div>
-          <p className="p-description">{msg.apiKeyInfo}</p>
+          <p className="reg-p-description">{msg.apiKeyInfo}</p>
 
-          <p className="p-message">{message}</p>
+          <p className="reg-p-message">{message}</p>
 
-          <div className="button-row">
-            <Button onClick={onClickDelete} className="button-delete" kind="alert">
+          <div className="reg-button-row">
+            <Button onClick={onClickDelete} className="reg-button-delete" kind="alert">
               Delete existing API key
             </Button>
             <Button
               onClick={() => void onClickEditSaveCancel()}
-              className="button-edit-save"
+              className="reg-button-edit-save"
               disabled={btnEditSaveCancelDisabled}
               isDisabled={btnEditSaveCancelDisabled}
             >

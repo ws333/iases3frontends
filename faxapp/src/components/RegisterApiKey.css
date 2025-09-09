@@ -1,4 +1,4 @@
-.outer-div {
+.reg-outer-div {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -8,25 +8,25 @@
   width: 100%;
 }
 
-.label {
+.reg-label {
   font-size: 14px;
   font-weight: 500;
   margin-left: 1rem;
   margin-top: 2rem;
 }
 
-.input-row {
-  align-items: left;
+.reg-input-row {
+  align-items: center;
   display: flex;
 }
 
-.inputs-column {
+.reg-inputs-column {
   align-items: left;
   display: flex;
   flex-direction: column;
 }
 
-.input {
+.reg-input {
   border: 1px solid #ddd;
   border-radius: 4px;
   flex: 1;
@@ -35,18 +35,18 @@
   width: 500px;
 }
 
-.button-row {
+.reg-button-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 3em;
   margin-top: 3em;
 }
 
-.button-toggle-show {
+.reg-button-toggle-show {
   min-width: 80px;
 }
 
-.button-row .button-delete {
+.reg-button-row .reg-button-delete {
   padding: 8px 16px;
   text-align: center;
   white-space: normal;
@@ -54,20 +54,20 @@
   max-width: 10em;
 }
 
-.button-edit-save {
+.reg-button-edit-save {
   margin-right: 3em;
   padding: 8px 16px;
   width: 80px;
   min-height: 4rem;
 }
 
-.p-message {
+.reg-p-message {
   color: orange;
   margin-top: 2em;
   text-align: center;
 }
 
-.p-description {
+.reg-p-description {
   color: #999;
   font-size: 12px;
   margin: 0 1rem;

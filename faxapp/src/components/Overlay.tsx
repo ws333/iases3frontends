@@ -18,9 +18,9 @@ function Overlay({ title, Component, onClose, closeOnClickBackground }: Props) {
   };
 
   return (
-    <div className="overlay" onClick={closeOnClickBackground ? onClose : () => {}}>
-      <div className="modal">
-        <button className="close-button" onClick={_onClose}>
+    <div className="overlay-container" onClick={closeOnClickBackground ? onClose : () => {}}>
+      <div className="overlay-modal">
+        <button className="overlay-close-button" onClick={_onClose}>
           ×
         </button>
         <h2 className="overlay-title">{title}</h2>
