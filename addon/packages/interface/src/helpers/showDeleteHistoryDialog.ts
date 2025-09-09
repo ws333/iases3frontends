@@ -1,4 +1,5 @@
 import { toast } from "react-toastify";
+import { zeroWidthSpace } from "../constants/constants";
 import TextDeletingData from "../components/dialogTexts/TextDeletingData";
 import { store } from "../store/store";
 import { toastOptions } from "../styles/styles";
@@ -16,6 +17,7 @@ export function showDeleteHistoryDialog() {
             if (resetOk) {
                 actions.sendingLog.setLog([]);
                 actions.render.initiateForcedRender();
+                actions.userMessage.setMessage(zeroWidthSpace);
                 const message = "Sending history has been deleted!";
                 toast(message, toastOptions);
                 console.log(message);
