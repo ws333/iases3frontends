@@ -4,6 +4,7 @@ import { ToastOptions } from 'react-toastify';
 export const toastStyles: CSSProperties = {
   backgroundColor: '#222',
   opacity: 1,
+  whiteSpace: 'pre-line', // Preserve newlines
 };
 
 export const toastOptions: ToastOptions = {
