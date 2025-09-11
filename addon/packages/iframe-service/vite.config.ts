@@ -1,11 +1,11 @@
+import dts from "unplugin-dts/vite";
 import { defineConfig } from "vite";
-import vts from "vite-plugin-dts";
 
 // https://vitejs.dev/config/
 export default defineConfig({
     base: "./",
     plugins: [
-        vts({
+        dts({
             include: ["src"],
         }),
     ],
