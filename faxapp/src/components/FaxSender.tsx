@@ -108,7 +108,7 @@ function FaxSender() {
         await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
         const message = getSessionFinishedText(faxesSent);
         setMessage(message);
-        addLogItem({ message, addNewline: true });
+        addLogItem({ message });
         clearSessionState();
         checkInProgress.current = false;
         setFaxesSent(0);
@@ -158,7 +158,7 @@ function FaxSender() {
     selectedNationsAtSendTime.current = selectedNations;
 
     for (const contact of contactsToSendTo) {
-      const logContact = `${contact.n} - ${contact.f}`;
+      const logContact = `${contact.n} ${formatFaxNumber(contact.f)}`;
 
       try {
         if (controller.current.signal.aborted) {
@@ -193,12 +193,12 @@ function FaxSender() {
         contact.sc++;
         setContact(contact); // Update the contact in state
         await storeActiveContacts(contact); // Update the contact in indexedDB
-        addLogItem({ message: `Fax sent to ${logContact}` });
+        addLogItem({ message: `Fax to ${logContact} queued` });
 
         await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
       } catch (error) {
         console.warn('Error in onClickSendFax:', (error as Error).message);
-        addLogItem({ message: `Failed to send fax to ${logContact}` });
+        addLogItem({ message: `Failed to queue fax to ${logContact}` });
       }
     }
 

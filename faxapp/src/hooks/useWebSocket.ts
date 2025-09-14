@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
+import { useStoreActions } from '../store/store';
 
 interface UseWebSocketOptions {
   apiKey: string;
@@ -18,6 +19,8 @@ export function useWebSocket({
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
 
   const sendWebSocketMessage = useCallback((message: WebSocketMessage) => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -77,8 +80,11 @@ export function useWebSocket({
                 from: message.webhookData.payload?.from,
               },
             };
-            console.log('*Debug* -> useWebSocket -> answer:', answer);
             sendWebSocketMessage(answer);
+
+            addLogItem({
+              message: `Fax to ${message.webhookData.payload?.to} ${message.webhookData.event_type.slice(4)}!`,
+            });
           }
         } catch (error) {
           console.warn('Failed to parse WebSocket message:', (error as Error).message);
@@ -103,7 +109,7 @@ export function useWebSocket({
         reconnectTimeoutRef.current = setTimeout(connect, reconnectInterval);
       }
     }
-  }, [apiKey, maxReconnectAttempts, onMessage, reconnectInterval, sendWebSocketMessage]);
+  }, [addLogItem, apiKey, maxReconnectAttempts, onMessage, reconnectInterval, sendWebSocketMessage]);
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {

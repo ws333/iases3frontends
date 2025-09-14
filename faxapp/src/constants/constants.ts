@@ -53,7 +53,7 @@ export const defaultMaxCount = maxCountOptions[5];
 
 export const minPassphraseLength = 3;
 
-export const sessionFinishedText = 'Session finished!';
+export const sessionFinishedText = 'Queueing of';
 
 export const sessionStateKey = 'sessionState';
 
