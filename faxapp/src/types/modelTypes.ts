@@ -52,6 +52,9 @@ interface ContactList {
 }
 
 interface FaxOptions {
+  apiKey: string;
+  setApiKey: Action<FaxOptions, string>;
+
   countryCode: string;
   setCountryCode: Action<FaxOptions, string>;
   updateNationAndLanguageOptions: ThunkOn<FaxOptions, undefined, Model>;

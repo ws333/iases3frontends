@@ -151,6 +151,9 @@ export const model: Model = {
     }),
   },
   faxOptions: {
+    apiKey: '',
+    setApiKey: action((state, payload) => ({ ...state, apiKey: payload })),
+
     countryCode: '',
     setCountryCode: action((state, payload) => ({ ...state, countryCode: payload })),
     updateNationAndLanguageOptions: thunkOn(

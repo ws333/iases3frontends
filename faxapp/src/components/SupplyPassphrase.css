@@ -1,0 +1,38 @@
+.passphrase-outer-div {
+  display: flex;
+  padding: 20px;
+  padding-bottom: 0;
+  width: 100%;
+}
+
+.passphrase-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-left: 1rem;
+  margin-top: 2rem;
+}
+
+.passphrase-input-row {
+  align-items: center;
+  display: flex;
+}
+
+.passphrase-inputs-column {
+  align-items: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.passphrase-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex: 1;
+  margin: 8px;
+  padding: 8px;
+  width: 500px;
+}
+
+.button-toggle-show {
+  align-self: center;
+  min-width: 80px;
+}

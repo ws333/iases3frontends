@@ -11,7 +11,6 @@ p {
   --container-max-width: 50rem;
 }
 
-/* Main container for fax sender component */
 .container_fax_sender {
   margin: auto;
   margin-top: 2rem;
@@ -162,4 +161,8 @@ p {
 .country_code_th_name,
 .country_code_td_name {
   padding-left: 2rem;
+}
+
+.fax-status-list ul {
+  list-style-type: none;
 }

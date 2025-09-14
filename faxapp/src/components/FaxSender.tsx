@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { Fax } from '../types/types';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { FaxStatuses } from '../types/types';
 import { ContactI3CFax } from '../types/typesI3C';
+import { WebSocketMessage } from '../types/typesSharedFax';
 import { defaultRandomWindow, fullProgressBarDelay } from '../../../addon/packages/interface/src/constants/constants';
 import ErrorMessage from '../../../addon/packages/interface/src/components/ErrorMessage';
 import Header from '../../../addon/packages/interface/src/components/Header';
@@ -8,14 +9,15 @@ import Message from '../../../addon/packages/interface/src/components/Message';
 import { useContactListFax } from '../hooks/useContactListFax';
 import { useFaxOptions } from '../hooks/useFaxOptions';
 import { useUpdateSendingStats } from '../hooks/useUpdateSendingStats';
+import { useWebSocket } from '../hooks/useWebSocket';
 import { waitRandomSeconds } from '../../../addon/packages/interface/src/helpers/waitRandomSeconds';
 import { checkApiKeyExists } from '../helpers/crypto';
+import { formatFaxNumber, formatName } from '../helpers/formatRecipientInfo';
 import { getSessionFinishedText } from '../helpers/getSessionFinishedText';
 import { storeActiveContacts } from '../helpers/indexedDB';
-import { renderFaxPdf } from '../helpers/renderFaxPdf';
-import { sendFax } from '../helpers/sendFax';
 import { checkForDangelingSession, clearSessionState, updateSessionState } from '../helpers/sessionState';
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
+import { showSupplyPassphraseDialog } from '../helpers/showSupplyPassphraseDialog';
 import { useStoreActions, useStoreState } from '../store/store';
 import ButtonEndSession from './ButtonEndSession';
 import ButtonSendFaxes from './ButtonSendFaxes';
@@ -23,6 +25,7 @@ import ButtonStopSending from './ButtonStopSending';
 import Dialog from './Dialog';
 import FaxOptions from './FaxOptions';
 import FaxPreview from './FaxPreview';
+import FaxStatusList from './FaxStatusList';
 import SelectNations from './SelectNations';
 import SendingLog from './SendingLog';
 import SendingProgress from './SendingProgress';
@@ -33,8 +36,11 @@ function FaxSender() {
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isSending, setIsSending] = useState(false);
 
+  const [faxStatuses, setFaxStatuses] = useState<FaxStatuses>(new Map());
+
   const fullPageOverlay = useStoreState((state) => state.fullPageOverlay);
   const userDialog = useStoreState((state) => state.userDialog);
+  const apiKey = useStoreState((state) => state.faxOptions.apiKey);
 
   const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
 
@@ -57,13 +63,31 @@ function FaxSender() {
 
   const { delay, FaxComponent } = useFaxOptions();
 
+  const handleWebSocketMessage = useCallback((message: WebSocketMessage) => {
+    if (message.type === 'webhook_data') {
+      const { webhookData } = message;
+      const event = webhookData.event_type?.slice(4).replace('.', ' ');
+      const faxId = webhookData.payload?.fax_id ?? '';
+      const to = webhookData.payload?.to;
+      const duration = webhookData.payload?.call_duration_secs;
+      const timestamp = webhookData.event_type === 'fax.delivered' ? Date.now() : 0;
+      const value = `Fax to ${to} ${event} ${duration ? `in ${duration}s` : ''}`;
+
+      if (faxId) setFaxStatuses((prev) => new Map(prev.set(faxId, { timestamp, value })));
+    }
+  }, []);
+
+  const { sendWebSocketMessage } = useWebSocket({ apiKey, onMessage: handleWebSocketMessage });
+
   useEffect(() => {
     void checkForDangelingSession();
   }, []);
 
   useEffect(() => {
-    void checkApiKeyExists().then((exists) => (!exists ? showRegisterFaxApiKey() : null));
-  }, []);
+    void checkApiKeyExists().then((exists) =>
+      !exists ? showRegisterFaxApiKey() : !apiKey ? showSupplyPassphraseDialog() : null,
+    );
+  }, [apiKey]);
 
   const leftToSendCount = useRef(0);
   const remainingCountSession = Math.max(0, maxCount - faxesSent);
@@ -72,6 +96,7 @@ function FaxSender() {
   const checkInProgress = useRef(false);
   const selectedNationsAtSendTime = useRef<string[]>([]);
   const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== selectedNations;
+
   useEffect(() => {
     async function checkIfSessionFinished() {
       if (
@@ -103,6 +128,23 @@ function FaxSender() {
     setMessage,
   ]);
 
+  // Clean up faxIds that were sucessfully delivered more than 10 secs ago
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setFaxStatuses((prev) => {
+        const now = Date.now();
+        const newMap = new Map();
+        for (const [key, status] of prev) {
+          if (status.timestamp === 0 || now - status.timestamp <= 10000) {
+            newMap.set(key, status);
+          }
+        }
+        return newMap;
+      });
+    }, 10000);
+    return () => clearInterval(interval);
+  }, []);
+
   async function onClickSendFax(e: React.MouseEvent) {
     e.preventDefault();
 
@@ -126,7 +168,7 @@ function FaxSender() {
           break;
         }
 
-        await prepareAndSendFax(contact);
+        prepareAndSendFax(contact);
 
         // Don't count and log fax as sent when signal has been aborted, e.g. if backend is down.
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -163,17 +205,18 @@ function FaxSender() {
     setIsSending(false);
   }
 
-  const prepareAndSendFax = async (contact: ContactI3CFax) => {
-    const faxPdf = await renderFaxPdf(contact.n);
-    const fax: Fax = {
-      number: contact.f,
-      pdf: faxPdf,
+  function prepareAndSendFax(contact: ContactI3CFax) {
+    const faxHeader: WebSocketMessage = {
+      type: 'send_fax',
+      apiKey,
+      faxHeader: {
+        toName: formatName(contact.n),
+        toNumber: formatFaxNumber(contact.f),
+      },
     };
 
-    const status = await sendFax(fax);
-    if (status.message) setMessage(status.message);
-    if (status.error) controller.current.abort();
-  };
+    sendWebSocketMessage(faxHeader);
+  }
 
   const onClickEndSession = () => {
     setEndSession(true);
@@ -199,6 +242,8 @@ function FaxSender() {
       <Header />
 
       {fullPageOverlay.isOpen && fullPageOverlay.content}
+
+      {faxStatuses.size > 0 && <FaxStatusList statuses={faxStatuses} />}
 
       {userDialog.isOpen && (
         <Dialog

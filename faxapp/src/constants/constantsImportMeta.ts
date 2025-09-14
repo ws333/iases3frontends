@@ -1,4 +1,4 @@
-import { PATH_BASE, SERVER_DEV, SERVER_PROD, URL_BACKEND_DEV, URL_BACKEND_PROD } from './constants';
+import { PATH_BASE, SERVER_DEV, SERVER_PROD, URL_BACKEND_PROD } from './constants';
 import { PATH_PING } from './constantsEndpointPaths';
 
 /**
@@ -20,6 +20,8 @@ if (!import.meta?.env) {
 
 export const URL_FAXAPP_BASE = import.meta.env.PROD ? `${SERVER_PROD}${PATH_BASE}` : `${SERVER_DEV}${PATH_BASE}`;
 
-export const URL_BACKEND = import.meta.env.PROD ? URL_BACKEND_PROD : URL_BACKEND_DEV;
+// Using URL_BACKEND_PROD only since it is processing webhooks from Telnyx
+// Possible to use localhost for this using ngrok, but this requires changing webhook url in Telnyx portal.
+export const URL_BACKEND = import.meta.env.PROD ? URL_BACKEND_PROD : URL_BACKEND_PROD;
 
 export const URL_BACKEND_PING = `${URL_BACKEND}${PATH_PING}`;
