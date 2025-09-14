@@ -163,6 +163,22 @@ p {
   padding-left: 2rem;
 }
 
+.fax-status-list h3 {
+  color: orange;
+  margin-bottom: 1rem;
+}
+
 .fax-status-list ul {
   list-style-type: none;
+}
+
+.fax-status-list {
+  position: fixed;
+  left: -2px;
+  top: 13rem;
+  min-width: 300px;
+  background-color: #111;
+  border: 1px solid #fff1;
+  border-radius: 5px;
+  padding: 1rem;
 }
