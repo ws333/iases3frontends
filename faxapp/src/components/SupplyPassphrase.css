@@ -1,30 +1,16 @@
 .passphrase-outer-div {
   display: flex;
-  padding: 0 20px;
-  width: 100%;
-}
-
-.passphrase-input-row {
   align-items: center;
-  display: flex;
-}
-
-.passphrase-inputs-column {
-  align-items: left;
-  display: flex;
-  flex-direction: column;
 }
 
 .passphrase-input {
   border: 1px solid #ddd;
   border-radius: 4px;
-  flex: 1;
   margin: 8px;
   padding: 8px;
-  width: 500px;
+  width: 33rem;
 }
 
-.button-toggle-show {
-  align-self: center;
+.passphrase-button-toggle-show {
   min-width: 80px;
 }

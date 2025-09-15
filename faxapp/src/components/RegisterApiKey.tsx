@@ -44,7 +44,7 @@ function RegisterApiKey() {
         setApiValueExists(true);
 
         const decryptedApiKey = await getApiKey(passphrase);
-        if (!editMode && !decryptedApiKey) setMessage(msg.enterExisting);
+        if (!editMode && !decryptedApiKey) setMessage(msg.enterExistingToEdit);
 
         return;
       }
@@ -97,7 +97,7 @@ function RegisterApiKey() {
 
     setEditMessage({ newPassphrase });
 
-    if (!editMode && keyExists && !apiKey) return setMessage(msg.enterExisting);
+    if (!editMode && keyExists && !apiKey) return setMessage(msg.enterExistingToEdit);
   };
 
   function onChangeApiKey(e: ChangeEvent<HTMLInputElement>) {
@@ -239,16 +239,16 @@ function RegisterApiKey() {
           <p className="reg-p-message">{message}</p>
 
           <div className="reg-button-row">
-            <Button onClick={onClickDelete} className="reg-button-delete" kind="alert">
+            <Button onClick={onClickDelete} className="reg-button reg-button-delete" kind="alert">
               Delete existing API key
             </Button>
             <Button
               onClick={() => void onClickEditSaveCancel()}
-              className="reg-button-edit-save"
+              className={`reg-button reg-button-edit-save ${btnEditSaveCancelDisabled ? 'disabled' : ''}`}
               disabled={btnEditSaveCancelDisabled}
               isDisabled={btnEditSaveCancelDisabled}
             >
-              {editMode ? (valueHasChanged && inputIsValid ? 'Save' : 'Cancel') : 'Edit'}
+              {editMode ? (valueHasChanged && inputIsValid ? 'Save changes' : 'Cancel') : 'Edit values'}
             </Button>
           </div>
         </div>

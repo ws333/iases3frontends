@@ -46,35 +46,31 @@ function SupplyPassphrase() {
   const btnToggleShowPassphraseHidden = !passphrase;
 
   return (
-    <div className="passphrase-outer-div">
-      <form ref={formRef} method="post" action="javascript:void(0)">
-        <div className="passphrase-inputs-column">
-          <div className="passphrase-input-row">
-            <input
-              ref={passphraseInputRef}
-              id="passPhrase"
-              name="password"
-              value={passphrase}
-              type={showPassphrase ? 'text' : 'password'}
-              className="passphrase-input"
-              autoComplete="current-password"
-              onChange={(e) => void onChangePassphrase(e)}
-              disabled={!inputPassphraseEnabled}
-              placeholder={msg.enterExisting}
-            />
-            <Button
-              onClick={() => setShowPassphrase(!showPassphrase)}
-              className="passphrase-button-toggle-show"
-              kind="ghost"
-              disabled={btnToggleShowPassphraseHidden}
-              isDisabled={btnToggleShowPassphraseHidden}
-            >
-              {btnToggleShowPassphraseHidden ? '' : showPassphrase ? 'Hide' : 'Show'}
-            </Button>
-          </div>
-        </div>
-      </form>
-    </div>
+    <form ref={formRef} method="post" action="javascript:void(0)">
+      <div className="passphrase-outer-div">
+        <input
+          ref={passphraseInputRef}
+          id="passPhrase"
+          name="password"
+          value={passphrase}
+          type={showPassphrase ? 'text' : 'password'}
+          className="passphrase-input"
+          autoComplete="current-password"
+          onChange={(e) => void onChangePassphrase(e)}
+          disabled={!inputPassphraseEnabled}
+          placeholder={msg.enterExisting}
+        />
+        <Button
+          onClick={() => setShowPassphrase(!showPassphrase)}
+          className="passphrase-button-toggle-show"
+          kind="ghost"
+          disabled={btnToggleShowPassphraseHidden}
+          isDisabled={btnToggleShowPassphraseHidden}
+        >
+          {btnToggleShowPassphraseHidden ? '' : showPassphrase ? 'Hide' : 'Show'}
+        </Button>
+      </div>
+    </form>
   );
 }
 
