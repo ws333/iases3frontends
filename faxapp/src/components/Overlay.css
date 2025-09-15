@@ -1,6 +1,7 @@
 .overlay-container {
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
+  align-items: flex-start;
+  background-color: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(4px);
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -12,12 +13,13 @@
 }
 
 .overlay-modal {
-  background-color: #111;
+  background-color: #222;
   border: 1px solid #fff1;
   border-radius: 13px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
   color: white;
-  max-height: 90vh;
+  margin-top: 25vh;
+  max-height: 75vh;
   max-width: 800px;
   overflow: auto;
   padding: 20px;
