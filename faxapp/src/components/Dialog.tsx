@@ -15,7 +15,7 @@ interface ModalProps {
 const StyledConfirmationModal = styled(ConfirmationModal)<ModalProps>`
   overflow-y: auto;
   overflow: hidden auto;
-  //   width: 800px;
+  background-color: #222;
   width: ${({ width }) => width}px;
   max-width: ${({ maxWidth }) => maxWidth}px;
 
@@ -34,6 +34,7 @@ const StyledConfirmationModal = styled(ConfirmationModal)<ModalProps>`
 const StyledModal = styled(Modal)<ModalProps>`
   overflow-y: auto;
   overflow: hidden auto;
+  background-color: #222;
   width: ${({ width }) => width}px;
   max-width: ${({ maxWidth }) => maxWidth}px;
 `;

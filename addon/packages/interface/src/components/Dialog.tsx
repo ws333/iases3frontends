@@ -9,6 +9,7 @@ type Props = Partial<UserDialog>;
 const StyledConfirmationModal = styled(ConfirmationModal)`
     overflow-y: auto;
     overflow: hidden auto;
+    background-color: #222;
 
     /* Target the confirm button to allow text wrapping */
     button {
@@ -30,6 +31,7 @@ interface ModalProps {
 const StyledModal = styled(Modal)<ModalProps>`
     overflow-y: auto;
     overflow: hidden auto;
+    background-color: #222;
     width: 92%;
     max-width: ${({ maxWidth }) => maxWidth}px;
 `;
