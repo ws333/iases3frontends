@@ -5,7 +5,7 @@ import { msg } from '../constants/constMessages';
 import { minPassphraseLength, zeroWidthSpace } from '../constants/constants';
 import { checkApiKeyExists, getApiKey, storeApiKey } from '../helpers/crypto';
 import { showDeleteApiKeyDialog } from '../helpers/showDeleteApiKeyDialog';
-import { store } from '../store/store';
+import { useStoreActions } from '../store/store';
 import { toastOptions } from '../styles/styles';
 import './RegisterApiKey.css';
 
@@ -20,6 +20,8 @@ function RegisterApiKey() {
   const [apiKey, setApiKey] = useState(''); // Using local state to require correct passphrase before revealing apiKey
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiValueExists, setApiValueExists] = useState(false);
+
+  const closeOverlay = useStoreActions((actions) => actions.fullPageOverlay.closeOverlay);
 
   const storedPassphrase = useRef('');
   const storedApiKey = useRef('');
@@ -146,8 +148,7 @@ function RegisterApiKey() {
       setShowPassphrase(false);
       setShowApiKey(false);
       setEditMode(false);
-
-      store.getActions().fullPageOverlay.closeOverlay();
+      closeOverlay();
 
       return;
     }
