@@ -49,9 +49,6 @@ function SupplyPassphrase() {
     <div className="passphrase-outer-div">
       <form ref={formRef} method="post" action="javascript:void(0)">
         <div className="passphrase-inputs-column">
-          <label htmlFor="passPhrase" className="passphrase-label">
-            Passphrase
-          </label>
           <div className="passphrase-input-row">
             <input
               ref={passphraseInputRef}
