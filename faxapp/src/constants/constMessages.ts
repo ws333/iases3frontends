@@ -12,6 +12,8 @@ export const msg = {
   apiKeyRetrieved: apiRetrieved,
   apiKeyModified: `API key modified! ${cs}`,
   apiKeyStored: 'API key stored securely!',
+  apiKeyToLong: 'API key length is to long!',
+  apiKeyToShort: 'API key length is to short!',
   bothModified: `Passphrase and API key modified! ${cs.slice(0, -1)}s!`,
   editValues: 'Edit the passphrase and/or API key',
   enterApiKey: 'Enter API key',

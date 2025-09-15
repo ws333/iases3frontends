@@ -39,6 +39,8 @@ export const STORAGE_KEY = {
 
 export type StorageKey = keyof typeof STORAGE_KEY;
 
+export const apiKeyLength = 43;
+
 export const defaultDialogWidth = 400;
 export const defaultDialogMaxWidth = 800;
 

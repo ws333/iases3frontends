@@ -2,7 +2,7 @@ import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Button } from 'ui-kit';
 import { msg } from '../constants/constMessages';
-import { minPassphraseLength, zeroWidthSpace } from '../constants/constants';
+import { apiKeyLength, minPassphraseLength, zeroWidthSpace } from '../constants/constants';
 import { checkApiKeyExists, getApiKey, storeApiKey } from '../helpers/crypto';
 import { showDeleteApiKeyDialog } from '../helpers/showDeleteApiKeyDialog';
 import { useStoreActions } from '../store/store';
@@ -63,7 +63,11 @@ function RegisterApiKey() {
     if (newP.length < minPassphraseLength) return setMessage(msg.passphraseToShort);
 
     // No API key
-    if (!newA && editMode) return setMessage(msg.apiKeyEmpty);
+    if (!newA) return setMessage(msg.apiKeyEmpty);
+
+    // Invalid API key length
+    if (newA && newA.length < apiKeyLength) return setMessage(msg.apiKeyToShort);
+    if (newA && newA.length > apiKeyLength) return setMessage(msg.apiKeyToLong);
 
     // Both modified
     if (newP !== spc && newA !== sac) return setMessage(apiValueExists ? msg.bothModified : msg.clickSave);
@@ -154,7 +158,7 @@ function RegisterApiKey() {
     focusToPassphrase();
   };
 
-  const inputIsValid = passphrase.length >= minPassphraseLength && apiKey.length > 0;
+  const inputIsValid = passphrase.length >= minPassphraseLength && apiKey.length === apiKeyLength;
   const valueHasChanged = apiKey !== storedApiKey.current || passphrase !== storedPassphrase.current;
   const btnEditSaveCancelDisabled = apiValueExists && !inputIsValid;
   const btnToggleShowPassphraseHidden = !editMode && !passphrase && !storedPassphrase.current;
