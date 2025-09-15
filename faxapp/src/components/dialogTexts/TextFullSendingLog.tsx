@@ -12,7 +12,7 @@ const styles: CSSProperties = {
 const TextFullSendingLog = (fullSendingLog: string[]) => {
   return (
     <>
-      <Text size={13} color="alert" style={{ ...styles }}>
+      <Text size={13} color="alert" style={{ ...styles, marginBottom: '1rem' }}>
         - Note that this view is not updated while sending! Press the esc or space key to close -
       </Text>
       {fullSendingLog.map((log, index) => (

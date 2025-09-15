@@ -13,5 +13,6 @@ export function showFullSendingLogDialog({ fullSendingLog, setUserDialog }: Args
     message: TextFullSendingLog(fullSendingLog),
     confirmActionText: 'Close',
     showConfirmationModal: false,
+    width: 800,
   });
 }
