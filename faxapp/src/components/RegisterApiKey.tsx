@@ -112,7 +112,7 @@ function RegisterApiKey() {
       setMessage(zeroWidthSpace);
       setPassphrase('');
       setApiKey('');
-      setEditMode(false);
+      setEditMode(true);
       setApiValueExists(false);
       focusToPassphrase();
     };
