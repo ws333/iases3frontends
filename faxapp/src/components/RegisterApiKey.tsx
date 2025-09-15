@@ -138,19 +138,14 @@ function RegisterApiKey() {
     }
   };
 
-  const onClickEditSaveCancel = async () => {
+  const onClickEditSaveCancel = async (inputIsValid: boolean) => {
+    if (!inputIsValid) return closeOverlay();
+
     if (editMode) {
       const result = await saveChanges({});
       if (result && result !== msg.apiKeyStored) return setMessage(result);
 
-      setMessage(zeroWidthSpace);
-      setInputPassphraseEnabled(false);
-      setShowPassphrase(false);
-      setShowApiKey(false);
-      setEditMode(false);
-      closeOverlay();
-
-      return;
+      return closeOverlay();
     }
 
     setEditMode(true);
@@ -159,7 +154,7 @@ function RegisterApiKey() {
     focusToPassphrase();
   };
 
-  const inputIsValid = passphrase.length >= minPassphraseLength && apiKey.length;
+  const inputIsValid = passphrase.length >= minPassphraseLength && apiKey.length > 0;
   const valueHasChanged = apiKey !== storedApiKey.current || passphrase !== storedPassphrase.current;
   const btnEditSaveCancelDisabled = apiValueExists && !inputIsValid;
   const btnToggleShowPassphraseHidden = !editMode && !passphrase && !storedPassphrase.current;
@@ -176,7 +171,7 @@ function RegisterApiKey() {
         }}
         onKeyDown={(e) => {
           if (e.key === 'Enter' && editMode) {
-            void onClickEditSaveCancel();
+            void onClickEditSaveCancel(inputIsValid);
           }
         }}
       >
@@ -243,7 +238,7 @@ function RegisterApiKey() {
               Delete existing API key
             </Button>
             <Button
-              onClick={() => void onClickEditSaveCancel()}
+              onClick={() => void onClickEditSaveCancel(inputIsValid)}
               className={`reg-button reg-button-edit-save ${btnEditSaveCancelDisabled ? 'disabled' : ''}`}
               disabled={btnEditSaveCancelDisabled}
               isDisabled={btnEditSaveCancelDisabled}
