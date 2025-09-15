@@ -5,7 +5,7 @@ import { msg } from '../constants/constMessages';
 import { minPassphraseLength, zeroWidthSpace } from '../constants/constants';
 import { checkApiKeyExists, getApiKey, storeApiKey } from '../helpers/crypto';
 import { showDeleteApiKeyDialog } from '../helpers/showDeleteApiKeyDialog';
-import { store, useStoreActions, useStoreState } from '../store/store';
+import { store } from '../store/store';
 import { toastOptions } from '../styles/styles';
 import './RegisterApiKey.css';
 
@@ -17,9 +17,7 @@ function RegisterApiKey() {
   const [showPassphrase, setShowPassphrase] = useState(false);
   const [inputPassphraseEnabled, setInputPassphraseEnabled] = useState(true);
 
-  const apiKey = useStoreState((state) => state.faxOptions.apiKey);
-  const setApiKey = useStoreActions((actions) => actions.faxOptions.setApiKey);
-
+  const [apiKey, setApiKey] = useState(''); // Using local state to require correct passphrase before revealing apiKey
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiValueExists, setApiValueExists] = useState(false);
 
