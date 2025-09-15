@@ -27,6 +27,7 @@ export const ERROR_FETCHING_CONTACTS = 'Failed to download contact lists, please
 export const ERROR_EMPTY_CONTACTS_ARRAY = 'Empty contacts array returned by fetchOnlineContacts';
 export const ERROR_EMPTY_COUNTRY_CODES_ARRAY = 'Not able to retrieve country codes, make sure you are online!';
 export const ERROR_OVERLAP_ACTIVE_DELETED = 'Overlap between active and deleted contacts in indexedDB!';
+export const ERROR_EXPORT_NOT_FROM_FAXAPP = 'Select file not exported from faxapp!';
 
 export const STORAGE_KEY = {
   CONTACTS: 'contactsI3CFax',
@@ -59,4 +60,4 @@ export const sessionStateKey = 'sessionState';
 
 export const zeroWidthSpace = '\u200b';
 
-export const zipPassword = 'Shivai2027!';
+export const zipPassword = 'Shivai2027!Fax';

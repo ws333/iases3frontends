@@ -3,6 +3,7 @@ import { ToastContentProps, toast } from 'react-toastify';
 import { CSSProperties } from 'styled-components';
 import { MenuOption, MenuView, RefreshIcon, Text } from 'ui-kit';
 import { ImportStats } from '../types/typesI3C';
+import { ERROR_EXPORT_NOT_FROM_FAXAPP } from '../constants/constants';
 import { importToLocalStorage } from '../helpers/importToLocalStorage';
 import { updateSendingLogState } from '../helpers/updateSendingLogState';
 import { useStoreActions } from '../store/store';
@@ -108,6 +109,10 @@ const MenuOptionImport = ({ view, onClose }: Props) => {
         data: importStatsOrError,
       });
     } catch (error) {
+      let { message } = error as Error;
+      if (message === 'Invalid password') message = ERROR_EXPORT_NOT_FROM_FAXAPP;
+      toast(message, { ...toastOptions, type: 'error' });
+
       console.warn('Error in onChangeImport:', error);
     } finally {
       if (fileInputRef.current) {
