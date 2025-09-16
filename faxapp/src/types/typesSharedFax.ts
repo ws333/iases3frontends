@@ -61,6 +61,10 @@ export type WebSocketMessage =
       faxHeader: FaxHeader;
     }
   | {
+      type: 'send_fax_error';
+      message: string;
+    }
+  | {
       type: 'send_fax_receipt';
       message: string;
     }

@@ -28,6 +28,7 @@ export const ERROR_EMPTY_CONTACTS_ARRAY = 'Empty contacts array returned by fetc
 export const ERROR_EMPTY_COUNTRY_CODES_ARRAY = 'Not able to retrieve country codes, make sure you are online!';
 export const ERROR_OVERLAP_ACTIVE_DELETED = 'Overlap between active and deleted contacts in indexedDB!';
 export const ERROR_EXPORT_NOT_FROM_FAXAPP = 'Select file not exported from faxapp!';
+export const ERROR_RESTART_BROWSER = 'Failed to send fax, please restart your browser and try again!';
 
 export const STORAGE_KEY = {
   CONTACTS: 'contactsI3CFax',

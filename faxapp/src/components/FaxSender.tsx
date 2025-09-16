@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 import { FaxStatuses } from '../types/types';
 import { ContactI3CFax } from '../types/typesI3C';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { defaultRandomWindow, fullProgressBarDelay } from '../../../addon/packages/interface/src/constants/constants';
+import { ERROR_RESTART_BROWSER } from '../constants/constants';
 import ErrorMessage from '../../../addon/packages/interface/src/components/ErrorMessage';
 import Header from '../../../addon/packages/interface/src/components/Header';
 import Message from '../../../addon/packages/interface/src/components/Message';
@@ -19,6 +21,7 @@ import { checkForDangelingSession, clearSessionState, updateSessionState } from 
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
 import { showSupplyPassphraseDialog } from '../helpers/showSupplyPassphraseDialog';
 import { useStoreActions, useStoreState } from '../store/store';
+import { toastOptions } from '../styles/styles';
 import ButtonEndSession from './ButtonEndSession';
 import ButtonSendFaxes from './ButtonSendFaxes';
 import ButtonStopSending from './ButtonStopSending';
@@ -77,7 +80,7 @@ function FaxSender() {
     }
   }, []);
 
-  const { sendWebSocketMessage } = useWebSocket({ apiKey, onMessage: handleWebSocketMessage });
+  const { sendFax } = useWebSocket({ apiKey, onMessage: handleWebSocketMessage });
 
   useEffect(() => {
     void checkForDangelingSession();
@@ -168,11 +171,17 @@ function FaxSender() {
           break;
         }
 
-        prepareAndSendFax(contact);
+        const result = await prepareAndSendFax(contact);
+
+        if (result.type === 'send_fax_error') {
+          toast(result.message, { ...toastOptions });
+          setMessage(result.message);
+        }
 
         // Don't count and log fax as sent when signal has been aborted, e.g. if backend is down.
+        // Also stop sending if backend didn't respond with result.type === 'send_fax_receipt'
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (controller.current.signal.aborted) {
+        if (controller.current.signal.aborted || result.type !== 'send_fax_receipt') {
           await waitRandomSeconds(fullProgressBarDelay / 2, 0);
           controller.current = new AbortController();
           setIsSending(false);
@@ -197,16 +206,20 @@ function FaxSender() {
 
         await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
       } catch (error) {
-        console.warn('Error in onClickSendFax:', (error as Error).message);
+        controller.current.abort();
+        setMessage(ERROR_RESTART_BROWSER);
+        setIsSending(false);
         addLogItem({ message: `Failed to queue fax to ${logContact}` });
+        console.warn('Error in onClickSendFax:', (error as Error).message);
+        break;
       }
     }
 
     setIsSending(false);
   }
 
-  function prepareAndSendFax(contact: ContactI3CFax) {
-    const faxHeader: WebSocketMessage = {
+  async function prepareAndSendFax(contact: ContactI3CFax) {
+    const sendFaxMessage: WebSocketMessage = {
       type: 'send_fax',
       apiKey,
       faxHeader: {
@@ -215,7 +228,7 @@ function FaxSender() {
       },
     };
 
-    sendWebSocketMessage(faxHeader);
+    return await sendFax(sendFaxMessage);
   }
 
   const onClickEndSession = () => {

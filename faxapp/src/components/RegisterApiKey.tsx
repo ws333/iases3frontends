@@ -17,9 +17,10 @@ function RegisterApiKey() {
   const [showPassphrase, setShowPassphrase] = useState(false);
   const [inputPassphraseEnabled, setInputPassphraseEnabled] = useState(true);
 
-  const [apiKey, setApiKey] = useState(''); // Using local state to require correct passphrase before revealing apiKey
+  const [localApiKey, setLocalApiKey] = useState(''); // Using local state to require correct passphrase before revealing apiKey
   const [showApiKey, setShowApiKey] = useState(false);
   const [apiValueExists, setApiValueExists] = useState(false);
+  const setGlobalApiKey = useStoreActions((actions) => actions.faxOptions.setApiKey);
 
   const closeOverlay = useStoreActions((actions) => actions.fullPageOverlay.closeOverlay);
 
@@ -55,54 +56,54 @@ function RegisterApiKey() {
     void updateEditMode();
   }, [editMode, passphrase]);
 
-  const setEditMessage = ({ newApiKey: newA = apiKey, newPassphrase: newP = passphrase }) => {
+  const setEditMessage = ({ newApiKey = localApiKey, newPass = passphrase }) => {
     const spc = storedPassphrase.current;
     const sac = storedApiKey.current;
 
     // Invalid passphrase
-    if (newP.length < minPassphraseLength) return setMessage(msg.passphraseToShort);
+    if (newPass.length < minPassphraseLength) return setMessage(msg.passphraseToShort);
 
     // No API key
-    if (!newA && editMode) return setMessage(msg.apiKeyEmpty);
+    if (!newApiKey && editMode) return setMessage(msg.apiKeyEmpty);
 
     // Both modified
-    if (newP !== spc && newA !== sac) return setMessage(apiValueExists ? msg.bothModified : msg.clickSave);
+    if (newPass !== spc && newApiKey !== sac) return setMessage(apiValueExists ? msg.bothModified : msg.clickSave);
 
     // Passphrase modified
-    if (newP !== spc) return setMessage(msg.passphraseModified);
+    if (newPass !== spc) return setMessage(msg.passphraseModified);
 
     // API key modified
-    if (newA && newA !== sac) return setMessage(msg.apiKeyModified);
+    if (newApiKey && newApiKey !== sac) return setMessage(msg.apiKeyModified);
 
     setMessage(msg.editValues);
   };
 
   const onChangePassphrase = async (e: ChangeEvent<HTMLInputElement>) => {
-    const newPassphrase = e.target.value;
-    setPassphrase(newPassphrase);
+    const newPass = e.target.value;
+    setPassphrase(newPass);
 
     const keyExists = await checkApiKeyExists();
-    const decryptedApiKey = await getApiKey(newPassphrase);
+    const decryptedApiKey = await getApiKey(newPass);
 
     // Set state if the passphrase decrypted the key - but only once
-    if (decryptedApiKey && newPassphrase !== storedPassphrase.current) {
+    if (decryptedApiKey && newPass !== storedPassphrase.current) {
       toast(msg.apiKeyRetrieved, toastOptions);
       setMessage(zeroWidthSpace);
       setInputPassphraseEnabled(false);
-      setApiKey(decryptedApiKey);
-      storedPassphrase.current = newPassphrase;
+      setLocalApiKey(decryptedApiKey);
+      storedPassphrase.current = newPass;
       storedApiKey.current = decryptedApiKey;
       return;
     }
 
-    setEditMessage({ newPassphrase });
+    setEditMessage({ newPass });
 
-    if (!editMode && keyExists && !apiKey) return setMessage(msg.enterExistingToEdit);
+    if (!editMode && keyExists && !localApiKey) return setMessage(msg.enterExistingToEdit);
   };
 
   function onChangeApiKey(e: ChangeEvent<HTMLInputElement>) {
     const { value } = e.target;
-    setApiKey(value);
+    setLocalApiKey(value);
     setEditMessage({ newApiKey: value });
   }
 
@@ -111,7 +112,8 @@ function RegisterApiKey() {
       setInputPassphraseEnabled(true);
       setMessage(zeroWidthSpace);
       setPassphrase('');
-      setApiKey('');
+      setLocalApiKey('');
+      setGlobalApiKey('');
       setEditMode(true);
       setApiValueExists(false);
       focusToPassphrase();
@@ -121,7 +123,7 @@ function RegisterApiKey() {
   };
 
   const saveChanges = async (values?: { newApiKey?: string; newPassphrase?: string }) => {
-    const { newApiKey = apiKey, newPassphrase = passphrase } = values ?? {};
+    const { newApiKey = localApiKey, newPassphrase = passphrase } = values ?? {};
 
     if (newApiKey !== storedApiKey.current || newPassphrase !== storedPassphrase.current) {
       const result = await storeApiKey({
@@ -129,6 +131,8 @@ function RegisterApiKey() {
         passphrase: newPassphrase,
         overwrite: inputPassphraseEnabled,
       });
+
+      if (newApiKey !== storedApiKey.current) setGlobalApiKey(newApiKey);
 
       if (result === msg.apiKeyStored) {
         storedApiKey.current = newApiKey;
@@ -156,11 +160,11 @@ function RegisterApiKey() {
     focusToPassphrase();
   };
 
-  const inputIsValid = passphrase.length >= minPassphraseLength && apiKey.length > 0;
-  const valueHasChanged = apiKey !== storedApiKey.current || passphrase !== storedPassphrase.current;
+  const inputIsValid = passphrase.length >= minPassphraseLength && localApiKey.length > 0;
+  const valueHasChanged = localApiKey !== storedApiKey.current || passphrase !== storedPassphrase.current;
   const btnEditSaveCancelDisabled = apiValueExists && !inputIsValid;
   const btnToggleShowPassphraseHidden = !editMode && !passphrase && !storedPassphrase.current;
-  const btnToggleShowApiKeyHidden = apiValueExists && !apiKey && !storedApiKey.current;
+  const btnToggleShowApiKeyHidden = apiValueExists && !localApiKey && !storedApiKey.current;
 
   return (
     <div className="reg-outer-div">
@@ -212,7 +216,7 @@ function RegisterApiKey() {
             <input
               id="apiKey"
               name="API key"
-              value={apiKey}
+              value={localApiKey}
               type={showApiKey ? 'text' : 'password'}
               disabled={!editMode || (!storedApiKey.current && apiValueExists)}
               onChange={onChangeApiKey}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
+import { SendWebSocketMessage } from '../types/types';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
 import { useStoreActions } from '../store/store';
@@ -19,16 +20,33 @@ export function useWebSocket({
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectAttemptsRef = useRef(0);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const pendingResolver = useRef<{ resolve: SendWebSocketMessage } | null>(null);
 
-  const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
+  const addLogItem = useStoreActions((actions) => actions.sendingLog.addLogItem);
 
-  const sendWebSocketMessage = useCallback((message: WebSocketMessage) => {
+  const sendWebSocketMessage = useCallback((message: WebSocketMessage): boolean => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
       wsRef.current.send(JSON.stringify(message));
+      return true;
     } else {
       console.warn('WebSocket is not open. Message not sent:', message);
+      return false;
     }
   }, []);
+
+  const sendFax = useCallback(
+    (message: WebSocketMessage) => {
+      return new Promise<WebSocketMessage>((resolve, reject) => {
+        const messageWasSent = sendWebSocketMessage(message);
+        if (messageWasSent) {
+          pendingResolver.current = { resolve };
+        } else {
+          reject(new Error('WebSocket is not open'));
+        }
+      });
+    },
+    [sendWebSocketMessage],
+  );
 
   const connect = useCallback(() => {
     if (!apiKey) return;
@@ -42,16 +60,13 @@ export function useWebSocket({
       const protocol = URL_BACKEND.startsWith('https://') ? 'wss://' : 'ws://';
       const wsUrl = URL_BACKEND.replace(/^https?:\/\//, protocol);
       const ws = new WebSocket(wsUrl);
+      wsRef.current = ws;
 
       ws.onopen = () => {
         console.log('WebSocket connected to backend');
         reconnectAttemptsRef.current = 0;
 
-        const message: WebSocketMessage = {
-          type: 'set_from_number',
-          apiKey,
-        };
-        ws.send(JSON.stringify(message));
+        sendWebSocketMessage({ type: 'set_from_number', apiKey });
       };
 
       ws.onerror = (error) => {
@@ -86,6 +101,14 @@ export function useWebSocket({
               message: `Fax to ${message.webhookData.payload?.to} ${message.webhookData.event_type.slice(4)}!`,
             });
           }
+
+          // Resolve pending promise in sendWebSocketMessageAsync
+          if (message.type === 'send_fax_receipt' || message.type === 'send_fax_error') {
+            if (pendingResolver.current) {
+              pendingResolver.current.resolve(message);
+              pendingResolver.current = null;
+            }
+          }
         } catch (error) {
           console.warn('Failed to parse WebSocket message:', (error as Error).message);
         }
@@ -99,8 +122,6 @@ export function useWebSocket({
           reconnectTimeoutRef.current = setTimeout(connect, reconnectInterval);
         }
       };
-
-      wsRef.current = ws;
     } catch (error) {
       console.error('Failed to create WebSocket connection:', (error as Error).message);
       // Optionally, trigger a retry or notify the user
@@ -125,5 +146,5 @@ export function useWebSocket({
     };
   }, [connect, disconnect]);
 
-  return { sendWebSocketMessage, disconnect };
+  return { sendWebSocketMessage, sendFax, disconnect };
 }

@@ -35,7 +35,7 @@ function SupplyPassphrase() {
 
     // Set state if the passphrase decrypted the key
     if (decryptedApiKey) {
-      toast(msg.passphraseCorrectReady, toastOptions);
+      toast(msg.apiKeyRetrieved, toastOptions);
       setInputPassphraseEnabled(false);
       setApiKey(decryptedApiKey);
       closeOverlay();
