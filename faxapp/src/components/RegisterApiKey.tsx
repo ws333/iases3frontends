@@ -120,7 +120,9 @@ function RegisterApiKey() {
     showDeleteApiKeyDialog(successCb);
   };
 
-  const saveChanges = async ({ newApiKey = apiKey, newPassphrase = passphrase }) => {
+  const saveChanges = async (values?: { newApiKey?: string; newPassphrase?: string }) => {
+    const { newApiKey = apiKey, newPassphrase = passphrase } = values ?? {};
+
     if (newApiKey !== storedApiKey.current || newPassphrase !== storedPassphrase.current) {
       const result = await storeApiKey({
         apiKey: newApiKey,
@@ -142,7 +144,7 @@ function RegisterApiKey() {
     if (!inputIsValid) return closeOverlay();
 
     if (editMode) {
-      const result = await saveChanges({});
+      const result = await saveChanges();
       if (result && result !== msg.apiKeyStored) return setMessage(result);
 
       return closeOverlay();
