@@ -1,8 +1,15 @@
 import type { JSX } from 'react';
+import { FaxWebhookRequestBody } from './typesSharedFax';
 
 export type FaxComponentProps = {
   name: string;
 };
+
+export interface FaxStatus {
+  event_type: FaxWebhookRequestBody['data']['event_type'];
+  payload: FaxWebhookRequestBody['data']['payload'];
+  received_at: string;
+}
 
 export type TFaxComponent = ({ name }: FaxComponentProps) => JSX.Element;
 

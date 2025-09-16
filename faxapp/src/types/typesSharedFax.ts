@@ -1,9 +1,3 @@
-export interface FaxStatus {
-  event_type: FaxWebhookRequestBody['data']['event_type'];
-  payload: FaxWebhookRequestBody['data']['payload'];
-  received_at: string;
-}
-
 export type FaxWebhookRequestBody = {
   data: {
     event_type:
@@ -39,10 +33,6 @@ export type FaxWebhookRequestBody = {
     delivered_to: string;
   };
 };
-
-export interface FaxGetStatusResponseBody extends Partial<FaxStatus> {
-  error?: string;
-}
 
 interface StatusBackend {
   status: 'OK' | 'ERROR';

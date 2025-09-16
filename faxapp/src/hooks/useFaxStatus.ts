@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { FaxStatus } from '../types/typesSharedFax';
+import { FaxStatus } from '../types/types';
 import { PATH_FAX_GET_STATUS } from '../constants/constantsEndpointPaths';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
 
