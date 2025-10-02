@@ -19,7 +19,7 @@ export async function sendEmailGoogle({ email }: Args): Promise<StatusBackend> {
 
     // Message to show in UI
     const { message } = (await response.json()) as SendEmailGoogleResponseBody;
-    return { status: 'OK', message: `${message ?? ''} - ${new Date().toLocaleString()}` };
+    return { status: 'OK', message: message ?? '' };
   }
 
   try {

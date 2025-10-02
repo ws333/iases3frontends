@@ -22,7 +22,7 @@ export async function sendEmailMS({ email, instance, accounts, scopes }: Args): 
     }
 
     const { message } = (await response.json()) as SendEmailMSResponseBody;
-    return { status: 'OK', message: `${message ?? ''} - ${new Date().toLocaleString()}` };
+    return { status: 'OK', message: message ?? '' };
   }
 
   try {
