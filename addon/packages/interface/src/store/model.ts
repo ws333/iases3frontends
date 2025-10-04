@@ -56,7 +56,9 @@ export const model: Model = {
         ),
         selectedContactsNotSent: computed((state) => {
             const threeMonthsAgo = Date.now() - threeMonths;
-            return state.selectedContacts.filter((contact) => contact.sd < threeMonthsAgo);
+            return state.selectedContacts.filter(
+                (contact) => contact.sd < threeMonthsAgo && contact.cf1 !== "u" && contact.cb1 !== "u"
+            );
         }),
 
         deletedContacts: [],

@@ -1,5 +1,5 @@
 /**
- * Sync frontend and frontend and backend after modifications to this file
+ * Sync relevant code in frontend and backend after modifications to this file
  */
 
 // Common

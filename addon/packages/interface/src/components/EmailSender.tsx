@@ -31,18 +31,21 @@ import "./EmailSender.css";
 function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: ProjectEnvProps) {
     if (environment === "unknown") throw new Error(ERROR_ENVIRONMENT_UNKNOWN);
 
+    const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
     const setMessage = useStoreActions((actions) => actions.userMessage.setMessage);
+
+    const [prefilghtInProgess, setPrefilghtInProgess] = useState(false);
+    const [emailsUnsubbed, setEmailsUnsubbed] = useState(0);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isSending, setIsSending] = useState(false);
-    const [prefilghtInProgess, setPrefilghtInProgess] = useState(false);
 
     const userDialog = useStoreState((state) => state.userDialog);
-    const countryCodeRef = useRef("");
-    countryCodeRef.current = useStoreState((state) => state.emailOptions.countryCode);
-
-    const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
+    const userEmail = useStoreState((state) => state.auth.currentLogin.userEmail);
 
     const controller = useRef(new AbortController());
+
+    const countryCodeRef = useRef("");
+    countryCodeRef.current = useStoreState((state) => state.emailOptions.countryCode);
 
     useUpdateSendingStats(isSending);
 
@@ -66,7 +69,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
     }, []);
 
     const leftToSendCount = useRef(0);
-    const remainingCountSession = Math.max(0, maxCount - emailsSent);
+    const remainingCountSession = Math.max(0, maxCount - (emailsSent + emailsUnsubbed));
     leftToSendCount.current = selectedContactsNotSent.slice(0, remainingCountSession).length;
 
     const checkInProgress = useRef(false);
@@ -93,8 +96,10 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
             }
         }
         void checkIfSessionFinished();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         emailsSent,
+        leftToSendCount.current, // Needed to execute useEffect if the last email didn't increment emailsSent (failed for some reason)
         endSession,
         setEmailsSent,
         setEndSession,
@@ -172,7 +177,11 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                     break;
                 }
 
-                await prepareAndSendEmail(contact);
+                const result = await prepareAndSendEmail(contact);
+                if (result?.status === "unsubbed") {
+                    await waitRandomSeconds(1, 0); // Short delay to ensure unsub message is readable
+                    continue;
+                }
 
                 // Don't count and log email as sent for webapp when signal has been aborted, e.g. if backend is down.
                 // For addon the compose email window will still be open and could be sent manually, so logging email as sent.
@@ -210,19 +219,34 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
         setIsSending(false);
     }
 
-    const prepareAndSendEmail = async (contact: ContactI3C) => {
+    const prepareAndSendEmail = async (contact: ContactI3C): Promise<{ status: "unsubbed" } | undefined> => {
         const emailText = renderEmail(EmailComponent, { name: contact.n });
         const email: Email = {
+            uid: contact.uid,
             to: contact.e,
+            from: userEmail,
             subject: selectedSubject,
             body: emailText,
         };
 
-        // Thunderbird addon always return undefined
-        // webapp returns status including a message to display to the user
-        const status = await sendEmailFn(email);
-        if (status?.message) setMessage(status.message);
-        if (status?.error) controller.current.abort();
+        // Thunderbird addon always returns undefined
+        // The webapp returns a status including a message to display to the user
+        const result = await sendEmailFn(email);
+
+        if (result && result.httpStatus === 410) {
+            contact.cf1 = "u";
+            await storeActiveContacts(contact); // Update the contact in indexedDB
+
+            const message = `Recipient ${contact.e} has unsubscribed`;
+            setMessage(message);
+            addLogItem({ message });
+            setEmailsUnsubbed((count) => count + 1);
+
+            return { status: "unsubbed" };
+        }
+
+        if (result?.message) setMessage(result.message);
+        if (result?.error) controller.current.abort();
     };
 
     const onClickEndSession = () => {

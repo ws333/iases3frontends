@@ -13,6 +13,8 @@ export async function fetchSendEmail({ url, email, accessToken }: Args) {
     credentials: 'include',
     body: JSON.stringify({
       accessToken,
+      uid: email.uid,
+      from: email.from,
       to: email.to,
       subject: email.subject,
       emailBody: email.body,
