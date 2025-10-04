@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+import { ContactI3C } from "./typesI3C";
 
 export type Provider = "MS" | "Google";
 
@@ -8,12 +9,13 @@ export type CurrentLogin = {
     accessToken?: string;
 };
 
-export type Email = Pick<browser.compose.ComposeDetails, "to" | "subject" | "body">;
+export type Email = Pick<ContactI3C, "uid"> & Pick<browser.compose.ComposeDetails, "to" | "from" | "subject" | "body">;
 
 export type StatusBackend = {
     status: "OK" | "ERROR";
     message?: string; // Message to display to user
     error?: string;
+    httpStatus?: number;
 };
 
 export type ProjectEnvProps = {
