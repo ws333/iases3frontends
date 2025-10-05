@@ -7,18 +7,19 @@ import { buttonGoogleStyles } from '../styles/loginStyles';
 interface Props {
   type: ButtonAuthType;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onLoad?: React.ReactEventHandler<HTMLButtonElement>;
   ref?: React.RefObject<HTMLButtonElement | null>;
 }
 
 /**
  *  Google button using official design
  */
-const ButtonGoogle = ({ type, onClick, ref }: Props) => {
+const ButtonGoogle = ({ type, onClick, onLoad, ref }: Props) => {
   const src = type === 'signIn' ? googleSignInBtn : googleContinueBtn;
   const alt = type === 'signIn' ? 'Sign in with Google' : 'Continue with Google';
 
   return (
-    <Button ref={ref} onClick={onClick} style={buttonGoogleStyles} aria-label={alt}>
+    <Button ref={ref} onClick={onClick} onLoad={onLoad} style={buttonGoogleStyles} aria-label={alt}>
       <img src={src} alt={alt} />
     </Button>
   );

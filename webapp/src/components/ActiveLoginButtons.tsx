@@ -1,4 +1,4 @@
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'ui-kit';
 import { AccountInfo, Provider } from '../types/types';
@@ -39,10 +39,10 @@ function ActiveLoginButtons({ accountsMS }: Props) {
   const buttonRefGoogle = useRef<HTMLButtonElement>(null);
   const buttonRefMS = useRef<HTMLButtonElement>(null);
 
-  useLayoutEffect(() => {
+  const onLoad = () => {
     if (buttonRefGoogle.current) setButtonWidthGoogle(buttonRefGoogle.current.offsetWidth);
     if (buttonRefMS.current) setButtonWidthMS(buttonRefMS.current.offsetWidth);
-  }, [showActiveLoginButtons]);
+  };
 
   const buttonStyles = useMemo(
     () => ({ ...activeUserEmailStyles, marginLeft: buttonWidthGoogle || buttonWidthMS }),
@@ -55,7 +55,12 @@ function ActiveLoginButtons({ accountsMS }: Props) {
         <div style={divButtonsColumnStyles}>
           {(showActiveLoginButtons === 'both' || showActiveLoginButtons === 'google') && (
             <div style={displayFlexRow}>
-              <ButtonGoogle type="continue" onClick={() => onClickUseActiveLogin('Google')} ref={buttonRefGoogle} />
+              <ButtonGoogle
+                type="continue"
+                onClick={() => onClickUseActiveLogin('Google')}
+                onLoad={onLoad}
+                ref={buttonRefGoogle}
+              />
               <Button kind="outlined" isDisabled style={buttonStyles}>
                 {isActiveGoogleLogin.userEmail}
               </Button>
@@ -63,7 +68,7 @@ function ActiveLoginButtons({ accountsMS }: Props) {
           )}
           {(showActiveLoginButtons === 'both' || showActiveLoginButtons === 'ms') && (
             <div style={displayFlexRow}>
-              <ButtonMS type="continue" onClick={() => onClickUseActiveLogin('MS')} ref={buttonRefMS} />
+              <ButtonMS type="continue" onClick={() => onClickUseActiveLogin('MS')} onLoad={onLoad} ref={buttonRefMS} />
               <Button kind="outlined" isDisabled style={buttonStyles} onClick={() => onClickUseActiveLogin('MS')}>
                 {accountsMS[0]?.username}
               </Button>
