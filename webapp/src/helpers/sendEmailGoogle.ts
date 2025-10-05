@@ -1,5 +1,5 @@
 import { Email, StatusBackend } from '../../../addon/packages/interface/src/types/types';
-import { SendEmailGoogleResponseBody } from '../types/typesBackend';
+import { SendEmailGoogleResponseBody } from '../types/typesShared';
 import { ERROR_FAILED_SENDING_EMAIL } from '../constants/constants';
 import { URL_SEND_EMAIL_GOOGLE } from '../constants/constantsImportMeta';
 import { fetchSendEmail } from './fetchSendEmail';

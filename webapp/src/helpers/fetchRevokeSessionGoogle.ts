@@ -1,4 +1,4 @@
-import { RevokeSessionGoogleResponseBody } from '../types/typesBackend';
+import { RevokeSessionGoogleResponseBody } from '../types/typesShared';
 import { PATH_REVOKE_SESSION_GOOGLE } from '../constants/constantsEndpointPaths';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
 

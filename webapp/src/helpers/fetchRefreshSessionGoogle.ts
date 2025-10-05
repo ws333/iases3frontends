@@ -1,4 +1,4 @@
-import { RefreshSessionGoogleResponseBody } from '../types/typesBackend';
+import { RefreshSessionGoogleResponseBody } from '../types/typesShared';
 import { URL_REFRESH_SESSION_GOOGLE } from '../constants/constantsImportMeta';
 
 export async function fetchRefreshSessionGoogle(): Promise<RefreshSessionGoogleResponseBody> {

@@ -1,4 +1,4 @@
-import { VerifySessionGoogleResponseBody } from '../types/typesBackend';
+import { VerifySessionGoogleResponseBody } from '../types/typesShared';
 import { URL_VERIFY_SESSION_GOOGLE } from '../constants/constantsImportMeta';
 import { fetchRefreshSessionGoogle } from './fetchRefreshSessionGoogle';
 

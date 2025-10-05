@@ -1,5 +1,5 @@
 import { CurrentLogin } from '../../../addon/packages/interface/src/types/types';
-import { VerifySessionGoogleResponseBody } from './typesBackend';
+import { VerifySessionGoogleResponseBody } from './typesShared';
 
 export type ButtonAuthType = 'signIn' | 'continue';
 

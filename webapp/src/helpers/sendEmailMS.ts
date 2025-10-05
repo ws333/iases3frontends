@@ -1,6 +1,6 @@
 import { AccountInfo, IPublicClientApplication, InteractionRequiredAuthError } from '@azure/msal-browser';
 import { Email, StatusBackend } from '../../../addon/packages/interface/src/types/types';
-import { SendEmailMSResponseBody } from '../types/typesBackend';
+import { SendEmailMSResponseBody } from '../types/typesShared';
 import { ERROR_FAILED_SENDING_EMAIL } from '../constants/constants';
 import { URL_SEND_EMAIL_MS } from '../constants/constantsImportMeta';
 import { fetchSendEmail } from './fetchSendEmail';
