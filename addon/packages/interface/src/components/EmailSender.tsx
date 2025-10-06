@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import type { Email, MessagePayload, ProjectEnvProps } from "../types/types";
+import type { Email, MessagePayload, ProjectEnvProps, StatusBackend } from "../types/types";
 import type { ContactI3C } from "../types/typesI3C";
 import { ERROR_ENVIRONMENT_UNKNOWN, defaultRandomWindow, fullProgressBarDelay } from "../constants/constants";
 import { useContactList } from "../hooks/useContactList";
@@ -171,45 +171,40 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                         );
                         break;
                     }
-                    // User stopped the session or sending of email to current contact failed, so breaking out of loop
-                    controller.current = new AbortController();
-                    await waitRandomSeconds(fullProgressBarDelay / 2, 0);
-                    break;
-                }
 
-                const result = await prepareAndSendEmail(contact);
-                if (result?.status === "unsubbed") {
-                    await waitRandomSeconds(1, 0); // Short delay to ensure unsub message is readable
-                    continue;
-                }
-
-                // Don't count and log email as sent for webapp when signal has been aborted, e.g. if backend is down.
-                // For addon the compose email window will still be open and could be sent manually, so logging email as sent.
-                // This is described in the docs. To unify the behaviour, close the email compose window programatically.
-                if (controller.current.signal.aborted && environment === "webapp") {
+                    // User stopped the session or sending of email to current contact failed, so breaking out of the for loop
                     await waitRandomSeconds(fullProgressBarDelay / 2, 0);
                     controller.current = new AbortController();
                     setIsSending(false);
                     break;
                 }
 
-                const _delay = leftToSendCount.current > 1 ? delay : fullProgressBarDelay;
-                const randomWindow = leftToSendCount.current > 1 ? defaultRandomWindow : 0;
+                const sendResult = await prepareAndSendEmail(contact);
 
-                // State emailsSent needs to be updated before setContact (to awoid flickering of progressbar max) and waitRandomSeconds
-                setEmailsSent((count) => {
-                    const newCount = ++count;
-                    updateSessionState(newCount, _delay);
-                    return newCount;
-                });
+                if (sendResult.status === "UNSUBBED") {
+                    await waitRandomSeconds(1, 0); // Short delay to ensure unsub message is readable
+                    continue;
+                }
 
-                contact.sd = Date.now();
-                contact.sc++;
-                setContact(contact); // Update the contact in state
-                await storeActiveContacts(contact); // Update the contact in indexedDB
-                addLogItem({ message: `Email sent to ${logContact}` });
+                if (sendResult.status === "OK") {
+                    const _delay = leftToSendCount.current > 1 ? delay : fullProgressBarDelay;
+                    const randomWindow = leftToSendCount.current > 1 ? defaultRandomWindow : 0;
 
-                await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
+                    // State emailsSent needs to be updated before setContact (to awoid flickering of progressbar max) and waitRandomSeconds
+                    setEmailsSent((count) => {
+                        const newCount = ++count;
+                        updateSessionState(newCount, _delay);
+                        return newCount;
+                    });
+
+                    contact.sd = Date.now();
+                    contact.sc++;
+                    setContact(contact); // Update the contact in state
+                    await storeActiveContacts(contact); // Update the contact in indexedDB
+                    addLogItem({ message: `Email sent to ${logContact}` });
+
+                    await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
+                }
             } catch (error) {
                 console.warn("Error in onClickSendEmail:", error);
                 addLogItem({ message: `Failed to send email to ${logContact}` });
@@ -219,7 +214,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
         setIsSending(false);
     }
 
-    const prepareAndSendEmail = async (contact: ContactI3C): Promise<{ status: "unsubbed" } | undefined> => {
+    const prepareAndSendEmail = async (contact: ContactI3C): Promise<StatusBackend | { status: "UNSUBBED" }> => {
         const emailText = renderEmail(EmailComponent, { name: contact.n });
         const email: Email = {
             uid: contact.uid,
@@ -242,11 +237,13 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
             addLogItem({ message });
             setEmailsUnsubbed((count) => count + 1);
 
-            return { status: "unsubbed" };
+            return { status: "UNSUBBED" };
         }
 
         if (result?.message) setMessage(result.message);
-        if (result?.error) controller.current.abort();
+
+        // Return OK for addon since result will always be undefined
+        return result || { status: "OK" };
     };
 
     const onClickEndSession = () => {
