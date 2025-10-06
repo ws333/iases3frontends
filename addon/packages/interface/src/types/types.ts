@@ -9,7 +9,8 @@ export type CurrentLogin = {
     accessToken?: string;
 };
 
-export type Email = Pick<ContactI3C, "uid"> & Pick<browser.compose.ComposeDetails, "to" | "from" | "subject" | "body">;
+export type Email = Partial<Pick<ContactI3C, "uid">> &
+    Pick<browser.compose.ComposeDetails, "to" | "from" | "subject" | "body">;
 
 export type StatusBackend = {
     status: "OK" | "ERROR";

@@ -216,13 +216,17 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
 
     const prepareAndSendEmail = async (contact: ContactI3C): Promise<StatusBackend | { status: "UNSUBBED" }> => {
         const emailText = renderEmail(EmailComponent, { name: contact.n });
+
         const email: Email = {
-            uid: contact.uid,
             to: contact.e,
-            from: userEmail,
             subject: selectedSubject,
             body: emailText,
         };
+
+        if (environment === "webapp") {
+            email.uid = contact.uid;
+            email.from = userEmail;
+        }
 
         // Thunderbird addon always returns undefined
         // The webapp returns a status including a message to display to the user
