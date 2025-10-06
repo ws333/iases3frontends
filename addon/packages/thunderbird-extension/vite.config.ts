@@ -22,7 +22,7 @@ export default defineConfig({
     ],
     build: {
         sourcemap: false,
-        minify: false,
+        minify: true,
         lib: {
             entry: "src/background.js",
             name: "background",
