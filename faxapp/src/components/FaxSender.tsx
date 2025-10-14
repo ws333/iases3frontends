@@ -148,6 +148,12 @@ function FaxSender() {
     return () => clearInterval(interval);
   }, []);
 
+  async function pauseSending() {
+    await waitRandomSeconds(fullProgressBarDelay / 2, 0);
+    controller.current = new AbortController();
+    setIsSending(false);
+  }
+
   async function onClickSendFax(e: React.MouseEvent) {
     e.preventDefault();
 
@@ -164,10 +170,9 @@ function FaxSender() {
       const logContact = `${contact.n} ${formatFaxNumber(contact.f)}`;
 
       try {
+        // Pause the session if the user clicked the stop button
         if (controller.current.signal.aborted) {
-          // User stopped the session or sending of fax to current contact failed, so breaking out of loop
-          controller.current = new AbortController();
-          await waitRandomSeconds(fullProgressBarDelay / 2, 0);
+          await pauseSending();
           break;
         }
 
@@ -178,13 +183,9 @@ function FaxSender() {
           setMessage(result.message);
         }
 
-        // Don't count and log fax as sent when signal has been aborted, e.g. if backend is down.
-        // Also stop sending if backend didn't respond with result.type === 'send_fax_receipt'
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (controller.current.signal.aborted || result.type !== 'send_fax_receipt') {
-          await waitRandomSeconds(fullProgressBarDelay / 2, 0);
-          controller.current = new AbortController();
-          setIsSending(false);
+        // Stop sending if backend didn't acknowledge receiving the send fax request
+        if (result.type !== 'send_fax_receipt') {
+          await pauseSending();
           break;
         }
 
