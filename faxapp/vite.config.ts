@@ -25,6 +25,7 @@ export default defineConfig({
   build: {
     target: 'ES2022',
     chunkSizeWarningLimit: 2048,
-    // minify: true,
+    // minify: false,
+    // sourcemap: true,
   },
 });
