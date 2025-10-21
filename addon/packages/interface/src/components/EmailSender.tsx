@@ -32,6 +32,8 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
     if (environment === "unknown") throw new Error(ERROR_ENVIRONMENT_UNKNOWN);
 
     const addLogItem = useStoreActions((state) => state.sendingLog.addLogItem);
+
+    const message = useStoreState((state) => state.userMessage.message);
     const setMessage = useStoreActions((actions) => actions.userMessage.setMessage);
 
     const [prefilghtInProgess, setPrefilghtInProgess] = useState(false);
@@ -304,7 +306,7 @@ function EmailSender({ environment, sendEmailFn, sendEmailPreflightFn }: Project
                 </div>
 
                 {showErrorMessage && <ErrorMessage errorMessage={errorMessage} />}
-                {<Message />}
+                {<Message message={message} />}
 
                 <div className="container_buttons">
                     {!isSending && (

@@ -35,7 +35,9 @@ import SendingProgress from './SendingProgress';
 import './FaxSender.css';
 
 function FaxSender() {
+  const message = useStoreState((state) => state.userMessage.message);
   const setMessage = useStoreActions((actions) => actions.userMessage.setMessage);
+
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isSending, setIsSending] = useState(false);
 
@@ -290,7 +292,7 @@ function FaxSender() {
         </div>
 
         {showErrorMessage && <ErrorMessage errorMessage={errorMessage} />}
-        {<Message />}
+        {<Message message={message} />}
 
         <div className="container_buttons">
           {!isSending && (

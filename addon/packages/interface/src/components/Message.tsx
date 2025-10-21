@@ -1,8 +1,8 @@
-import { useStoreState } from "../store/store";
+interface MessageProps {
+    message: string;
+}
 
-function Message() {
-    const message = useStoreState((state) => state.userMessage.message);
-
+function Message({ message }: MessageProps) {
     return (
         <div className="container_message">
             {message.split("\n").map((line, idx) => (
