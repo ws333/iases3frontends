@@ -32,12 +32,10 @@
     "ui-kit": "file:../addon/vendor/ui-kit-0.2.2.tgz"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
     "@types/express": "^5.0.3",
     "@types/node": "^24.3.0",
     "@types/papaparse": "^5.3.16",
     "@types/thunderbird-webext-browser": "^127.0.0",
-    "pdf-lib": "^1.17.1",
-    "playwright": "^1.55.1"
+    "pdf-lib": "^1.17.1"
   }
 }
