@@ -1,4 +1,6 @@
 name: Build
+permissions:
+  contents: read
 
 on:
   pull_request:
@@ -30,3 +32,5 @@ jobs:
         run: cd addon && pnpm run build-addon
       - name: Build webapp
         run: cd webapp && pnpm run build
+      - name: Build webapp
+        run: cd faxapp && pnpm run build
