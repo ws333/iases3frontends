@@ -12,10 +12,11 @@ type Props = {
 
 function ButtonSendFaxes({ checkInProgress, disabled, endSession, leftToSendCount, onClick }: Props) {
   const faxesSent = useStoreState((state) => state.contactList.faxesSent);
+  const faxesInQueue = useStoreState((state) => state.contactList.faxesInQueue);
   const selectedNations = useStoreState((state) => state.contactList.selectedNations);
 
   const buttonText =
-    checkInProgress || endSession
+    checkInProgress || endSession || faxesInQueue
       ? 'Please wait...'
       : !selectedNations.length
         ? 'No contacts selected'

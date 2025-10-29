@@ -4,7 +4,7 @@ import { FaxStatuses } from '../types/types';
 import { ContactI3CFax } from '../types/typesI3C';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { defaultRandomWindow, fullProgressBarDelay } from '../../../addon/packages/interface/src/constants/constants';
-import { ERROR_RESTART_BROWSER } from '../constants/constants';
+import { ERROR_RESTART_BROWSER, maxFaxesInQueueCount } from '../constants/constants';
 import ErrorMessage from '../../../addon/packages/interface/src/components/ErrorMessage';
 import Header from '../../../addon/packages/interface/src/components/Header';
 import Message from '../../../addon/packages/interface/src/components/Message';
@@ -16,11 +16,10 @@ import { waitRandomSeconds } from '../../../addon/packages/interface/src/helpers
 import { checkApiKeyExists } from '../helpers/crypto';
 import { formatFaxNumber, formatName } from '../helpers/formatRecipientInfo';
 import { getSessionFinishedText } from '../helpers/getSessionFinishedText';
-import { storeActiveContacts } from '../helpers/indexedDB';
-import { checkForDangelingSession, clearSessionState, updateSessionState } from '../helpers/sessionState';
+import { checkForDangelingSession, clearSessionState } from '../helpers/sessionState';
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
 import { showSupplyPassphraseDialog } from '../helpers/showSupplyPassphraseDialog';
-import { useStoreActions, useStoreState } from '../store/store';
+import { store, useStoreActions, useStoreState } from '../store/store';
 import { toastOptions } from '../styles/styles';
 import ButtonEndSession from './ButtonEndSession';
 import ButtonSendFaxes from './ButtonSendFaxes';
@@ -54,6 +53,8 @@ function FaxSender() {
   useUpdateSendingStats(isSending);
 
   const {
+    faxesInQueue,
+    bumpFaxesInQueue,
     faxesSent,
     endSession,
     maxCount,
@@ -63,7 +64,6 @@ function FaxSender() {
     selectedNations,
     setFaxesSent,
     setEndSession,
-    setContact,
   } = useContactListFax();
 
   const { delay, FaxComponent } = useFaxOptions();
@@ -94,20 +94,33 @@ function FaxSender() {
     );
   }, [apiKey]);
 
-  const leftToSendCount = useRef(0);
+  const faxedAddedToQueue = useRef(0);
+  const faxesLeftToQueue = maxCount - faxedAddedToQueue.current;
+
+  useEffect(() => {
+    if (isSending && faxesLeftToQueue === 0) {
+      setMessage('Queuing is complete, waiting for the fax service provider to process the faxes...');
+    }
+  }, [isSending, faxesLeftToQueue, setMessage]);
+
+  const faxesLeftToSend = useRef(0);
   const remainingCountSession = Math.max(0, maxCount - faxesSent);
-  leftToSendCount.current = selectedContactsNotSent.slice(0, remainingCountSession).length;
+  faxesLeftToSend.current = selectedContactsNotSent.slice(0, remainingCountSession).length;
 
   const checkInProgress = useRef(false);
   const selectedNationsAtSendTime = useRef<string[]>([]);
   const selectedNationsChangedSinceLastSending = selectedNationsAtSendTime.current !== selectedNations;
 
   useEffect(() => {
+    if (isSending && remainingCountSession === 0) setIsSending(false);
+  }, [isSending, remainingCountSession]);
+
+  useEffect(() => {
     async function checkIfSessionFinished() {
       if (
         faxesSent > 0 &&
         !checkInProgress.current &&
-        (endSession || (leftToSendCount.current === 0 && !selectedNationsChangedSinceLastSending))
+        (endSession || (faxesLeftToSend.current === 0 && !selectedNationsChangedSinceLastSending))
       ) {
         checkInProgress.current = true;
         await waitRandomSeconds(fullProgressBarDelay, 0); // Let progressbar stay at 100% for a few seconds
@@ -120,6 +133,7 @@ function FaxSender() {
         setEndSession(false);
         const messageReady = `${message} Ready to start new session!`;
         setMessage(messageReady);
+        faxedAddedToQueue.current = 0;
       }
     }
     void checkIfSessionFinished();
@@ -161,7 +175,7 @@ function FaxSender() {
 
     setIsSending(true);
     setErrorMessage('');
-    setMessage('Sending faxes, please wait...');
+    setMessage('Queing faxes, please wait...');
     await waitRandomSeconds(fullProgressBarDelay / 2, 0);
 
     const contactsToSendTo = selectedContactsNotSent.slice(0, maxCount - faxesSent);
@@ -191,21 +205,21 @@ function FaxSender() {
           break;
         }
 
-        const _delay = leftToSendCount.current > 1 ? delay : fullProgressBarDelay;
-        const randomWindow = leftToSendCount.current > 1 ? defaultRandomWindow : 0;
+        const _delay = faxesLeftToSend.current > 1 ? delay : fullProgressBarDelay;
+        const randomWindow = faxesLeftToSend.current > 1 ? defaultRandomWindow : 0;
 
-        // State faxesSent needs to be updated before setContact (to awoid flickering of progressbar max) and waitRandomSeconds
-        setFaxesSent((count) => {
-          const newCount = ++count;
-          updateSessionState(newCount, _delay);
-          return newCount;
-        });
+        // Counts number of faxes currently in queue
+        // Decremented when faxes are successfully delivered
+        bumpFaxesInQueue();
 
-        contact.sd = Date.now();
-        contact.sc++;
-        setContact(contact); // Update the contact in state
-        await storeActiveContacts(contact); // Update the contact in indexedDB
+        // Counts total number of faxes added to queue for current session
+        faxedAddedToQueue.current += 1;
+
         addLogItem({ message: `Fax to ${logContact} queued` });
+
+        while (store.getState().contactList.faxesInQueue >= maxFaxesInQueueCount) {
+          await waitRandomSeconds(delay, randomWindow, { signal: controller.current.signal });
+        }
 
         await waitRandomSeconds(_delay, randomWindow, { signal: controller.current.signal });
       } catch (error) {
@@ -217,8 +231,6 @@ function FaxSender() {
         break;
       }
     }
-
-    setIsSending(false);
   }
 
   async function prepareAndSendFax(contact: ContactI3CFax) {
@@ -241,17 +253,27 @@ function FaxSender() {
 
   const onClickStop = () => {
     controller.current.abort();
-    setMessage('Sending stopped by user...');
+    setIsSending(false);
+    setMessage(
+      'Queuing stopped, waiting for already queued faxes to be processed by fax service provider (about 1 minute).',
+    );
   };
+
+  // Update user message after user clicked stop button and all queued faxes have been processed by fax service provider
+  useEffect(() => {
+    if (!isSending && !checkInProgress.current && !faxesInQueue && faxesSent > 0) {
+      setMessage('Queuing stopped by user...');
+    }
+  }, [faxesInQueue, faxesSent, isSending, setMessage]);
 
   const isBusy = isSending || endSession || controller.current.signal.aborted || checkInProgress.current;
 
   const showErrorMessage = errorMessage && !isBusy;
 
-  const sendButtonDisabled = isBusy || !selectedContactsNotSent.length;
+  const sendButtonDisabled = isBusy || !selectedContactsNotSent.length || faxesInQueue > 0;
 
   const stopButtonDisabled =
-    leftToSendCount.current === 0 || faxesSent === 0 || controller.current.signal.aborted || checkInProgress.current;
+    !faxesLeftToQueue || !faxesInQueue || controller.current.signal.aborted || checkInProgress.current;
 
   return (
     <div className="container_fax_sender">
@@ -297,14 +319,14 @@ function FaxSender() {
         <div className="container_buttons">
           {!isSending && (
             <div className="container_buttons_not_issending">
-              {faxesSent > 0 && !endSession && !checkInProgress.current && (
+              {faxesSent > 0 && !endSession && !checkInProgress.current && !faxesInQueue && (
                 <ButtonEndSession onClick={onClickEndSession} />
               )}
               <ButtonSendFaxes
                 checkInProgress={checkInProgress.current}
                 disabled={sendButtonDisabled}
                 endSession={endSession}
-                leftToSendCount={leftToSendCount.current}
+                leftToSendCount={faxesLeftToSend.current}
                 onClick={(e) => {
                   void onClickSendFax(e);
                 }}
@@ -318,7 +340,7 @@ function FaxSender() {
               checkInProgress={checkInProgress.current}
               disabled={stopButtonDisabled}
               onClick={onClickStop}
-              toSendCount={leftToSendCount.current}
+              leftToQueueCount={faxesLeftToQueue}
             />
           )}
         </div>

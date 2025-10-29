@@ -20,7 +20,7 @@ export function showDeleteHistoryDialog() {
           actions.sendingLog.setLog([]);
           actions.render.initiateForcedRender();
           actions.userMessage.setMessage(zeroWidthSpace);
-          const message = 'Sending history has been deleted!';
+          const message = 'The sending history has been deleted!';
           toast(message, toastOptions);
           console.log(message);
         } else {

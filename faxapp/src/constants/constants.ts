@@ -43,7 +43,7 @@ export type StorageKey = keyof typeof STORAGE_KEY;
 export const defaultDialogWidth = 400;
 export const defaultDialogMaxWidth = 800;
 
-export const minSendingDelay = 1; // Minimum delay between faxes being sent in seconds
+export const minSendingDelay = 3; // Minimum delay between faxes being sent in seconds
 export const defaultSendingDelay = 3;
 export const defaultRandomWindow = 1;
 export const fullProgressBarDelay = 2;
@@ -55,8 +55,10 @@ export const defaultMaxCount = maxCountOptions[5];
 
 export const minPassphraseLength = 12; // Recommended value is 16, but since there is a cap on number of faxes allowed to be sent 12 suffices.
 
-export const sessionFinishedText = 'Queueing of';
+export const sessionFinishedText = 'Sending of';
 
+export const maxFaxesInQueueCount = 8;
+export const faxesInQueueCounterKey = 'faxesInQueueCounter';
 export const sessionStateKey = 'sessionState';
 
 export const zeroWidthSpace = '\u200b';

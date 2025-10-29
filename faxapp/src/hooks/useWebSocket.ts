@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef } from 'react';
 import { SendWebSocketMessage } from '../types/types';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
+import { formatFaxNumberToOriginal } from '../helpers/formatRecipientInfo';
+import { updateContactState } from '../helpers/updateContactState';
 import { useStoreActions } from '../store/store';
 
 interface UseWebSocketOptions {
@@ -23,6 +25,7 @@ export function useWebSocket({
   const pendingResolver = useRef<{ resolve: SendWebSocketMessage } | null>(null);
 
   const addLogItem = useStoreActions((actions) => actions.sendingLog.addLogItem);
+  const decrementFaxesInQueue = useStoreActions((actions) => actions.contactList.decrementFaxesInQueue);
 
   const sendWebSocketMessage = useCallback((message: WebSocketMessage): boolean => {
     if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -73,19 +76,18 @@ export function useWebSocket({
         console.warn('WebSocket error:', error);
       };
 
-      ws.onmessage = (event: { data?: string }) => {
+      ws.onmessage = async (event: { data?: string }) => {
         if (!event.data) return console.warn('Empty websocket message received!');
 
         try {
           const message: WebSocketMessage = JSON.parse(event.data);
           onMessage?.(message);
-          console.log(message);
 
-          // Acknowledge that fax.delivered or fax.failed message was received so that backend can clean up state
           if (
             message.type === 'webhook_data' &&
             (message.webhookData.event_type === 'fax.delivered' || message.webhookData.event_type === 'fax.failed')
           ) {
+            // Acknowledge that fax.delivered or fax.failed message was received so that backend can clean up state
             const answer: WebSocketMessage = {
               type: 'backend_message_received',
               typeReceived: message.type,
@@ -96,6 +98,27 @@ export function useWebSocket({
               },
             };
             sendWebSocketMessage(answer);
+
+            // Update faxesQueued
+            decrementFaxesInQueue();
+
+            /**
+             * Update state when a fax has been delivered
+             */
+            const toNumber = formatFaxNumberToOriginal(message.webhookData.payload?.to ?? '');
+
+            const failureReason =
+              message.webhookData.event_type === 'fax.failed'
+                ? (message.webhookData.payload?.failure_reason ?? 'failure_reason was undefined')
+                : null;
+
+            if (failureReason) console.warn(message);
+
+            if (toNumber) {
+              await updateContactState(toNumber, failureReason);
+            } else {
+              console.warn(`${useWebSocket.name} -> formatFaxNumberToOriginal -> toNumber is undefined`);
+            }
 
             addLogItem({
               message: `Fax to ${message.webhookData.payload?.to} ${message.webhookData.event_type.slice(4)}!`,
@@ -130,7 +153,15 @@ export function useWebSocket({
         reconnectTimeoutRef.current = setTimeout(connect, reconnectInterval);
       }
     }
-  }, [addLogItem, apiKey, maxReconnectAttempts, onMessage, reconnectInterval, sendWebSocketMessage]);
+  }, [
+    addLogItem,
+    apiKey,
+    decrementFaxesInQueue,
+    maxReconnectAttempts,
+    onMessage,
+    reconnectInterval,
+    sendWebSocketMessage,
+  ]);
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {

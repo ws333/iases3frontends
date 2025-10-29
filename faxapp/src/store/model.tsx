@@ -1,10 +1,11 @@
 import { action, computed, thunk, thunkOn } from 'easy-peasy';
-import type { Model } from '../types/modelTypes';
+import type { Model, StateActionContactList } from '../types/modelTypes';
 import {
   defaultDialogMaxWidth,
   defaultDialogWidth,
   defaultMaxCount,
   defaultSendingDelay,
+  faxesInQueueCounterKey,
   zeroWidthSpace,
 } from '../constants/constants';
 import { defaultLanguage, defaultLanguageOptions, faxComponents } from '../constants/faxTemplates';
@@ -12,8 +13,7 @@ import { threeMonths } from '../constants/timeConstants';
 import Overlay from '../components/Overlay';
 import TextEndingSession from '../components/dialogTexts/TextEndingSession';
 import { getDateTime } from '../helpers/getDateTime';
-import { storeSendingLog } from '../helpers/indexedDB';
-import { storeOptionsKey } from '../helpers/indexedDB';
+import { storeOptionsKey, storeSendingLog } from '../helpers/indexedDB';
 import { getLogsToDisplay } from '../helpers/sendingLog';
 
 export const model: Model = {
@@ -70,6 +70,33 @@ export const model: Model = {
 
     deletedContacts: [],
     setDeletedContacts: action((state, payload) => ({ ...state, deletedContacts: [...payload] })),
+
+    faxesInQueue: parseInt(localStorage.getItem(faxesInQueueCounterKey) ?? '0', 10),
+    bumpFaxesInQueue: action((state) => {
+      const newState: StateActionContactList = {
+        ...state,
+        faxesInQueue: state.faxesInQueue + 1,
+      };
+      localStorage.setItem(faxesInQueueCounterKey, newState.faxesInQueue.toString());
+      return newState;
+    }),
+    decrementFaxesInQueue: action((state) => {
+      const newState: StateActionContactList = {
+        ...state,
+        faxesInQueue: state.faxesInQueue - 1,
+      };
+      localStorage.setItem(faxesInQueueCounterKey, newState.faxesInQueue.toString());
+      return newState;
+    }),
+    setFaxesInQueue: action((state, payload) => {
+      const newFaxesInQueue = typeof payload === 'number' ? payload : payload(state.faxesInQueue);
+      const newState: StateActionContactList = {
+        ...state,
+        faxesInQueue: newFaxesInQueue,
+      };
+      localStorage.setItem(faxesInQueueCounterKey, newState.faxesInQueue.toString());
+      return newState;
+    }),
 
     faxesSent: 0,
     setFaxesSent: action((state, payload) => ({

@@ -8,7 +8,6 @@ import { useStoreActions, useStoreState } from '../store/store';
 
 function useContactListFax() {
   const contacts = useStoreState((state) => state.contactList.contacts);
-  const setContact = useStoreActions((actions) => actions.contactList.setContact);
   const setContacts = useStoreActions((actions) => actions.contactList.setContacts);
   const selectedContactsNotSent = useStoreState((state) => state.contactList.selectedContactsNotSent);
   const setDeletedContacts = useStoreActions((actions) => actions.contactList.setDeletedContacts);
@@ -17,6 +16,9 @@ function useContactListFax() {
 
   const endSession = useStoreState((state) => state.contactList.endSession);
   const setEndSession = useStoreActions((actions) => actions.contactList.setEndSession);
+
+  const faxesInQueue = useStoreState((state) => state.contactList.faxesInQueue);
+  const bumpFaxesInQueue = useStoreActions((state) => state.contactList.bumpFaxesInQueue);
 
   const faxesSent = useStoreState((state) => state.contactList.faxesSent);
   const setFaxesSent = useStoreActions((actions) => actions.contactList.setFaxesSent);
@@ -82,6 +84,8 @@ function useContactListFax() {
   return {
     endSession,
     setEndSession,
+    faxesInQueue,
+    bumpFaxesInQueue,
     faxesSent,
     setFaxesSent,
     maxCount,
@@ -89,7 +93,6 @@ function useContactListFax() {
     selectedContactsNotSent,
     nextContactNotSent,
     selectedNations,
-    setContact,
   };
 }
 

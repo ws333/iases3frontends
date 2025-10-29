@@ -17,3 +17,11 @@ export function formatName(name: string) {
 
   return `${title} ${name}`;
 }
+
+export function formatFaxNumberToOriginal(faxNumber: string) {
+  const { countryCode } = store.getState().faxOptions;
+  const callingCode = getCountryCallingCode(countryCode);
+  if (!callingCode) return 'callingCode not defined';
+  const offset = callingCode.length + 1;
+  return `${faxNumber.slice(offset, offset + 3)}-${faxNumber.slice(offset + 3, offset + 6)}-${faxNumber.slice(offset + 6)}`;
+}

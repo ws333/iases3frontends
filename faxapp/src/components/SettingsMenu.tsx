@@ -4,6 +4,7 @@ import { exportFromLocalStorage } from '../helpers/exportFromLocalStorage';
 import { showCountryCodesLegendDialog } from '../helpers/showCountryCodesLegendDialog';
 import { showDeleteHistoryDialog } from '../helpers/showDeleteHistoryDialog';
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
+import { showResetSendingQueueDialog } from '../helpers/showResetSendingQueueDialog';
 import { useStoreState } from '../store/store';
 import MenuOptionFullSendingLog from './MenuOptionFullSendingLog';
 import MenuOptionImport from './MenuOptionImport';
@@ -60,6 +61,15 @@ function SettingsMenu() {
               onClose();
             },
             icon: <DownloadIcon />,
+          },
+          {
+            text: 'Reset sending queue counter',
+            kind: 'alert',
+            onSelect: () => {
+              showResetSendingQueueDialog();
+              onClose();
+            },
+            icon: <TrashBinIcon />,
           },
           {
             text: 'Reset sending history',

@@ -24,7 +24,9 @@ const TextDeletingData = (
         Export data
       </Button>
     </div>
-    <Text style={{ ...styles, textAlign: 'center' }}>Are you sure you want to delete the sending history?</Text>
+    <Text style={{ ...styles, textAlign: 'center', marginBottom: '1rem' }}>
+      Are you sure you want to delete the sending history?
+    </Text>
   </>
 );
 

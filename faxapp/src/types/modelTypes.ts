@@ -1,4 +1,4 @@
-import { Action, Computed, Thunk, ThunkOn } from 'easy-peasy';
+import { Action, Computed, FilterActionTypes, StateMapper, Thunk, ThunkOn } from 'easy-peasy';
 import { JSX } from 'react';
 import { ButtonKind } from 'ui-kit';
 import type { LanguageOption } from '../constants/faxTemplates.ts';
@@ -16,6 +16,8 @@ export interface Model {
   userMessage: UserMessage;
 }
 
+export type StateActionContactList = StateMapper<FilterActionTypes<ContactList>>;
+
 interface ContactList {
   contacts: ContactI3CFax[];
   setContact: Action<ContactList, ContactI3CFax>;
@@ -25,6 +27,11 @@ interface ContactList {
 
   deletedContacts: ContactI3CFax[];
   setDeletedContacts: Action<ContactList, ContactI3CFax[]>;
+
+  faxesInQueue: number;
+  bumpFaxesInQueue: Action<ContactList>;
+  decrementFaxesInQueue: Action<ContactList>;
+  setFaxesInQueue: Action<ContactList, number | ((prev: number) => number)>;
 
   faxesSent: number;
   setFaxesSent: Action<ContactList, number | ((prev: number) => number)>;

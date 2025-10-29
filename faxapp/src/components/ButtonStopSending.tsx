@@ -6,11 +6,11 @@ type Props = {
   checkInProgress?: boolean;
   disabled?: boolean | string;
   onClick: MouseEventHandler;
-  toSendCount: number;
+  leftToQueueCount: number;
 };
 
-function ButtonStopSending({ aborted, checkInProgress, disabled, onClick, toSendCount }: Props) {
-  const buttonText = aborted || checkInProgress || !toSendCount ? 'Please wait...' : 'Stop sending';
+function ButtonStopSending({ aborted, checkInProgress, disabled, onClick, leftToQueueCount }: Props) {
+  const buttonText = aborted || checkInProgress || !leftToQueueCount ? 'Please wait...' : 'Stop queuing';
   return (
     <Button isDisabled={disabled} onClick={onClick}>
       {buttonText}

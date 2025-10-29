@@ -21,7 +21,7 @@ function SendingProgress({ maxSelectedContactsNotSent, selectedContactsNotSent }
 
   return (
     <section className="section_sending_progress">
-      <h2>Progress</h2>
+      <h2>Sending progress</h2>
       <progress className="progress_bar" value={faxesSent} max={max}></progress>
       <p>
         {faxesSent} / {max}
