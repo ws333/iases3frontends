@@ -37,20 +37,6 @@ export function useWebSocket({
     }
   }, []);
 
-  const sendFax = useCallback(
-    (message: WebSocketMessage) => {
-      return new Promise<WebSocketMessage>((resolve, reject) => {
-        const messageWasSent = sendWebSocketMessage(message);
-        if (messageWasSent) {
-          pendingResolver.current = { resolve };
-        } else {
-          reject(new Error('WebSocket is not open'));
-        }
-      });
-    },
-    [sendWebSocketMessage],
-  );
-
   const connect = useCallback(() => {
     if (!apiKey) return;
 
@@ -162,6 +148,28 @@ export function useWebSocket({
     reconnectInterval,
     sendWebSocketMessage,
   ]);
+
+  const sendFax = useCallback(
+    (message: WebSocketMessage) => {
+      return new Promise<WebSocketMessage>((resolve, reject) => {
+        let retryCount = 0;
+        const trySend = () => {
+          const messageWasSent = sendWebSocketMessage(message);
+          if (messageWasSent) {
+            pendingResolver.current = { resolve };
+          } else if (retryCount < maxReconnectAttempts) {
+            retryCount++;
+            connect();
+            setTimeout(trySend, reconnectInterval);
+          } else {
+            reject(new Error('Failed to send WebSocket message after retries'));
+          }
+        };
+        trySend();
+      });
+    },
+    [sendWebSocketMessage, connect, reconnectInterval, maxReconnectAttempts],
+  );
 
   const disconnect = useCallback(() => {
     if (reconnectTimeoutRef.current) {
