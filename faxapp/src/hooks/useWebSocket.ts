@@ -98,7 +98,7 @@ export function useWebSocket({
                 ? (message.webhookData.payload?.failure_reason ?? 'failure_reason was undefined')
                 : null;
 
-            if (failureReason) console.warn(message);
+            if (failureReason) console.warn(`Sending fax to ${toNumber} failed: ${failureReason}`);
 
             if (toNumber) {
               await updateContactState(toNumber, failureReason);

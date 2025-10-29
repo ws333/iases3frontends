@@ -135,8 +135,8 @@ export async function getApiKey(passPhrase: string): Promise<string> {
     );
     const key = await deriveKeyFromPassphrase(passPhrase, salt);
     return await decryptString(encryptedKey, key);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.warn(`${msg.errorDecryptingApiKey} ${(error as Error).message}`);
     return '';
   }
 }
