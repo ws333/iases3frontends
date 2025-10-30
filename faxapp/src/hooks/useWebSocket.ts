@@ -3,6 +3,7 @@ import { SendWebSocketMessage } from '../types/types';
 import { WebSocketMessage } from '../types/typesSharedFax';
 import { URL_BACKEND } from '../constants/constantsImportMeta';
 import { formatFaxNumberToOriginal } from '../helpers/formatRecipientInfo';
+import { getContactNameAndNumber } from '../helpers/getContactNameAndNumber';
 import { updateContactState } from '../helpers/updateContactState';
 import { useStoreActions } from '../store/store';
 
@@ -106,9 +107,8 @@ export function useWebSocket({
               console.warn(`${useWebSocket.name} -> formatFaxNumberToOriginal -> toNumber is undefined`);
             }
 
-            addLogItem({
-              message: `Fax to ${message.webhookData.payload?.to} ${message.webhookData.event_type.slice(4)}!`,
-            });
+            const nameAndNumber = getContactNameAndNumber(message.webhookData.payload?.to);
+            addLogItem({ message: `Fax to ${nameAndNumber} ${message.webhookData.event_type.slice(4)}!` });
           }
 
           // Resolve pending promise in sendWebSocketMessageAsync

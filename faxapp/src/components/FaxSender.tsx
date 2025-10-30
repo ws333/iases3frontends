@@ -15,6 +15,7 @@ import { useWebSocket } from '../hooks/useWebSocket';
 import { waitRandomSeconds } from '../../../addon/packages/interface/src/helpers/waitRandomSeconds';
 import { checkApiKeyExists } from '../helpers/crypto';
 import { formatFaxNumber, formatName } from '../helpers/formatRecipientInfo';
+import { getContactNameAndNumber } from '../helpers/getContactNameAndNumber';
 import { getSessionFinishedText } from '../helpers/getSessionFinishedText';
 import { checkForDangelingSession, clearSessionState } from '../helpers/sessionState';
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
@@ -73,11 +74,12 @@ function FaxSender() {
       const { webhookData } = message;
       const event = webhookData.event_type?.slice(4).replace('.', ' ');
       const faxId = webhookData.payload?.fax_id ?? '';
-      const to = webhookData.payload?.to;
       const duration = webhookData.payload?.call_duration_secs;
       const timestamp =
         webhookData.event_type === 'fax.delivered' || webhookData.event_type === 'fax.failed' ? Date.now() : 0;
-      const value = `Fax to ${to} ${event} ${duration ? `in ${duration}s` : ''}`;
+
+      const nameAndNumber = getContactNameAndNumber(webhookData.payload?.to);
+      const value = `Fax to ${nameAndNumber} ${event} ${duration ? `in ${duration}s` : ''}`;
 
       if (faxId) setFaxStatuses((prev) => new Map(prev.set(faxId, { timestamp, value })));
     }
