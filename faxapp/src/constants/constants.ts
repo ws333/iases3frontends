@@ -57,7 +57,7 @@ export const minPassphraseLength = 12; // Recommended value is 16, but since the
 
 export const sessionFinishedText = 'Sending of';
 
-export const maxFaxesInQueueCount = 8;
+export const maxFaxesInQueueCount = 2;
 export const faxesInQueueCounterKey = 'faxesInQueueCounter';
 export const sessionStateKey = 'sessionState';
 
