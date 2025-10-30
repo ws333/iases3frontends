@@ -65,7 +65,13 @@ export const model: Model = {
     ),
     selectedContactsNotSent: computed((state) => {
       const threeMonthsAgo = Date.now() - threeMonths;
-      return state.selectedContacts.filter((contact) => contact.sd < threeMonthsAgo);
+      return state.selectedContacts.filter((contact) => {
+        const updatedDate = new Date(contact.ud).getTime();
+        // Also include all contacts where the fax number has changed
+        // This means that the old number was invalid and removed, and therefore the next number (if any) would replace it.
+        // Some contacts migh have a change in name only, but this would be very rare.
+        return contact.sd < threeMonthsAgo || updatedDate > contact.sd;
+      });
     }),
 
     deletedContacts: [],
