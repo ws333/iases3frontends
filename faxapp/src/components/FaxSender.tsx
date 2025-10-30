@@ -75,7 +75,8 @@ function FaxSender() {
       const faxId = webhookData.payload?.fax_id ?? '';
       const to = webhookData.payload?.to;
       const duration = webhookData.payload?.call_duration_secs;
-      const timestamp = webhookData.event_type === 'fax.delivered' ? Date.now() : 0;
+      const timestamp =
+        webhookData.event_type === 'fax.delivered' || webhookData.event_type === 'fax.failed' ? Date.now() : 0;
       const value = `Fax to ${to} ${event} ${duration ? `in ${duration}s` : ''}`;
 
       if (faxId) setFaxStatuses((prev) => new Map(prev.set(faxId, { timestamp, value })));
