@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { DownloadIcon, InfoIcon, Menu, MenuOption, MenuOptionProps, OpenMenuButton, TrashBinIcon } from 'ui-kit';
 import { exportFromLocalStorage } from '../helpers/exportFromLocalStorage';
-import { showCountryCodesLegendDialog } from '../helpers/showCountryCodesLegendDialog';
 import { showDeleteHistoryDialog } from '../helpers/showDeleteHistoryDialog';
 import { showRegisterFaxApiKey } from '../helpers/showRegisterFaxApiKey';
 import { showResetSendingQueueDialog } from '../helpers/showResetSendingQueueDialog';
@@ -40,15 +39,6 @@ function SettingsMenu() {
             },
             icon: <InfoIcon />,
           },
-          {
-            text: 'Show country codes legend',
-            onSelect: () => {
-              showCountryCodesLegendDialog();
-              onClose();
-            },
-            icon: <InfoIcon />,
-          },
-
           {
             // Dummy to position menu option in MenuList below
             text: importSendingHistory,
