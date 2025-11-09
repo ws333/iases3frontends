@@ -35,6 +35,7 @@ export default defineConfig({
     },
   ],
   build: {
+    chunkSizeWarningLimit: 2048,
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
