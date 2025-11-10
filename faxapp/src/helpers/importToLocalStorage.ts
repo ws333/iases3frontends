@@ -25,7 +25,7 @@ export async function importToLocalStorage(file: File): Promise<ImportStats | Er
   };
 
   // Create a zip reader with password protection
-  const zipReader = new ZipReader(new BlobReader(file), { password: zipPassword });
+  const zipReader = new ZipReader(new BlobReader(file), { password: zipPassword, useWebWorkers: false });
 
   // Get entries from the zip file
   const entries: Entry[] = await zipReader.getEntries();

@@ -22,6 +22,8 @@ export async function exportFromLocalStorage() {
     password: zipPassword,
     // Use AES encryption when a password is provided
     encryptionStrength: 3, // 3 is for AES-256
+    // @ts-expect-error zip.js lib has a type bug (PR submitted https://github.com/gildas-lormeau/zip.js/pull/616)
+    useWebWorkers: false,
   });
 
   // Add each localStorage item to the zip
