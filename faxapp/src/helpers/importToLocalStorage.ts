@@ -35,8 +35,10 @@ export async function importToLocalStorage(file: File): Promise<ImportStats | Er
 
   // Process each entry in the zip
   for (const entry of entries) {
+    if (entry.directory) continue;
+
     const fileName = entry.filename;
-    const content = await entry.getData?.(new TextWriter());
+    const content = await entry.getData(new TextWriter());
 
     if (!content) continue;
 
