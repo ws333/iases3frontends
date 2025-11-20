@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-base-to-string */
 /* eslint-disable @typescript-eslint/return-await */
 import { ContactI3CFax, SendingLogEntry } from '../types/typesI3C';
 import { zeroWidthSpace } from '../constants/constants';
