@@ -21,6 +21,12 @@ export default defineConfig({
       '@lib/utils': path.resolve(__dirname, './node_modules/ui-kit/lib/utils'),
       '@lib/codegen': path.resolve(__dirname, './node_modules/ui-kit/lib/codegen'),
     },
+    // Dedupe packages to prevent multiple instances when importing from addon package
+    dedupe: ['easy-peasy', 'react', 'react-dom'],
+  },
+  optimizeDeps: {
+    // Force pre-bundling of easy-peasy to ensure single instance
+    include: ['easy-peasy'],
   },
   build: {
     target: 'ES2022',
